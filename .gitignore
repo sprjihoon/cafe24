@@ -1,0 +1,23 @@
+# FTP 자격증명 (비밀번호 포함 - 절대 커밋 금지)
+ftp-mcp-server/watcher.config.json
+
+# Node.js
+ftp-mcp-server/node_modules/
+ftp-mcp-server/*.log
+
+# 패키징 임시 파일
+*.zip
+*.tar.gz
+
+# OS 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 에디터
+.vscode/settings.json
+*.swp
+*.swo
+
+# 진단 도구 (배포 금지)
+skin/layout/basic/js/debug.js

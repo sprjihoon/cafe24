@@ -1,0 +1,9 @@
+{
+  "host": "ftp.cafe24.com",
+  "user": "카페24_아이디",
+  "pass": "카페24_FTP_비밀번호",
+  "local": "C:/Users/one/cafe24d/skin",
+  "remote": "/www/skin",
+  "port": 21,
+  "secure": false
+}

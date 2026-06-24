@@ -1,0 +1,315 @@
+@charset "utf-8";
+
+/* ============================================
+   LE BLANC 스타일 — 전체 오버라이드
+   ============================================ */
+
+/* 구글 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* ─── 기본 리셋 ─── */
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: #222;
+  background: #fff;
+  min-width: 320px !important;
+}
+
+a { color: #222; text-decoration: none; }
+a:hover { text-decoration: none; color: #222; }
+
+/* ─── 마퀴 배너 (상단 핑크 띠) ─── */
+#marquee-banner {
+  width: 100%;
+  background-color: #ff4d7d;
+  color: #fff;
+  height: 36px;
+  line-height: 36px;
+  overflow: hidden;
+  position: relative;
+}
+#marquee-banner .marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 25s linear infinite;
+}
+#marquee-banner .marquee-track span {
+  display: inline-block;
+  padding: 0 60px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── 헤더 전체 ─── */
+#header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8 !important;
+}
+#header:before, #header:after { display: none !important; }
+
+/* ─── 헤더 상단바 (햄버거 / 로고 / 아이콘) ─── */
+#header .inner {
+  width: 100% !important;
+  max-width: 1400px;
+  margin: 0 auto !important;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+/* 기존 topArea 숨기기 */
+#header .topArea { display: none !important; }
+
+/* 기존 util 영역 숨기기 */
+#header .link,
+#header .special,
+#header ul.special,
+#header div[module="Layout_multishopList"],
+#header div[module="Layout_statelogoff"],
+#header div[module="Layout_stateLogon"],
+#header ul[module="Layout_shoppingInfo"] { display: none !important; }
+
+/* ─── 새 헤더 내부 구조 ─── */
+.lb-header {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 햄버거 버튼 */
+.lb-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+}
+.lb-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: #222;
+  transition: 0.3s;
+}
+
+/* 로고 */
+.lb-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #222;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.lb-logo:hover { color: #222; text-decoration: none; }
+
+/* 우측 아이콘 그룹 */
+.lb-icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.lb-icons a {
+  display: flex;
+  align-items: center;
+  color: #222;
+  font-size: 12px;
+  text-decoration: none;
+  position: relative;
+}
+.lb-icons a:hover { color: #ff4d7d; }
+
+/* 장바구니 숫자 배지 */
+.lb-cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #ff4d7d;
+  color: #fff;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* SVG 아이콘 */
+.lb-icon-svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ─── 네비게이션 ─── */
+#lb-nav {
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+}
+.lb-nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lb-nav-inner::-webkit-scrollbar { display: none; }
+
+.lb-nav-inner a {
+  display: block;
+  padding: 13px 18px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #444;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.lb-nav-inner a:hover,
+.lb-nav-inner a.active {
+  color: #222;
+  font-weight: 500;
+  border-bottom-color: #222;
+}
+.lb-nav-inner a.sale {
+  color: #ff4d7d;
+  font-weight: 600;
+}
+.lb-nav-inner a.sale:hover { color: #e0004a; border-bottom-color: #ff4d7d; }
+
+/* ─── 레이아웃 전체 ─── */
+#wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+#container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 사이드바 숨기기 */
+#sidebar { display: none !important; }
+
+/* 콘텐츠 풀 너비 */
+#contents {
+  float: none !important;
+  width: 100% !important;
+}
+
+/* ─── 상품 그리드 ─── */
+.xans-product-listmain ul,
+.xans-product-listnormal ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 24px;
+  padding: 0;
+}
+.xans-product-listmain li,
+.xans-product-listnormal li {
+  float: none !important;
+  width: auto !important;
+}
+
+/* 상품 이미지 */
+.xans-product-listmain .prdList img,
+.xans-product-listnormal .prdList img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+/* 상품명 */
+.xans-product-listmain .name,
+.xans-product-listnormal .name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* 가격 */
+.xans-product-listmain .price,
+.xans-product-listnormal .price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  margin-top: 4px;
+}
+
+/* 할인율 */
+.xans-product-listmain .discount,
+.xans-product-listnormal .discount {
+  color: #ff4d7d;
+  font-weight: 600;
+}
+
+/* ─── 푸터 ─── */
+#footer {
+  margin: 60px 0 0 !important;
+  border-top: 1px solid #e8e8e8 !important;
+  border-bottom: none !important;
+  background: #f8f8f8;
+  padding: 40px 0;
+}
+#footer:before { display: none !important; }
+#footer .inner {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 0 24px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.8;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 1024px) {
+  .xans-product-listmain ul,
+  .xans-product-listnormal ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .lb-logo { font-size: 18px; }
+  .lb-nav-inner a { padding: 12px 12px; font-size: 12px; }
+}
