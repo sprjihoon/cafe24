@@ -214,49 +214,78 @@
 .lb-hero { width:100%; overflow:hidden; }
 .lb-hero img { width:100%; display:block; }
 
-/* 히어로 플레이스홀더 (이미지 없을 때) */
+/* 히어로 플레이스홀더 — VERWICK 다크 배경 */
 .lb-hero-placeholder {
-  min-height:560px;
-  background:linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #111 100%);
+  min-height:600px;
+  background: linear-gradient(
+    to bottom right,
+    #1a1a1a 0%,
+    #2d2825 40%,
+    #3a3530 70%,
+    #1a1a1a 100%
+  );
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  padding:0 var(--content-padding);
-  color:#fff;
+  justify-content:flex-end;
+  padding: var(--space-20) var(--content-padding);
+  color:#faf8f5;
+  position: relative;
+  overflow: hidden;
+}
+/* 장식용 오버레이 라인 */
+.lb-hero-placeholder::before {
+  content:'';
+  position:absolute;
+  top: 60px;
+  right: 10%;
+  width: 1px;
+  height: 180px;
+  background: rgba(212,196,176,0.4);
 }
 .lb-hero-sub {
   font-family:var(--font-display);
   font-size:var(--font-size-sm);
+  font-style: italic;
   letter-spacing:var(--letter-spacing-widest);
-  color:var(--color-accent);
+  color:#d4c4b0;
   margin:0 0 var(--space-4);
 }
 .lb-hero-title {
-  font-size:clamp(36px, 5vw, 72px);
-  font-weight:var(--font-weight-bold);
-  line-height:1.1;
+  font-family: var(--font-display);
+  font-size:clamp(48px, 7vw, 96px);
+  font-weight: var(--font-weight-light);
+  letter-spacing: 0.08em;
+  line-height:1.05;
   margin:0 0 var(--space-6);
+  text-transform: uppercase;
 }
 .lb-hero-desc {
-  font-size:var(--font-size-lg);
-  color:rgba(255,255,255,0.7);
-  line-height:var(--line-height-base);
-  margin:0 0 var(--space-8);
+  font-size:var(--font-size-base);
+  color:rgba(212,196,176,0.85);
+  line-height:var(--line-height-loose);
+  margin:0 0 var(--space-10);
+  letter-spacing: 0.04em;
 }
 .lb-hero-btn {
   display:inline-block;
-  padding:14px 32px;
-  background:var(--color-white);
-  color:var(--color-primary);
+  padding:14px 40px;
+  background:transparent;
+  color:#faf8f5;
+  border: 1px solid rgba(212,196,176,0.6);
+  font-family: var(--font-display);
   font-size:var(--font-size-sm);
-  font-weight:var(--font-weight-semibold);
-  letter-spacing:var(--letter-spacing-wide);
+  font-weight:var(--font-weight-light);
+  letter-spacing:var(--letter-spacing-widest);
   text-transform:uppercase;
   text-decoration:none;
-  transition:background var(--transition-base), color var(--transition-base);
+  transition: all var(--transition-base);
   width:fit-content;
 }
-.lb-hero-btn:hover { background:var(--color-accent); color:#fff; }
+.lb-hero-btn:hover {
+  background: #d4c4b0;
+  border-color: #d4c4b0;
+  color: #1a1a1a;
+}
 
 /* 카테고리 단축 아이콘 존 */
 .lb-cat-zone {
@@ -315,44 +344,54 @@
 .lb-feature-card {
   display:block;
   position:relative;
-  min-height:240px;
-  padding:var(--space-10) var(--space-8);
-  background:var(--color-bg-subtle);
+  min-height:280px;
+  padding:var(--space-12) var(--space-10);
+  background: #f0ebe3;
   text-decoration:none;
   color:var(--color-text);
   overflow:hidden;
-  transition:background var(--transition-base);
+  transition: all var(--transition-base);
 }
-.lb-feature-card:hover { background:#f0f0f0; }
-.lb-feature-sale { background:#fff8f9; }
-.lb-feature-sale:hover { background:#fff0f3; }
+.lb-feature-card:hover { background: #e8e0d5; }
+.lb-feature-sale { background: #2d2825; color: #faf8f5; }
+.lb-feature-sale:hover { background: #3a3530; }
+.lb-feature-pick { background: #f0ebe3; }
 .lb-feature-inner { position:relative; z-index:1; }
 .lb-feature-label {
   display:inline-block;
   font-family:var(--font-display);
-  font-size:var(--font-size-sm);
-  font-weight:var(--font-weight-bold);
-  letter-spacing:var(--letter-spacing-widest);
+  font-size:var(--font-size-xs);
+  font-weight:var(--font-weight-light);
+  letter-spacing:0.3em;
   color:var(--color-accent);
-  margin-bottom:var(--space-3);
+  text-transform: uppercase;
+  margin-bottom:var(--space-4);
 }
-.lb-feature-pick .lb-feature-label { color:var(--color-primary); }
+.lb-feature-sale .lb-feature-label { color: #d4c4b0; }
 .lb-feature-title {
-  font-size:var(--font-size-xl);
-  font-weight:var(--font-weight-normal);
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: var(--font-weight-light);
+  letter-spacing: 0.05em;
   line-height:var(--line-height-tight);
   margin:0 0 var(--space-6);
-  color:var(--color-primary);
+  color:inherit;
 }
-.lb-feature-title strong { font-weight:var(--font-weight-normal); font-size:var(--font-size-base); color:var(--color-text-muted); display:block; margin-top:var(--space-2); }
+.lb-feature-title strong { font-weight:var(--font-weight-light); font-size:var(--font-size-base); color: inherit; opacity: 0.6; display:block; margin-top:var(--space-2); }
 .lb-feature-cta {
+  display: inline-block;
+  font-family: var(--font-display);
   font-size:var(--font-size-sm);
-  font-weight:var(--font-weight-semibold);
-  letter-spacing:var(--letter-spacing-wide);
-  color:var(--color-primary);
-  text-decoration:underline;
-  text-underline-offset:3px;
+  font-weight:var(--font-weight-light);
+  letter-spacing:var(--letter-spacing-widest);
+  text-transform: uppercase;
+  color:inherit;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  opacity: 0.75;
+  transition: opacity var(--transition-base);
 }
+.lb-feature-cta:hover { opacity: 1; }
 
 /* 상품 섹션 헤더 */
 .lb-product-section { margin:var(--space-15) 0; }

@@ -5,34 +5,38 @@
    모든 스킨이 공유하는 CSS 변수 체계.
    새 스킨을 만들 때 이 블록의 값만 교체하면 전체 스타일이 바뀐다.
    ============================================================ */
+/* ============================================================
+   VERWICK — TIMELESS MODERNITY
+   브랜드 팔레트: 크림 / 웜 베이지 / 웜 타우프 / 다크 차콜
+   ============================================================ */
 :root {
   /* ── 색상 ── */
-  --color-primary:        #222;       /* 메인 텍스트 / 강조 요소 */
-  --color-accent:         #ff4d7d;    /* 포인트 컬러 (SALE, 배지, hover) */
-  --color-accent-dark:    #e0004a;    /* 포인트 컬러 darken */
-  --color-bg:             #fff;       /* 페이지 배경 */
-  --color-bg-subtle:      #f8f8f8;    /* 푸터, 카드 배경 */
-  --color-border:         #e8e8e8;    /* 일반 구분선 */
-  --color-border-strong:  #d8d8d8;    /* 강조 구분선 */
-  --color-text:           #222;       /* 본문 텍스트 */
-  --color-text-muted:     #888;       /* 보조 텍스트 */
-  --color-text-faint:     #999;       /* 흐린 텍스트 */
-  --color-danger:         #c00;       /* 오류, SALE 강조 */
-  --color-white:          #fff;
-  --color-black:          #000;
+  --color-primary:        #1a1a1a;    /* 메인 텍스트 / 로고 */
+  --color-accent:         #9a8878;    /* 웜 타우프 포인트 */
+  --color-accent-dark:    #7a6858;    /* 포인트 darken */
+  --color-bg:             #faf8f5;    /* 웜 오프화이트 배경 */
+  --color-bg-subtle:      #f0ebe3;    /* 크림 베이지 (푸터, 카드) */
+  --color-border:         #e5ddd5;    /* 웜 구분선 */
+  --color-border-strong:  #cdc3b8;    /* 강조 구분선 */
+  --color-text:           #2d2825;    /* 웜 다크 텍스트 */
+  --color-text-muted:     #8a7d72;    /* 웜 그레이 보조 */
+  --color-text-faint:     #a89e94;    /* 흐린 텍스트 */
+  --color-danger:         #8a6a5a;    /* SALE 강조 (웜 브라운) */
+  --color-white:          #faf8f5;
+  --color-black:          #1a1a1a;
 
-  /* 마퀴 배너 (스킨별 교체 포인트) */
-  --color-marquee-bg:     #ff4d7d;
-  --color-marquee-text:   #fff;
+  /* 마퀴 배너 — VERWICK 시그니처 다크 */
+  --color-marquee-bg:     #1a1a1a;
+  --color-marquee-text:   #d4c4b0;
 
   /* 헤더 */
-  --color-header-bg:      #fff;
-  --color-header-border:  #e8e8e8;
+  --color-header-bg:      #faf8f5;
+  --color-header-border:  #e5ddd5;
 
   /* ── 폰트 ── */
-  --font-sans:      'Noto Sans KR', 'Montserrat', sans-serif;
-  --font-display:   'Montserrat', sans-serif;
-  --font-serif:     'Times New Roman', serif;
+  --font-sans:      'Noto Sans KR', 'Cormorant Garamond', sans-serif;
+  --font-display:   'Cormorant Garamond', 'Times New Roman', serif;
+  --font-serif:     'Cormorant Garamond', serif;
 
   --font-size-xs:   11px;
   --font-size-sm:   12px;
@@ -118,7 +122,7 @@
 /* ============================================================
    GOOGLE FONTS IMPORT
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
 
 /* ============================================================
    BASE RESET
@@ -235,16 +239,33 @@ img { vertical-align: top; }
 
 /* 로고 — 왼쪽 인라인 배치 */
 .lb-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+}
+.lb-logo-brand {
+  display: block;
   font-family: var(--font-display);
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-widest);
   color: var(--color-primary);
   text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
+  line-height: 1.1;
 }
-.lb-logo:hover { color: var(--color-primary); text-decoration: none; }
+.lb-logo-tagline {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: var(--font-weight-light);
+  letter-spacing: 0.25em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.lb-logo:hover .lb-logo-brand { color: var(--color-primary); }
+.lb-logo:hover { text-decoration: none; }
 
 /* 우측 아이콘 */
 .lb-icons {

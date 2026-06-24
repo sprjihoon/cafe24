@@ -220,7 +220,7 @@ $("body").on("click", ".eTab a", function(e){
   function ensureMarquee() {
     if (document.getElementById('marquee-banner')) return;
 
-    var msg = '보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; '.repeat(5);
+    var msg = 'TIMELESS MODERNITY &nbsp;&nbsp;·&nbsp;&nbsp; FREE SHIPPING OVER 50,000원 &nbsp;&nbsp;·&nbsp;&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;&nbsp;·&nbsp;&nbsp; 미니멀하고 클래식한 감성의 프리미엄 컨템포러리 &nbsp;&nbsp;·&nbsp;&nbsp; 30일 무료반품 &nbsp;&nbsp;·&nbsp;&nbsp; ';
     var html =
       '<div id="marquee-banner">' +
         '<div class="marquee-track">' +
