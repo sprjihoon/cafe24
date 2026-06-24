@@ -1,5 +1,7 @@
 
 <!--@layout(/layout/basic/layout.html)-->
+<!--@js(/layout/basic/js/atelier-products.js)-->
+<!--@js(/layout/basic/js/product-copy.js)-->
 <!--
     $category_page = /product/list.html
     $project_page = /product/project.html
@@ -22,7 +24,10 @@
 		$coupon_download_page = /coupon/coupon_productdetail.html
     -->
     <div class="headingArea">
-        <h2>[{$product_code}] {$name}</h2>
+        <span id="lb-product-badge" class="lb-product-badge" hidden></span>
+        <h2><span class="blind">상품코드</span>[{$product_code}] {$name}</h2>
+        <p id="lb-product-summary" class="lb-product-summary" hidden></p>
+        <div id="lb-product-meta" class="lb-product-meta" hidden></div>
         <span class="delivery {$delvtype_display|display}">(해외배송 가능상품)</span>
         <span class="icon">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} <img src="//img.echosting.cafe24.com/design/skin/admin/ko_KR/ico_rental.png" alt="" class="{$rental_information_display|display}"> {$regular_delivery_icon} {$cultural_tax_icon}</span>
         <!-- 공급사 바로가기버튼 영역 -->
@@ -638,7 +643,25 @@
             <li><a href="#prdRelated">관련상품</a></li>
         </ul>
         <div class="cont">
-            <h3>상품상세정보</h3>
+            <div class="lb-product-notes">
+                <div class="lb-product-note">
+                    <h4 class="lb-product-note-title">ABOUT THIS PIECE</h4>
+                    <p>과한 디테일보다 오래 입을 수 있는 균형에 집중했습니다.<br>단독으로도, 여러 옷과 함께해도 자연스럽게 이어지는 디자인입니다.</p>
+                </div>
+                <div class="lb-product-note">
+                    <h4 class="lb-product-note-title">FIT NOTE</h4>
+                    <p>몸을 조이지 않으면서도 흐트러져 보이지 않는 실루엣입니다.<br>자세한 실측과 착용 이미지를 함께 확인해 주세요.</p>
+                </div>
+                <div class="lb-product-note">
+                    <h4 class="lb-product-note-title">FABRIC NOTE</h4>
+                    <p>피부에 닿는 감각과 일상적인 관리까지 고려해 선택한 소재입니다.<br>계절이 지나도 자주 손이 갈 수 있도록 완성했습니다.</p>
+                </div>
+                <div class="lb-product-note">
+                    <h4 class="lb-product-note-title">STYLING NOTE</h4>
+                    <p>같은 톤의 팬츠와 매치하면 차분한 인상을,<br>데님이나 가벼운 스커트와 함께하면 조금 더 편안한 일상 룩을 완성할 수 있습니다.</p>
+                </div>
+            </div>
+            <h3 class="blind">상품상세정보</h3>
             {$product_detail}
         </div>
     </div>
@@ -656,6 +679,10 @@
             {$payment_info}
         </div>
         <div class="cont">
+            <div class="lb-shipping-intro">
+                <p class="lb-copy-eyebrow">YOUR ORDER, CAREFULLY PREPARED</p>
+                <p class="lb-shipping-lead">주문하신 옷이 가장 좋은 상태로 도착할 수 있도록 정성껏 준비합니다.</p>
+            </div>
             <h3>배송정보</h3>
             <ul class="delivery">
                 <li>배송 방법 : {$shipping_method}</li>
@@ -685,8 +712,11 @@
             <li><a href="#prdRelated">관련상품</a></li>
         </ul>
         <div class="board">
-            <h3>상품사용후기</h3>
-            <p class="desc">상품의 사용후기를 적어주세요.</p>
+            <div class="lb-review-intro">
+                <p class="lb-copy-eyebrow">WORN IN REAL LIFE</p>
+                <h3>당신의 일상 속에 스며든 순간들</h3>
+            </div>
+            <p class="desc blind">상품의 사용후기를 적어주세요.</p>
 
             <div module="product_review">
                 <!--@js(/js/module/product/review.js)-->

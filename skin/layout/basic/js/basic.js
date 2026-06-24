@@ -189,30 +189,22 @@ $("body").on("click", ".eTab a", function(e){
      {$mall_name}은 모듈 컨텍스트 밖에서 미처리됨
      → module holder에 있는 로고 텍스트를 읽어서 lb-logo에 적용 */
   function fixMallName() {
-    var lbLogo = document.querySelector('.lb-logo');
-    if (!lbLogo) return;
+    var brandEl = document.querySelector('.lb-logo-brand');
+    if (!brandEl) return;
 
-    // 이미 정상 텍스트면 스킵
-    var currentText = lbLogo.textContent.trim();
+    var currentText = brandEl.textContent.trim();
     if (currentText && currentText.indexOf('{$') === -1) return;
 
-    // 1순위: module holder 안의 로고 링크 텍스트
     var holderLogo = document.querySelector('#lb-module-holder .xans-layout-logotop a, #lb-module-holder h1 a');
     if (holderLogo) {
       var name = holderLogo.textContent.trim();
       if (name && name.indexOf('{$') === -1) {
-        lbLogo.textContent = name;
+        brandEl.textContent = name;
         return;
       }
     }
 
-    // 2순위: 페이지 title에서 추출 (보통 "상품명 : 쇼핑몰명" 형태)
-    var title = document.title;
-    var parts = title.split(':');
-    var shopName = parts[parts.length - 1].trim();
-    if (shopName && shopName.length > 0 && shopName.indexOf('{$') === -1) {
-      lbLogo.textContent = shopName;
-    }
+    brandEl.textContent = 'ATELIER N.';
   }
 
   /* ② 마퀴 배너 안전 삽입
@@ -220,7 +212,7 @@ $("body").on("click", ".eTab a", function(e){
   function ensureMarquee() {
     if (document.getElementById('marquee-banner')) return;
 
-    var msg = 'TIMELESS MODERNITY &nbsp;&nbsp;·&nbsp;&nbsp; FREE SHIPPING OVER 50,000원 &nbsp;&nbsp;·&nbsp;&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;&nbsp;·&nbsp;&nbsp; 미니멀하고 클래식한 감성의 프리미엄 컨템포러리 &nbsp;&nbsp;·&nbsp;&nbsp; 30일 무료반품 &nbsp;&nbsp;·&nbsp;&nbsp; ';
+    var msg = '50,000원 이상 무료배송 &nbsp;&nbsp;·&nbsp;&nbsp; 30일 무료반품 &nbsp;&nbsp;·&nbsp;&nbsp; 일상에 자연스럽게 스며드는 정돈된 여성복 &nbsp;&nbsp;·&nbsp;&nbsp; 유행보다 오래 입는 기본 &nbsp;&nbsp;·&nbsp;&nbsp; 편안하지만 흐트러지지 않는 실루엣 &nbsp;&nbsp;·&nbsp;&nbsp; ';
     var html =
       '<div id="marquee-banner">' +
         '<div class="marquee-track">' +
@@ -274,11 +266,97 @@ $("body").on("click", ".eTab a", function(e){
     }
   }
 
+  /* ⑤ 히어로 슬라이더 */
+  function initHeroSlider() {
+    var slider = document.getElementById('lb-hero-slider');
+    if (!slider) return;
+
+    var track = slider.querySelector('.lb-hero-track');
+    var dots = slider.querySelectorAll('.lb-hero-dot');
+    if (!track || !dots.length) return;
+
+    var current = 0;
+    var total = dots.length;
+    var timer = null;
+
+    function goTo(index) {
+      current = (index + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('is-active', i === current);
+      }
+    }
+
+    function startAuto() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(function () { goTo(current + 1); }, 6000);
+    }
+
+    for (var d = 0; d < dots.length; d++) {
+      (function (idx) {
+        dots[idx].addEventListener('click', function () {
+          goTo(idx);
+          startAuto();
+        });
+      })(d);
+    }
+
+    goTo(0);
+    startAuto();
+  }
+
+  /* ⑥ 카테고리 목록 페이지 카피 */
+  var CATEGORY_COPY = {
+    '26': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' },
+    '27': { label: 'TOP', desc: '매일의 조합을 가장 편하게 시작하는 기본' },
+    '28': { label: 'BOTTOM', desc: '움직임은 편안하게, 선은 자연스럽게' },
+    '29': { label: 'BAG & SHOES', desc: '룩의 균형을 마무리하는 작은 선택' },
+    '30': { label: 'ACCESSORY', desc: '룩의 균형을 마무리하는 작은 선택' }
+  };
+
+  var CATEGORY_COPY_BY_KEY = {
+    outer: CATEGORY_COPY['26'],
+    top: CATEGORY_COPY['27'],
+    knit: { label: 'KNIT', desc: '부드러운 온도와 오래 남는 질감' },
+    shirt: { label: 'SHIRT', desc: '힘을 빼도 정돈돼 보이는 한 벌' },
+    bottom: CATEGORY_COPY['28'],
+    dress: { label: 'DRESS', desc: '특별한 날과 평범한 날 사이에 있는 옷' },
+    bagshoes: CATEGORY_COPY['29']
+  };
+
+  function initCategoryCopy() {
+    var intro = document.getElementById('lb-cat-page-intro');
+    if (!intro) return;
+
+    var eyebrow = document.getElementById('lb-cat-page-eyebrow');
+    var desc = document.getElementById('lb-cat-page-desc');
+    if (!eyebrow || !desc) return;
+
+    var copy = null;
+    var params = new URLSearchParams(window.location.search);
+    var catKey = params.get('cat');
+    var cateNo = params.get('cate_no');
+
+    if (catKey && CATEGORY_COPY_BY_KEY[catKey]) {
+      copy = CATEGORY_COPY_BY_KEY[catKey];
+    } else if (cateNo && CATEGORY_COPY[cateNo]) {
+      copy = CATEGORY_COPY[cateNo];
+    }
+
+    if (!copy) return;
+
+    eyebrow.textContent = copy.label;
+    desc.textContent = copy.desc;
+    intro.hidden = false;
+  }
+
   function init() {
     ensureMarquee();
     ensureHeader();
     fixMallName();
     fixBreadcrumb();
+    initHeroSlider();
+    initCategoryCopy();
   }
 
   if (document.readyState === 'loading') {
