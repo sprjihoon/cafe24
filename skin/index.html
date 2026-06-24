@@ -5,7 +5,7 @@
 <!-- ============================================================
      ① HERO — 4슬라이드 (관리자 배너 이미지 등록 시 smart-banner로 교체 가능)
      ============================================================ -->
-<div class="lb-hero">
+<div class="lb-hero lb-full-bleed">
   <div class="lb-hero-slider" id="lb-hero-slider">
     <div class="lb-hero-track">
       <div class="lb-hero-slide lb-hero-slide--1">
@@ -49,6 +49,54 @@
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  function initLbHeroSlider() {
+    var slider = document.getElementById('lb-hero-slider');
+    if (!slider || slider.dataset.lbReady === '1') return;
+    slider.dataset.lbReady = '1';
+
+    var track = slider.querySelector('.lb-hero-track');
+    var dots = slider.querySelectorAll('.lb-hero-dot');
+    if (!track || !dots.length) return;
+
+    var current = 0;
+    var total = dots.length;
+    var timer = null;
+
+    function goTo(index) {
+      current = (index + total) % total;
+      var slideWidth = slider.getBoundingClientRect().width;
+      track.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('is-active', i === current);
+      }
+    }
+
+    function startAuto() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(function () { goTo(current + 1); }, 6000);
+    }
+
+    for (var d = 0; d < dots.length; d++) {
+      (function (idx) {
+        dots[idx].addEventListener('click', function () {
+          goTo(idx);
+          startAuto();
+        });
+      })(d);
+    }
+
+    window.addEventListener('resize', function () { goTo(current); });
+    goTo(0);
+    startAuto();
+    setTimeout(function () { goTo(0); }, 150);
+  }
+
+  initLbHeroSlider();
+})();
+</script>
 
 <!-- ============================================================
      ② CATEGORY — 7카테고리 카피

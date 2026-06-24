@@ -86,6 +86,12 @@
   /* ── 레이아웃 ── */
   --max-width:        1400px;
   --content-padding:  24px;          /* 좌우 패딩 */
+
+  /* 메인 히어로 배너 (PC 1014 기준 ≈ 16:9) */
+  --hero-aspect-ratio:        16 / 9;
+  --hero-aspect-ratio-mobile: 4 / 5;
+  --hero-max-height:          720px;
+  --hero-min-height:          420px;
   --header-height:    60px;
   --nav-height:       44px;
   --marquee-height:   36px;
@@ -137,6 +143,12 @@
    ============================================================ */
 * { box-sizing: border-box; }
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   font-family: var(--font-sans);
   font-weight: var(--font-weight-normal);
@@ -144,7 +156,10 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   line-height: var(--line-height-base);
-  min-width: 320px !important;
+  min-width: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 a { color: var(--color-text); text-decoration: none; }

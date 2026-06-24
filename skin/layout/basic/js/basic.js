@@ -266,44 +266,7 @@ $("body").on("click", ".eTab a", function(e){
     }
   }
 
-  /* ⑤ 히어로 슬라이더 */
-  function initHeroSlider() {
-    var slider = document.getElementById('lb-hero-slider');
-    if (!slider) return;
-
-    var track = slider.querySelector('.lb-hero-track');
-    var dots = slider.querySelectorAll('.lb-hero-dot');
-    if (!track || !dots.length) return;
-
-    var current = 0;
-    var total = dots.length;
-    var timer = null;
-
-    function goTo(index) {
-      current = (index + total) % total;
-      track.style.transform = 'translateX(-' + (current * 100) + '%)';
-      for (var i = 0; i < dots.length; i++) {
-        dots[i].classList.toggle('is-active', i === current);
-      }
-    }
-
-    function startAuto() {
-      if (timer) clearInterval(timer);
-      timer = setInterval(function () { goTo(current + 1); }, 6000);
-    }
-
-    for (var d = 0; d < dots.length; d++) {
-      (function (idx) {
-        dots[idx].addEventListener('click', function () {
-          goTo(idx);
-          startAuto();
-        });
-      })(d);
-    }
-
-    goTo(0);
-    startAuto();
-  }
+  /* ⑤ 히어로 슬라이더 — index.html 인라인 스크립트에서 초기화 */
 
   /* ⑥ 카테고리 목록 페이지 카피 */
   var CATEGORY_COPY = {
@@ -355,7 +318,6 @@ $("body").on("click", ".eTab a", function(e){
     ensureHeader();
     fixMallName();
     fixBreadcrumb();
-    initHeroSlider();
     initCategoryCopy();
   }
 

@@ -1,0 +1,455 @@
+@charset "utf-8";
+
+/* ============================================================
+   CAFE24 SKIN — DESIGN TOKENS
+   모든 스킨이 공유하는 CSS 변수 체계.
+   새 스킨을 만들 때 이 블록의 값만 교체하면 전체 스타일이 바뀐다.
+   ============================================================ */
+/* ============================================================
+   BRAND MOOD — Quiet / Refined / Everyday
+   Ivory · Oatmeal · Taupe · Cocoa · Charcoal · Black · Soft Blue
+   ============================================================ */
+:root {
+  /* ── 브랜드 팔레트 ── */
+  --color-ivory:          #faf8f5;
+  --color-oatmeal:        #f0ebe3;
+  --color-taupe:          #9a8878;
+  --color-cocoa:          #6b5344;
+  --color-charcoal:       #2d2825;
+  --color-black:          #1a1a1a;
+  --color-soft-blue:      #b8c4ce;
+
+  /* ── 시맨틱 색상 ── */
+  --color-primary:        var(--color-charcoal);
+  --color-accent:         var(--color-taupe);
+  --color-accent-dark:    var(--color-cocoa);
+  --color-bg:             var(--color-ivory);
+  --color-bg-subtle:      var(--color-oatmeal);
+  --color-border:         #e5ddd5;
+  --color-border-strong:  #cdc3b8;
+  --color-text:           var(--color-charcoal);
+  --color-text-muted:     #8a7d72;
+  --color-text-faint:     #a89e94;
+  --color-danger:         var(--color-cocoa);
+  --color-white:          var(--color-ivory);
+
+  /* 마퀴 배너 */
+  --color-marquee-bg:     var(--color-charcoal);
+  --color-marquee-text:   #d4c4b0;
+
+  /* 헤더 */
+  --color-header-bg:      #faf8f5;
+  --color-header-border:  #e5ddd5;
+
+  /* ── 폰트 ── */
+  --font-sans:      'Noto Sans KR', 'Cormorant Garamond', sans-serif;
+  --font-display:   'Cormorant Garamond', 'Times New Roman', serif;
+  --font-serif:     'Cormorant Garamond', serif;
+
+  --font-size-xs:   11px;
+  --font-size-sm:   12px;
+  --font-size-base: 13px;
+  --font-size-md:   14px;
+  --font-size-lg:   16px;
+  --font-size-xl:   18px;
+  --font-size-2xl:  22px;
+
+  --font-weight-light:    300;
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --letter-spacing-tight:   0.02em;
+  --letter-spacing-base:    0.05em;
+  --letter-spacing-wide:    0.10em;
+  --letter-spacing-wider:   0.12em;
+  --letter-spacing-widest:  0.15em;
+
+  --line-height-tight:  1.3;
+  --line-height-base:   1.6;
+  --line-height-loose:  1.8;
+
+  /* ── 여백 (8px 베이스 시스템) ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-15: 60px;
+  --space-20: 80px;
+
+  /* ── 레이아웃 ── */
+  --max-width:        1400px;
+  --content-padding:  24px;          /* 좌우 패딩 */
+  --header-height:    60px;
+  --nav-height:       44px;
+  --marquee-height:   36px;
+
+  /* ── 테두리 ── */
+  --radius-sm:    2px;
+  --radius-md:    4px;
+  --radius-lg:    8px;
+  --radius-xl:    16px;
+  --radius-full:  9999px;
+
+  /* ── 그림자 ── */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.12);
+  --shadow-lg:   0 8px 24px rgba(0,0,0,0.16);
+
+  /* ── 전환(transition) ── */
+  --transition-fast:  0.15s ease;
+  --transition-base:  0.2s ease;
+  --transition-slow:  0.3s ease;
+
+  /* ── z-index ── */
+  --z-base:    1;
+  --z-nav:     100;
+  --z-header:  1000;
+  --z-tooltip: 9000;
+  --z-modal:   10000;
+
+  /* ── 상품 그리드 ── */
+  --grid-cols:          4;            /* 데스크탑 열 수 */
+  --grid-gap-row:       32px;
+  --grid-gap-col:       20px;
+  --product-img-ratio:  3/4;          /* 상품 이미지 비율 */
+
+  /* ── 페이지별 최대 너비 ── */
+  --max-width-product-detail: 1200px;
+  --max-width-myshop:          900px;
+  --max-width-member:          680px;
+  --max-width-order:          1100px;
+}
+
+/* ============================================================
+   GOOGLE FONTS IMPORT
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+/* ============================================================
+   BASE RESET
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: var(--line-height-base);
+  min-width: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+a { color: var(--color-text); text-decoration: none; }
+a:hover { text-decoration: none; color: var(--color-text); }
+
+img { vertical-align: top; }
+
+/* ============================================================
+   MARQUEE BANNER
+   ============================================================ */
+#marquee-banner {
+  width: 100%;
+  height: var(--marquee-height);
+  line-height: var(--marquee-height);
+  background: var(--color-marquee-bg);
+  color: var(--color-marquee-text);
+  overflow: hidden;
+  position: relative;
+}
+#marquee-banner .marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 25s linear infinite;
+}
+#marquee-banner .marquee-track span {
+  display: inline-block;
+  padding: 0 var(--space-15);
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-base);
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border) !important;
+}
+#header:before,
+#header:after { display: none !important; }
+
+#header .topArea,
+#header .link,
+#header .special,
+#header ul.special,
+#header div[module="Layout_multishopList"],
+#header div[module="Layout_statelogoff"],
+#header div[module="Layout_stateLogon"],
+#header ul[module="Layout_shoppingInfo"] { display: none !important; }
+
+/* LB 헤더 래퍼 */
+.lb-header {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 왼쪽 그룹: 햄버거 + 로고 */
+.lb-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* 햄버거 */
+.lb-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding: var(--space-1);
+  background: none;
+  border: none;
+  flex-shrink: 0;
+}
+.lb-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-primary);
+  transition: var(--transition-slow);
+}
+
+/* 로고 — 왼쪽 인라인 배치 */
+.lb-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+}
+.lb-logo-brand {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-widest);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.lb-logo-tagline {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: var(--font-weight-light);
+  letter-spacing: 0.25em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.lb-logo:hover .lb-logo-brand { color: var(--color-primary); }
+.lb-logo:hover { text-decoration: none; }
+
+/* 우측 아이콘 */
+.lb-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.lb-icons a {
+  display: flex;
+  align-items: center;
+  position: relative;
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+.lb-icons a:hover { color: var(--color-accent); }
+
+/* 장바구니 아이콘 래퍼 */
+.lb-icon-cart {
+  position: relative;
+}
+
+/* 장바구니 뱃지 */
+.lb-cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* SVG 아이콘 */
+.lb-icon-svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+#lb-nav {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#lb-nav::-webkit-scrollbar { display: none; }
+
+#lb-nav {
+  display: flex;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+  gap: 0;
+  align-items: center;
+}
+#lb-nav a {
+  display: block;
+  padding: var(--space-3) 18px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  color: #444;
+  white-space: nowrap;
+  letter-spacing: var(--letter-spacing-tight);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-base), border-color var(--transition-base);
+}
+#lb-nav a:hover,
+#lb-nav a.active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  border-bottom-color: var(--color-primary);
+}
+#lb-nav a.lb-sale { color: var(--color-danger); font-weight: var(--font-weight-semibold); }
+#lb-nav a.lb-sale:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+#footer {
+  margin-top: var(--space-15) !important;
+  border-top: 1px solid var(--color-border) !important;
+  border-bottom: none !important;
+  background: var(--color-bg-subtle);
+  padding: var(--space-10) 0;
+}
+#footer:before { display: none !important; }
+#footer .inner {
+  width: 100% !important;
+  max-width: var(--max-width) !important;
+  margin: 0 auto !important;
+  padding: 0 var(--content-padding);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-loose);
+}
+
+/* ============================================================
+   PRODUCT GRID
+   ============================================================ */
+.xans-product-listmain ul,
+.xans-product-listnormal ul {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  gap: var(--grid-gap-row) var(--grid-gap-col);
+  padding: 0;
+  list-style: none;
+}
+.xans-product-listmain li,
+.xans-product-listnormal li {
+  float: none !important;
+  width: auto !important;
+}
+.xans-product-listmain .prdList img,
+.xans-product-listnormal .prdList img {
+  width: 100%;
+  aspect-ratio: var(--product-img-ratio);
+  object-fit: cover;
+  display: block;
+}
+.xans-product-listmain .name,
+.xans-product-listnormal .name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  color: #333;
+  margin-top: var(--space-2);
+}
+.xans-product-listmain .price,
+.xans-product-listnormal .price {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  margin-top: var(--space-1);
+}
+.xans-product-listmain .discount,
+.xans-product-listnormal .discount {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  :root { --grid-cols: 2; }
+  .lb-logo { font-size: var(--font-size-xl); }
+}
+@media (max-width: 640px) {
+  :root {
+    --grid-cols: 2;
+    --content-padding: 16px;
+  }
+  .lb-logo { font-size: var(--font-size-lg); }
+  #lb-nav a { padding: var(--space-3) var(--space-3); font-size: var(--font-size-sm); }
+}

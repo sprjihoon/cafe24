@@ -1,4 +1,5 @@
 //window popup script
+/* skin sync 2026-06-24 */
 function winPop(url) {
     window.open(url, "popup", "width=300,height=300,left=10,top=10,resizable=no,scrollbars=no");
 }

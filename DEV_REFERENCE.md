@@ -38,6 +38,7 @@
 | FTP MCP 서버 구축 | ✅ 완료 | `ftp-mcp-server/index.js` |
 | FTP 연결 및 경로 설정 | ✅ 완료 | `watcher.config.json` |
 | LE BLANC 마퀴 배너 | ✅ 완료 | `layout.html`, `layout.css` |
+| ATELIER N. 모바일 스킨 (메인·레이아웃·CSS) | ✅ 완료 | `mobile/` → `/sde_design/mobile/` |
 | LE BLANC 헤더 (로고, 아이콘) | ✅ 완료 | `layout.html`, `layout.css` |
 | LE BLANC 네비게이션 | ✅ 완료 (하드코딩) | `layout.html` |
 | 사이드바 숨김 | ✅ 완료 | `layout.css` |
@@ -52,7 +53,7 @@
 | 작업 | 우선순위 | 비고 |
 |------|----------|------|
 | Layout_category 모듈로 nav 재구성 | 🔴 높음 | 현재 카테고리 번호 하드코딩 상태 |
-| 모바일 스킨 개발 | 🔴 높음 | 판매 심사 필수 요건 |
+| 모바일 스킨 Smart Design 저장 | 🟡 중간 | HTML 변경 반영 시 관리자 저장 필요 |
 | 장바구니/주문/결제 페이지 스타일 | 🟡 중간 | 서브페이지 완성도 |
 | 푸터 디자인 개선 | 🟡 중간 | LE BLANC 스타일 통일 |
 | 메인 이미지 배너 슬라이더 | 🟡 중간 | 첫인상 중요 |
@@ -72,29 +73,27 @@ C:\Users\one\cafe24d\
 │   ├── watcher.config.example.json
 │   ├── package.json
 │   └── README.md
-└── skin\                         ← 로컬 스킨 작업 폴더
-    └── layout\
-        └── basic\
-            ├── layout.html       ← 메인 레이아웃 템플릿 ★ 핵심
-            ├── css\
-            │   ├── layout.css    ← 레이아웃 + LE BLANC 커스텀 CSS 전체 ★
-            │   ├── common.css    ← 전체 공통 스타일 (수정 주의)
-            │   ├── leblanc.css   ← LE BLANC 보조 CSS (layout.html에 포함됨)
-            │   └── ec-base-*.css ← 카페24 기본 컴포넌트 (수정 금지)
-            └── js\
-                ├── basic.js      ← DOM 주입 + LE BLANC 초기화 ★
-                ├── common.js     ← 카페24 공통 JS (수정 금지)
-                ├── popup.js      ← 팝업 JS
-                └── debug.js      ← 호환성 진단 도구 (배포 시 제외)
+└── skin\                         ← PC 스킨 (로컬)
+    └── layout\basic\ ...
+└── mobile\                       ← 모바일 스킨 (로컬)
+    ├── index.html                ← 메인 (main.html 레이아웃)
+    ├── layout\basic\
+    │   ├── main.html             ← 메인 전용 레이아웃 ★
+    │   ├── layout.html           ← 서브페이지 레이아웃 ★
+    │   ├── footer.html, navigation.html, sidebar.html, search.html
+    │   ├── css\leblanc.css, lb-mobile.css
+    │   └── js\basic.js, product-copy.js
+    └── product\list.html, detail.html
 ```
 
 ### FTP 서버 경로 매핑
 
 | 로컬 경로 | 서버 경로 |
 |-----------|-----------|
+| `skin/` | `/sde_design/base/` |
 | `skin/layout/basic/` | `/sde_design/base/layout/basic/` |
-| `skin/layout/basic/css/` | `/sde_design/base/layout/basic/css/` |
-| `skin/layout/basic/js/` | `/sde_design/base/layout/basic/js/` |
+| `mobile/` | `/sde_design/mobile/` |
+| `mobile/layout/basic/` | `/sde_design/mobile/layout/basic/` |
 
 ---
 
