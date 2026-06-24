@@ -35,11 +35,11 @@
     <p><a href="#contents">본문 바로가기</a></p>
 </div>
 
-<!-- LE BLANC 마퀴 배너 -->
+<!-- 마퀴 배너 — 텍스트는 여기서 수정 -->
 <div id="marquee-banner">
   <div class="marquee-track">
-    <span>FREE SHIPPING ON ORDERS OVER 50,000원 &nbsp;·&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;·&nbsp; 신상품 매일 업데이트 &nbsp;·&nbsp; 무료배송 5만원 이상 &nbsp;·&nbsp; 30일 무료반품 &nbsp;·&nbsp;</span>
-    <span>FREE SHIPPING ON ORDERS OVER 50,000원 &nbsp;·&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;·&nbsp; 신상품 매일 업데이트 &nbsp;·&nbsp; 무료배송 5만원 이상 &nbsp;·&nbsp; 30일 무료반품 &nbsp;·&nbsp;</span>
+    <span>보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp;</span>
+    <span>보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; 보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp;</span>
   </div>
 </div>
 
@@ -47,35 +47,36 @@
 <div class="inner">
 
   <!-- LE BLANC 헤더 -->
-  <div class="lb-header" style="position:relative;">
-    <!-- 햄버거 -->
-    <button class="lb-hamburger" onclick="alert('메뉴 오픈 — 카테고리를 연결해주세요')" style="background:none;border:none;">
-      <span></span><span></span><span></span>
-    </button>
+  <div class="lb-header">
+    <!-- 왼쪽: 햄버거 + 로고 -->
+    <div class="lb-header-left">
+      <button class="lb-hamburger" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/index.html" class="lb-logo">{$mall_name}</a>
+    </div>
 
-    <!-- 로고 -->
-    <a href="/index.html" class="lb-logo">{$mall_name}</a>
-
-    <!-- 우측 아이콘 -->
+    <!-- 우측 아이콘 (원본 순서: 장바구니 → 유저 → 검색) -->
     <div class="lb-icons">
-      <!-- 검색 -->
-      <a href="/product/search.html" title="검색">
-        <svg class="lb-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
-      </a>
-      <!-- 로그인/마이쇼핑 -->
-      <a href="/myshop/index.html" title="마이쇼핑" module="Layout_stateLogon">
-        <svg class="lb-icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </a>
-      <a href="/member/login.html" title="로그인" module="Layout_statelogoff">
-        <svg class="lb-icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </a>
       <!-- 장바구니 -->
-      <a href="/order/basket.html" title="장바구니" style="position:relative;">
+      <a href="/order/basket.html" title="장바구니" class="lb-icon-cart">
         <svg class="lb-icon-svg" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="lb-cart-count" module="Layout_orderBasketCount">
           <!--@css(/css/module/layout/orderBasketcount.css)-->
           {$basket_count}
         </span>
+      </a>
+      <!-- 마이쇼핑 (로그인 시) -->
+      <a href="/myshop/index.html" title="마이쇼핑" module="Layout_stateLogon">
+        <svg class="lb-icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <!-- 로그인 (비로그인 시) -->
+      <a href="/member/login.html" title="로그인" module="Layout_statelogoff">
+        <svg class="lb-icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <!-- 검색 -->
+      <a href="/product/search.html" title="검색">
+        <svg class="lb-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
       </a>
     </div>
   </div>

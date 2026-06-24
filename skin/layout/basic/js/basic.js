@@ -220,11 +220,12 @@ $("body").on("click", ".eTab a", function(e){
   function ensureMarquee() {
     if (document.getElementById('marquee-banner')) return;
 
+    var msg = '보이지 않는 것이 더 깊고 넓은 것입니다. &nbsp;&nbsp;&nbsp; '.repeat(5);
     var html =
       '<div id="marquee-banner">' +
         '<div class="marquee-track">' +
-          '<span>FREE SHIPPING ON ORDERS OVER 50,000원 &nbsp;&middot;&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;&middot;&nbsp; 신상품 매일 업데이트 &nbsp;&middot;&nbsp; 무료배송 5만원 이상 &nbsp;&middot;&nbsp; 30일 무료반품 &nbsp;&middot;&nbsp;</span>' +
-          '<span>FREE SHIPPING ON ORDERS OVER 50,000원 &nbsp;&middot;&nbsp; NEW ARRIVALS EVERY WEEK &nbsp;&middot;&nbsp; 신상품 매일 업데이트 &nbsp;&middot;&nbsp; 무료배송 5만원 이상 &nbsp;&middot;&nbsp; 30일 무료반품 &nbsp;&middot;&nbsp;</span>' +
+          '<span>' + msg + '</span>' +
+          '<span>' + msg + '</span>' +
         '</div>' +
       '</div>';
 
@@ -242,8 +243,7 @@ $("body").on("click", ".eTab a", function(e){
     }
   }
 
-  /* ③ 헤더 fallback
-     layout.html의 lb-header가 없을 때(캐시된 구버전)만 주입 */
+  /* ③ 헤더 fallback — 새 헤더 구조 (로고 왼쪽) */
   function ensureHeader() {
     if (document.querySelector('.lb-header')) return;
 
@@ -252,14 +252,16 @@ $("body").on("click", ".eTab a", function(e){
 
     header.innerHTML =
       '<div class="lb-header">' +
-        '<button class="lb-hamburger" style="background:none;border:none;cursor:pointer;">' +
-          '<span></span><span></span><span></span>' +
-        '</button>' +
-        '<a href="/index.html" class="lb-logo">SHOP</a>' +
+        '<div class="lb-header-left">' +
+          '<button class="lb-hamburger" aria-label="메뉴 열기">' +
+            '<span></span><span></span><span></span>' +
+          '</button>' +
+          '<a href="/index.html" class="lb-logo">SHOP</a>' +
+        '</div>' +
         '<div class="lb-icons">' +
-          '<a href="/product/search.html" title="검색">&#128269;</a>' +
+          '<a href="/order/basket.html" title="장바구니" class="lb-icon-cart">&#128717;</a>' +
           '<a href="/member/login.html" title="로그인">&#128100;</a>' +
-          '<a href="/order/basket.html" title="장바구니">&#128717;</a>' +
+          '<a href="/product/search.html" title="검색">&#128269;</a>' +
         '</div>' +
       '</div>';
   }
