@@ -1,9 +1,14 @@
 @charset "utf-8";
 
+/* ============================================================
+   CAFE24 BASE LAYOUT — 카페24 기본 구조 (수정 금지)
+   이 섹션은 카페24 모듈이 의존하는 클래스들. 삭제/이름변경 금지.
+   ============================================================ */
+
 /* Layout */
-#header { position:relative; border-bottom:1px solid #d8d8d8;  }
+#header { position:relative; border-bottom:1px solid #d8d8d8; }
 #header:before { position:absolute; top:35px; left:0; content:""; width:100%; height:0; border-top:1px solid #d8d8d8; }
-#header:after { position:absolute; bottom:45px; left:0; content:""; width:100%; height:0; border-top:1px solid #d8d8d8; }
+#header:after  { position:absolute; bottom:45px; left:0; content:""; width:100%; height:0; border-top:1px solid #d8d8d8; }
 #header .inner { position:relative; width:1218px; margin:0 auto; *zoom:1; }
 #header .inner:after { content:""; display:block; clear:both; }
 #header .topArea { height:112px; padding:83px 0 0; text-align:center; *zoom:1; }
@@ -19,37 +24,37 @@
 #header .link > span img { vertical-align:middle; }
 #header .link .xans-layout-bookmark span { padding-left:17px; background:url("//img.echosting.cafe24.com/skin/base/layout/ico_bookmark.png") no-repeat 0 1px; }
 
-#wrap { position:relative; width:1460px; margin:27px auto 0; }
+#wrap      { position:relative; width:1460px; margin:27px auto 0; }
 #container { width:1218px; margin:0 auto; *zoom:1; }
 #container:after { content:""; display:block; clear:both; }
-#sidebar { float:left; width:180px; }
+#sidebar   { float:left; width:180px; }
 #sidebar .banner { padding:0 0 20px; border-bottom:1px solid #e8e8e8; }
 #sidebar .banner p a { display:block; position:relative; height:20px; margin:0 0 0 10px; padding:10px 0 10px 25px; font-size:13px; font-weight:bold; line-height:20px; }
-#sidebar .banner [class*="Banner"]:before {  position:absolute; top:11px; left:0;  content:""; display:block; width:20px; height:20px; background:url("//img.echosting.cafe24.com/skin/base/layout/sfix_sidebar_banner.png") no-repeat; }
-  #sidebar .banner p a.giftBanner:before { background-position:0 0; }
-  #sidebar .banner p a.opdiaryBanner:before { background-position:-50px 0; }
-  #sidebar .banner p a.sosBanner:before { background-position:-100px 0; }
-  #sidebar .banner p a.attendBanner:before { background-position:0 -50px; }
-  #sidebar .banner p a.couponzoneBanner:before { background-position:-50px -50px; }
-  #sidebar .banner p a.calendarBanner:before { background-position:-100px -50px; }
+#sidebar .banner [class*="Banner"]:before { position:absolute; top:11px; left:0; content:""; display:block; width:20px; height:20px; background:url("//img.echosting.cafe24.com/skin/base/layout/sfix_sidebar_banner.png") no-repeat; }
+  #sidebar .banner p a.giftBanner:before      { background-position:0 0; }
+  #sidebar .banner p a.opdiaryBanner:before   { background-position:-50px 0; }
+  #sidebar .banner p a.sosBanner:before       { background-position:-100px 0; }
+  #sidebar .banner p a.attendBanner:before    { background-position:0 -50px; }
+  #sidebar .banner p a.couponzoneBanner:before{ background-position:-50px -50px; }
+  #sidebar .banner p a.calendarBanner:before  { background-position:-100px -50px; }
 #sidebar .banner [class*="Banner"]:hover { text-decoration:none; }
 #contents { float:right; width:1014px; }
 #contents .visual img { max-width:100%; }
 #banner { position:absolute; top:0; left:0; width:90px; }
-#quick { position:absolute; top:0; right:0; width:90px; }
+#quick  { position:absolute; top:0; right:0; width:90px; }
 #quick .banner a { display:block; margin:15px 0 0; }
 
-#footer { position:relative; margin:40px 0 0 0; border-top:1px solid #e8e8e8;  border-bottom:45px solid #e8e8e8; }
+#footer { position:relative; margin:40px 0 0 0; border-top:1px solid #e8e8e8; border-bottom:45px solid #e8e8e8; }
 #footer:before { position:absolute; top:44px; left:0; content:""; width:100%; height:0; border-bottom:1px solid #e8e8e8; }
 #footer .inner { overflow:hidden; position:relative; width:1218px; margin:0 auto -45px; *zoom:1; }
-#footer .inner:after {  content:""; display:block; clear:both; }
+#footer .inner:after { content:""; display:block; clear:both; }
 
 /* Main */
-#boardArea { overflow:hidden; margin:50px 0 0; border-top:1px solid #d8d8d8; }
+#boardArea  { overflow:hidden; margin:50px 0 0; border-top:1px solid #d8d8d8; }
 #bannerArea { margin:22px 0 0; }
 #bannerArea h2 { margin:0 0 16px; font-weight:normal; font-size:20px; color:#2e2e2e; text-align:center; }
 
-/* 탐색경로바 */
+/* 탐색경로(breadcrumb) */
 .path { overflow:hidden; height:30px; line-height:30px; *zoom:1; }
 .path span { overflow:hidden; position:absolute; width:0; height:0; white-space:nowrap; text-indent:100%; }
 .path ol { float:right; }
@@ -59,21 +64,21 @@
 .path li strong,
 .path li strong a { color:#2e2e2e; }
 
-/* 타이틀 */
+/* 타이틀 영역 */
 .titleArea { min-height:30px; margin:10px 0 20px; border-bottom:1px solid #e8e8e8; }
 .titleArea h2 { display:inline-block; color:#2e2e2e; font-size:16px; *display:inline; }
-.titleArea p { display:inline-block; position:relative; margin:0 0 0 6px; padding:0 0 0 10px; color:#939393; *display:inline; }
+.titleArea p  { display:inline-block; position:relative; margin:0 0 0 6px; padding:0 0 0 10px; color:#939393; *display:inline; }
 .titleArea p:before { display:inline-block; position:absolute; top:0; left:0; content:""; width:1px; height:13px; border-left:1px solid #d9d9d9; }
 .titleArea ul { padding:5px 0; color:#939393; line-height:18px; }
 .titleArea ul li { position:relative; padding:0 0 0 9px; }
-.titleArea ul li:before { display:block; position: absolute; top:50%; left:0; content:""; width:2px; height:2px; margin:-2px 0 0 0; background:#939393; }
+.titleArea ul li:before { display:block; position:absolute; top:50%; left:0; content:""; width:2px; height:2px; margin:-2px 0 0 0; background:#939393; }
 
 /* 게시판 메인 */
 .boardMain { overflow:hidden; *zoom:1; }
 .boardMain td img { vertical-align:middle; margin:1px; }
 .boardMain .board { position:relative; margin:0 0 65px; }
-.boardMain .leftArea { float:left; width:50%; }
-.boardMain .leftArea .board { margin:0 23px 65px 0; }
+.boardMain .leftArea  { float:left; width:50%; }
+.boardMain .leftArea  .board { margin:0 23px 65px 0; }
 .boardMain .rightArea { float:right; width:50%; }
 .boardMain .rightArea .board { margin:0 0 65px 23px; }
 .boardMain .board h3 { margin:0 0 13px; height:28px; font-size:16px; color:#2e2e2e; border-bottom:2px solid #626672; }
@@ -90,173 +95,62 @@
 .boardMain .board .galleryList li .imgLink img { width:100%; max-height:110px; border:1px solid #ededed; }
 
 /* 퀵뷰 모달 */
-#modalBackpanel { display:none; position:absolute; top:0; left:0; z-index:10000; width:100%; height:100%; background:#000; }
-#modalContainer { display:none; position:absolute; top:100px; left:100px; z-index:10001; width:975px; height:720px; border:1px solid #333; background:#fff; }
+#modalBackpanel  { display:none; position:absolute; top:0; left:0; z-index:10000; width:100%; height:100%; background:#000; }
+#modalContainer  { display:none; position:absolute; top:100px; left:100px; z-index:10001; width:975px; height:720px; border:1px solid #333; background:#fff; }
 #modalContainer #modalContent { width:100%; height:100%; }
 
+
 /* ============================================================
-   LE BLANC DESIGN OVERRIDE
+   SKIN OVERRIDE — 토큰 기반 리팩터링 (스킨별 커스텀 영역)
+   var(--xxx) 값은 leblanc.css :root 에서 정의된 디자인 토큰 참조.
    ============================================================ */
 
-/* 기존 헤더/레이아웃 숨기기 */
+/* 기존 카페24 헤더 구조 숨기기 */
 #header .topArea,
 #header .special,
 #header:before,
 #header:after { display:none !important; }
-
 #header { border-bottom:none !important; padding:0 !important; }
 
-#wrap { width:100% !important; max-width:100% !important; margin:0 !important; }
-#container { width:100% !important; max-width:1400px !important; padding:0 20px !important; }
-#sidebar { display:none !important; }
-#contents { float:none !important; width:100% !important; }
-
-/* 마퀴 배너 */
-#marquee-banner {
-  background:#111;
-  color:#fff;
-  font-size:12px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  overflow:hidden;
-  white-space:nowrap;
-  height:34px;
-  line-height:34px;
-}
-.marquee-track {
-  display:inline-block;
-  animation:marquee 30s linear infinite;
-}
-.marquee-track span { padding-right:80px; }
-@keyframes marquee {
-  0%   { transform:translateX(0); }
-  100% { transform:translateX(-50%); }
-}
-
-/* LE BLANC 헤더 */
-.lb-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  height:64px;
-  padding:0 32px;
-  border-bottom:1px solid #e8e8e8;
-  background:#fff;
-}
-.lb-logo {
-  font-family:'Times New Roman', serif;
-  font-size:22px;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  color:#111;
-  text-decoration:none;
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-}
-.lb-hamburger {
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-  cursor:pointer;
-  z-index:10;
-}
-.lb-hamburger span {
-  display:block;
-  width:22px;
-  height:1.5px;
-  background:#111;
-}
-.lb-icons {
-  display:flex;
-  gap:18px;
-  align-items:center;
-  z-index:10;
-}
-.lb-icons a {
-  color:#111;
-  text-decoration:none;
-  font-size:12px;
-  letter-spacing:0.05em;
-}
-.lb-nav {
-  display:flex;
-  gap:36px;
-  align-items:center;
-  height:44px;
-  padding:0 32px;
-  border-bottom:1px solid #e8e8e8;
-  background:#fff;
-}
-.lb-nav a {
-  font-size:12px;
-  letter-spacing:0.1em;
-  text-transform:uppercase;
-  color:#111;
-  text-decoration:none;
-}
-.lb-nav a:hover { border-bottom:1px solid #111; }
-
-/* 기존 헤더 모듈 영역 숨기기 */
+/* 모듈 홀더 — mall_name 추출 전용, 화면에서 숨김 */
 #lb-module-holder { display:none !important; }
 
-/* SVG 아이콘 크기 */
-.lb-icon-svg {
-  width:20px;
-  height:20px;
-  display:block;
-  fill:none;
-  stroke:#111;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-.lb-cart-count {
-  position:absolute;
-  top:-6px;
-  right:-8px;
-  min-width:16px;
-  height:16px;
-  border-radius:8px;
-  background:#111;
-  color:#fff;
-  font-size:10px;
-  line-height:16px;
-  text-align:center;
-  padding:0 4px;
-}
+/* 레이아웃 풀 너비 전환 */
+#wrap      { width:100% !important; max-width:100% !important; margin:0 !important; }
+#container { width:100% !important; max-width:var(--max-width) !important; padding:0 var(--content-padding) !important; box-sizing:border-box; }
+#sidebar   { display:none !important; }
+#contents  { float:none !important; width:100% !important; }
 
-/* SALE 링크 강조 */
-#lb-nav .lb-sale { color:#c00 !important; }
+/* 본문 하단 여백 */
+#contents { padding-bottom:var(--space-15); min-height:400px; }
+#footer   { margin-top:var(--space-15); }
+
+/* ── 탐색경로 오버라이드 ── */
+.path { margin:var(--space-3) 0; height:auto; line-height:var(--line-height-base); }
+.path li { color:var(--color-text-faint); font-size:var(--font-size-sm); }
+
+/* ── 페이지 타이틀 오버라이드 ── */
+.titleArea { margin:var(--space-5) 0; border-bottom:1px solid var(--color-border); padding-bottom:var(--space-3); }
+.titleArea h2 { font-size:var(--font-size-xl); font-weight:var(--font-weight-normal); letter-spacing:var(--letter-spacing-base); }
 
 /* ============================================================
-   세부 페이지 공통
+   PAGE-SPECIFIC — 페이지별 레이아웃
+   xans-* 클래스는 카페24가 body에 자동 부여. 건드리지 않음.
    ============================================================ */
 
-/* 탐색경로(breadcrumb) */
-.path { margin:12px 0; padding:0; height:auto; line-height:1.5; }
-.path li { color:#999; font-size:12px; }
-
-/* 페이지 타이틀 영역 */
-.titleArea { margin:20px 0; border-bottom:1px solid #e8e8e8; padding-bottom:12px; }
-.titleArea h2 { font-size:18px; font-weight:400; letter-spacing:0.05em; }
-
-/* ============================================================
-   상품 목록 페이지
-   ============================================================ */
+/* 상품 목록 */
 .xans-product-listmain,
-.xans-product-listnormal {
-  width:100% !important;
-}
+.xans-product-listnormal { width:100% !important; }
 
-/* 상품 그리드 - 4열 */
 .xans-product-listmain .prdList,
 .xans-product-listnormal .prdList {
   display:grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap:32px 20px !important;
+  grid-template-columns: repeat(var(--grid-cols, 4), 1fr) !important;
+  gap:var(--grid-gap-row, 32px) var(--grid-gap-col, 20px) !important;
   float:none !important;
   overflow:visible !important;
+  padding:0 !important;
+  list-style:none;
 }
 .xans-product-listmain .prdList li,
 .xans-product-listnormal .prdList li {
@@ -265,69 +159,64 @@
   padding:0 !important;
   float:none !important;
 }
-
-/* 상품 이미지 */
 .xans-product-listmain .prdList li .thumbnail img,
 .xans-product-listnormal .prdList li .thumbnail img {
   width:100% !important;
-  aspect-ratio:3/4;
+  aspect-ratio:var(--product-img-ratio, 3/4);
   object-fit:cover;
 }
-
-/* 상품명/가격 */
 .xans-product-listmain .prdList li .description,
 .xans-product-listnormal .prdList li .description {
-  padding:10px 0 0;
-  font-size:13px;
-  line-height:1.6;
+  padding:var(--space-2) 0 0;
+  font-size:var(--font-size-base);
+  line-height:var(--line-height-base);
 }
 
-/* ============================================================
-   상품 상세 페이지
-   ============================================================ */
-.xans-product-detail {
-  width:100% !important;
-  max-width:1200px !important;
-  margin:0 auto !important;
-}
-
-/* 상세 2단 레이아웃 */
-.xans-product-detail .detail_info_top { overflow:hidden; }
-.xans-product-detail .thumbnail { float:left; width:50%; }
-.xans-product-detail .infoArea { float:right; width:46%; padding:0 0 0 4%; }
-
-/* ============================================================
-   카테고리 목록 페이지
-   ============================================================ */
+/* 정렬/필터 영역 */
 .xans-product-listmain .sort_opt,
 .xans-product-listnormal .sort_opt {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin:0 0 24px;
-  padding:0 0 12px;
-  border-bottom:1px solid #e8e8e8;
-  font-size:12px;
+  margin:0 0 var(--space-6);
+  padding:0 0 var(--space-3);
+  border-bottom:1px solid var(--color-border);
+  font-size:var(--font-size-sm);
 }
 
-/* ============================================================
-   마이쇼핑 / 회원 페이지
-   ============================================================ */
-.xans-myshop { width:100% !important; max-width:900px !important; margin:0 auto !important; }
-.xans-member { width:100% !important; max-width:680px !important; margin:0 auto !important; }
+/* 상품 상세 */
+.xans-product-detail {
+  width:100% !important;
+  max-width:var(--max-width-product-detail) !important;
+  margin:0 auto !important;
+}
+.xans-product-detail .detail_info_top { overflow:hidden; }
+.xans-product-detail .thumbnail { float:left; width:50%; }
+.xans-product-detail .infoArea  { float:right; width:46%; padding:0 0 0 4%; }
 
-/* ============================================================
-   장바구니 / 주문 페이지
-   ============================================================ */
-.xans-order { width:100% !important; max-width:1100px !important; margin:0 auto !important; }
+/* 마이쇼핑 */
+.xans-myshop { width:100% !important; max-width:var(--max-width-myshop) !important; margin:0 auto !important; }
 
-/* ============================================================
-   게시판
-   ============================================================ */
+/* 회원 */
+.xans-member { width:100% !important; max-width:var(--max-width-member) !important; margin:0 auto !important; }
+
+/* 주문/장바구니 */
+.xans-order { width:100% !important; max-width:var(--max-width-order) !important; margin:0 auto !important; }
+
+/* 게시판 */
 .xans-board { width:100% !important; }
 
 /* ============================================================
-   공통 – 섹션 여백
+   RESPONSIVE BREAKPOINTS
    ============================================================ */
-#contents { padding:0 0 60px; min-height:400px; }
-#footer { margin-top:60px; }
+@media (max-width:1024px) {
+  #container { max-width:100% !important; }
+}
+@media (max-width:768px) {
+  .xans-product-detail .thumbnail,
+  .xans-product-detail .infoArea {
+    float:none;
+    width:100%;
+    padding:0;
+  }
+}

@@ -755,3 +755,130 @@ body.xans-board             /* 게시판 */
 ---
 
 *이 문서는 파일 분석으로 자동 추출됨. 모듈/변수는 카페24 서버 전용 — 임의 변경 금지.*
+
+---
+
+## 11. 디자인 토큰 체계 (Design Tokens)
+
+> **최종 업데이트**: 2026-06-24  
+> 판매용 스킨 베이스 구축 작업 — `leblanc.css` 상단 `:root {}` 블록에 정의됨.  
+> 새 스킨 제작 시 이 블록의 값만 교체하면 전체 디자인이 바뀐다.
+
+### 11-1. 변경된 파일 목록
+
+| 파일 | 변경 내용 | 역할 |
+|------|-----------|------|
+| `layout/basic/css/leblanc.css` | **전면 재작성** — `:root {}` 토큰 블록 추가, 모든 하드코딩 값 → `var()` 로 교체, 마퀴/헤더/네비/그리드/반응형 통합 | 디자인 토큰 정의 + LE BLANC 스타일 |
+| `layout/basic/css/layout.css` | **리팩터링** — 카페24 기본 구조 보존, SKIN OVERRIDE 섹션을 `var()` 기반으로 교체, 페이지별 레이아웃 정리 | 카페24 기본 레이아웃 + 스킨 오버라이드 |
+
+### 11-2. 토큰 목록
+
+#### 색상 (Color Tokens)
+
+| 토큰 | 기본값 | 용도 |
+|------|--------|------|
+| `--color-primary` | `#222` | 메인 텍스트, 버튼, 강조 |
+| `--color-accent` | `#ff4d7d` | 포인트 컬러 (SALE, 배지, hover) |
+| `--color-accent-dark` | `#e0004a` | 포인트 darken (hover) |
+| `--color-bg` | `#fff` | 페이지 배경 |
+| `--color-bg-subtle` | `#f8f8f8` | 푸터, 카드 배경 |
+| `--color-border` | `#e8e8e8` | 일반 구분선 |
+| `--color-border-strong` | `#d8d8d8` | 강조 구분선 |
+| `--color-text` | `#222` | 본문 텍스트 |
+| `--color-text-muted` | `#888` | 보조 텍스트 |
+| `--color-text-faint` | `#999` | 흐린 텍스트 |
+| `--color-danger` | `#c00` | 오류, SALE 강조 |
+| `--color-marquee-bg` | `#ff4d7d` | 마퀴 배너 배경 (스킨별 교체 포인트) |
+| `--color-marquee-text` | `#fff` | 마퀴 배너 텍스트 |
+| `--color-header-bg` | `#fff` | 헤더 배경 |
+| `--color-header-border` | `#e8e8e8` | 헤더 하단 구분선 |
+
+#### 폰트 (Typography Tokens)
+
+| 토큰 | 기본값 | 용도 |
+|------|--------|------|
+| `--font-sans` | `'Noto Sans KR', 'Montserrat', sans-serif` | 기본 본문 폰트 |
+| `--font-display` | `'Montserrat', sans-serif` | 로고, 영문 강조 |
+| `--font-serif` | `'Times New Roman', serif` | 세리프 액센트 |
+| `--font-size-xs` | `11px` | 최소 |
+| `--font-size-sm` | `12px` | 보조 텍스트 |
+| `--font-size-base` | `13px` | 기본 |
+| `--font-size-md` | `14px` | 상품명, 설명 |
+| `--font-size-lg` | `16px` | 섹션 타이틀 |
+| `--font-size-xl` | `18px` | 페이지 타이틀 |
+| `--font-size-2xl` | `22px` | 로고 |
+| `--letter-spacing-widest` | `0.15em` | 로고 |
+
+#### 여백 (Spacing Tokens — 8px 베이스)
+
+| 토큰 | 값 | px 기준 |
+|------|-----|---------|
+| `--space-1` | `4px` | 최소 간격 |
+| `--space-2` | `8px` | 기본 내부 간격 |
+| `--space-3` | `12px` | 소 여백 |
+| `--space-4` | `16px` | 중 여백 |
+| `--space-6` | `24px` | content-padding |
+| `--space-8` | `32px` | 섹션 간격 |
+| `--space-10` | `40px` | 푸터 패딩 |
+| `--space-15` | `60px` | 섹션 하단 여백 |
+
+#### 레이아웃 (Layout Tokens)
+
+| 토큰 | 기본값 | 용도 |
+|------|--------|------|
+| `--max-width` | `1400px` | 전체 최대 너비 |
+| `--content-padding` | `24px` | 좌우 패딩 |
+| `--header-height` | `60px` | 헤더 높이 |
+| `--nav-height` | `44px` | 네비 높이 |
+| `--marquee-height` | `36px` | 마퀴 배너 높이 |
+| `--max-width-product-detail` | `1200px` | 상품 상세 최대 너비 |
+| `--max-width-myshop` | `900px` | 마이쇼핑 최대 너비 |
+| `--max-width-member` | `680px` | 회원 페이지 최대 너비 |
+| `--max-width-order` | `1100px` | 주문서 최대 너비 |
+
+#### 상품 그리드 (Grid Tokens)
+
+| 토큰 | 기본값 | 설명 |
+|------|--------|------|
+| `--grid-cols` | `4` | 데스크탑 열 수 (반응형에서 자동 변경) |
+| `--grid-gap-row` | `32px` | 행 간격 |
+| `--grid-gap-col` | `20px` | 열 간격 |
+| `--product-img-ratio` | `3/4` | 상품 이미지 비율 |
+
+#### 테두리 / 그림자 / 전환 (UI Tokens)
+
+| 토큰 | 기본값 | 용도 |
+|------|--------|------|
+| `--radius-sm` | `2px` | 작은 모서리 |
+| `--radius-md` | `4px` | 버튼, 입력 |
+| `--radius-lg` | `8px` | 카드 |
+| `--radius-full` | `9999px` | 배지, pill |
+| `--shadow-sm` | `0 1px 3px rgba(0,0,0,0.08)` | 가벼운 그림자 |
+| `--shadow-md` | `0 4px 12px rgba(0,0,0,0.12)` | 카드 그림자 |
+| `--transition-base` | `0.2s ease` | 기본 전환 속도 |
+| `--z-header` | `1000` | 헤더 z-index |
+
+### 11-3. 새 스킨 제작 시 교체 방법
+
+```css
+/* 새 스킨: mybrand.css — :root 오버라이드만 작성 */
+:root {
+  --color-primary:       #1a1a2e;   /* 다크 네이비 */
+  --color-accent:        #e94560;   /* 레드 포인트 */
+  --color-marquee-bg:    #1a1a2e;
+  --font-display:        'Playfair Display', serif;
+  --grid-cols:           3;
+  --product-img-ratio:   1/1;       /* 정사각형 이미지 */
+}
+```
+
+이 파일을 layout.html에 `<!--@css(/layout/basic/css/mybrand.css)-->` 로 추가하면  
+leblanc.css 의 모든 `var()` 값이 자동으로 교체됨.
+
+### 11-4. 반응형 브레이크포인트
+
+| 구간 | 조건 | `--grid-cols` |
+|------|------|---------------|
+| 데스크탑 | `> 1024px` | `4` |
+| 태블릿 | `≤ 1024px` | `2` |
+| 모바일 | `≤ 640px` | `2` (패딩 축소) |
