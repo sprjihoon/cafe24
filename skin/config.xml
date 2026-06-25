@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <title>LE BLANC Premium Skin</title>
+    <version>1.0.0</version>
+    <date>2026-06-25</date>
+    <description>
+        <![CDATA[
+        <div style="padding: 20px; line-height: 1.8;">
+            <h2 style="margin-bottom: 15px;">LE BLANC 프리미엄 스킨</h2>
+            <p style="margin-bottom: 10px;">
+                <strong>브랜드 감성</strong>과 <strong>종합 쇼핑몰 기능</strong>을 모두 갖춘 하이브리드 스킨입니다.
+            </p>
+            <h3 style="margin: 20px 0 10px;">주요 기능</h3>
+            <ul style="padding-left: 20px;">
+                <li>✅ 전체 화면 히어로 배너 (영상 지원)</li>
+                <li>✅ WEEKLY BEST 슬라이더</li>
+                <li>✅ SHORTS 숏폼 영상 슬라이더</li>
+                <li>✅ 타임세일 카운트다운</li>
+                <li>✅ YouTube 영상 배너</li>
+                <li>✅ 포토리뷰 슬라이더</li>
+                <li>✅ 플로팅 위젯 (채팅, 카카오톡, 위로 가기)</li>
+                <li>✅ 사이드 네비게이션</li>
+                <li>✅ 완벽한 모바일 반응형</li>
+            </ul>
+            <p style="margin-top: 20px; color: #666;">
+                문의: support@leblanc-skin.com
+            </p>
+        </div>
+        ]]>
+    </description>
+
+    <!-- 로고 설정 -->
+    <display name="로고 설정">
+        <image name="로고 이미지" var="logo_image" path="/web/upload/logo/" default="/web/upload/logo/logo.png">
+            <![CDATA[
+            상단 헤더에 표시될 로고 이미지를 업로드하세요. (권장 크기: 180x48px)
+            ]]>
+        </image>
+        <text name="쇼핑몰 이름" var="mall_name" default="LE BLANC">
+            <![CDATA[
+            로고 이미지가 없을 경우 표시될 쇼핑몰 이름
+            ]]>
+        </text>
+        <text name="태그라인" var="tagline" default="2026 FALL COLLECTION">
+            <![CDATA[
+            로고 하단에 표시될 짧은 태그라인 (영문 권장)
+            ]]>
+        </text>
+    </display>
+
+    <!-- 마키 배너 -->
+    <display name="마키 배너">
+        <text name="마키 텍스트" var="marquee_text" default="50,000원 이상 무료배송 · 30일 무료반품 · 일상에 자연스럽게 스며드는 정돈된 여성복">
+            <![CDATA[
+            상단에 무한 반복되는 텍스트 (· 으로 구분)
+            ]]>
+        </text>
+        <color name="마키 배경색" var="marquee_bg" default="#2a2420" />
+        <color name="마키 텍스트 색상" var="marquee_color" default="#faf8f5" />
+    </display>
+
+    <!-- 히어로 배너 -->
+    <display name="히어로 배너">
+        <bool name="전체 화면 모드" var="hero_fullscreen" default="false">
+            <![CDATA[
+            활성화 시 100vh 전체 화면으로 표시됩니다.
+            ]]>
+        </bool>
+        <text name="영상 URL (MP4)" var="hero_video_url" default="">
+            <![CDATA[
+            영상 배경을 사용하려면 MP4 파일 URL을 입력하세요. (선택)
+            ]]>
+        </text>
+        <text name="YouTube 영상 ID" var="hero_youtube_id" default="">
+            <![CDATA[
+            YouTube 영상을 배경으로 사용하려면 영상 ID를 입력하세요. (선택)
+            예: dQw4w9WgXcQ
+            ]]>
+        </text>
+    </display>
+
+    <!-- 타임세일 -->
+    <display name="타임세일">
+        <text name="종료 날짜" var="timesale_end_date" default="2026-12-31 23:59:59">
+            <![CDATA[
+            타임세일 종료 날짜 및 시간 (YYYY-MM-DD HH:MM:SS)
+            ]]>
+        </text>
+        <text name="타임세일 제목" var="timesale_title" default="끝이 없는 할인의 블랙홀">
+            <![CDATA[
+            타임세일 배너에 표시될 제목
+            ]]>
+        </text>
+        <text name="타임세일 설명" var="timesale_desc" default="지금이 아니면 다시 오지 않을 가격">
+            <![CDATA[
+            타임세일 배너에 표시될 설명
+            ]]>
+        </text>
+    </display>
+
+    <!-- 영상 배너 -->
+    <display name="영상 배너">
+        <text name="YouTube 영상 ID" var="video_youtube_id" default="dQw4w9WgXcQ">
+            <![CDATA[
+            브랜드 스토리 영상의 YouTube ID
+            ]]>
+        </text>
+        <text name="영상 제목" var="video_title" default="가장 어디에도 없었던 방식으로">
+            <![CDATA[
+            영상 배너에 표시될 제목
+            ]]>
+        </text>
+        <text name="영상 설명" var="video_desc" default="우리는 유행을 만들지 않고, 오래 남는 기본을 제안합니다.">
+            <![CDATA[
+            영상 배너에 표시될 설명
+            ]]>
+        </text>
+    </display>
+
+    <!-- 브랜드 색상 -->
+    <display name="브랜드 색상">
+        <color name="강조 색상" var="accent_color" default="#d4c4b0">
+            <![CDATA[
+            버튼, 링크 등에 사용되는 강조 색상
+            ]]>
+        </color>
+        <color name="차콜 색상" var="charcoal_color" default="#2a2420">
+            <![CDATA[
+            다크 배경, 텍스트에 사용되는 색상
+            ]]>
+        </color>
+        <color name="코코아 색상" var="cocoa_color" default="#5b4b42">
+            <![CDATA[
+            서브 배경에 사용되는 색상
+            ]]>
+        </color>
+    </display>
+
+    <!-- 푸터 -->
+    <display name="푸터 설정">
+        <text name="회사명" var="footer_company" default="LE BLANC">
+            <![CDATA[
+            푸터에 표시될 회사명
+            ]]>
+        </text>
+        <text name="대표자명" var="footer_ceo" default="홍길동">
+            <![CDATA[
+            대표자 이름
+            ]]>
+        </text>
+        <text name="사업자등록번호" var="footer_business_no" default="123-45-67890">
+            <![CDATA[
+            사업자등록번호
+            ]]>
+        </text>
+        <text name="고객센터 전화" var="footer_phone" default="1588-0000">
+            <![CDATA[
+            고객센터 전화번호
+            ]]>
+        </text>
+        <text name="고객센터 운영시간" var="footer_hours" default="평일 10:00 - 17:00 (주말 및 공휴일 휴무)">
+            <![CDATA[
+            고객센터 운영 시간
+            ]]>
+        </text>
+    </display>
+
+    <!-- SNS 링크 -->
+    <display name="SNS 링크">
+        <text name="Instagram URL" var="sns_instagram" default="https://instagram.com/leblanc">
+            <![CDATA[
+            Instagram 프로필 URL
+            ]]>
+        </text>
+        <text name="Facebook URL" var="sns_facebook" default="https://facebook.com/leblanc">
+            <![CDATA[
+            Facebook 페이지 URL
+            ]]>
+        </text>
+        <text name="YouTube URL" var="sns_youtube" default="https://youtube.com/leblanc">
+            <![CDATA[
+            YouTube 채널 URL
+            ]]>
+        </text>
+        <text name="카카오톡 채널 URL" var="sns_kakao" default="">
+            <![CDATA[
+            카카오톡 채널 URL (선택)
+            ]]>
+        </text>
+    </display>
+
+    <!-- 고급 설정 -->
+    <display name="고급 설정">
+        <bool name="플로팅 위젯 표시" var="show_floating_widgets" default="true">
+            <![CDATA[
+            우측 플로팅 버튼 (채팅, 카카오톡, 위로 가기) 표시 여부
+            ]]>
+        </bool>
+        <bool name="사이드 네비 표시" var="show_side_nav" default="true">
+            <![CDATA[
+            좌측 사이드 네비게이션 표시 여부 (1280px 이상에서만 표시)
+            ]]>
+        </bool>
+        <text name="최대 너비 (px)" var="max_width" default="1400">
+            <![CDATA[
+            컨텐츠 최대 너비 (기본값: 1400px)
+            ]]>
+        </text>
+    </display>
+</config>

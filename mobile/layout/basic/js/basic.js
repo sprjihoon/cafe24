@@ -84,21 +84,22 @@
   }
 
   var CATEGORY_COPY = {
-    '26': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' },
-    '27': { label: 'TOP', desc: '매일의 조합을 가장 편하게 시작하는 기본' },
-    '28': { label: 'BOTTOM', desc: '움직임은 편안하게, 선은 자연스럽게' },
-    '29': { label: 'BAG & SHOES', desc: '룩의 균형을 마무리하는 작은 선택' },
-    '30': { label: 'ACCESSORY', desc: '룩의 균형을 마무리하는 작은 선택' }
+    '24': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' },
+    '25': { label: 'TOP', desc: '매일의 조합을 가장 편하게 시작하는 기본' },
+    '26': { label: 'DRESS', desc: '특별한 날과 평범한 날 사이에 있는 옷' },
+    '27': { label: 'BOTTOM', desc: '움직임은 편안하게, 선은 자연스럽게' },
+    '28': { label: 'ACCESSORY', desc: '룩의 균형을 마무리하는 작은 선택' },
+    '29': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' }
   };
 
   var CATEGORY_COPY_BY_KEY = {
-    outer: CATEGORY_COPY['26'],
-    top: CATEGORY_COPY['27'],
+    outer: CATEGORY_COPY['24'],
+    top: CATEGORY_COPY['25'],
     knit: { label: 'KNIT', desc: '부드러운 온도와 오래 남는 질감' },
     shirt: { label: 'SHIRT', desc: '힘을 빼도 정돈돼 보이는 한 벌' },
-    bottom: CATEGORY_COPY['28'],
-    dress: { label: 'DRESS', desc: '특별한 날과 평범한 날 사이에 있는 옷' },
-    bagshoes: CATEGORY_COPY['29']
+    bottom: CATEGORY_COPY['27'],
+    dress: CATEGORY_COPY['26'],
+    bagshoes: CATEGORY_COPY['28']
   };
 
   function initCategoryCopy() {

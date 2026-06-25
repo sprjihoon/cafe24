@@ -207,17 +207,33 @@ $("body").on("click", ".eTab a", function(e){
     brandEl.textContent = 'ATELIER N.';
   }
 
+  function buildMarqueeSet() {
+    var items = [
+      '5만원 이상 무료배송',
+      '30일 무료반품',
+      '일상에 자연스럽게 스며드는 정돈된 여성복',
+      '유행보다 오래 입을 수 있는 옷장의 기본',
+      '편안하지만 흐트러지지 않는 실루엣'
+    ];
+    var html = '';
+    for (var i = 0; i < items.length; i++) {
+      if (i > 0) html += '<span class="marquee-dot" aria-hidden="true">·</span>';
+      html += '<span class="marquee-item">' + items[i] + '</span>';
+    }
+    return html;
+  }
+
   /* ② 마퀴 배너 안전 삽입
      layout.html에 있으면 중복 삽입 방지 */
   function ensureMarquee() {
     if (document.getElementById('marquee-banner')) return;
 
-    var msg = '50,000원 이상 무료배송 &nbsp;&nbsp;·&nbsp;&nbsp; 30일 무료반품 &nbsp;&nbsp;·&nbsp;&nbsp; 일상에 자연스럽게 스며드는 정돈된 여성복 &nbsp;&nbsp;·&nbsp;&nbsp; 유행보다 오래 입는 기본 &nbsp;&nbsp;·&nbsp;&nbsp; 편안하지만 흐트러지지 않는 실루엣 &nbsp;&nbsp;·&nbsp;&nbsp; ';
+    var setHtml = buildMarqueeSet();
     var html =
       '<div id="marquee-banner">' +
         '<div class="marquee-track">' +
-          '<span>' + msg + '</span>' +
-          '<span>' + msg + '</span>' +
+          '<div class="marquee-set">' + setHtml + '</div>' +
+          '<div class="marquee-set" aria-hidden="true">' + setHtml + '</div>' +
         '</div>' +
       '</div>';
 
@@ -235,7 +251,7 @@ $("body").on("click", ".eTab a", function(e){
     }
   }
 
-  /* ③ 헤더 fallback — 새 헤더 구조 (로고 왼쪽) */
+  /* ③ 헤더 fallback — 로고(중앙) · 유틸(우), 햄버거는 nav 행 */
   function ensureHeader() {
     if (document.querySelector('.lb-header')) return;
 
@@ -244,18 +260,23 @@ $("body").on("click", ".eTab a", function(e){
 
     header.innerHTML =
       '<div class="lb-header">' +
-        '<div class="lb-header-left">' +
-          '<button class="lb-hamburger" aria-label="메뉴 열기">' +
-            '<span></span><span></span><span></span>' +
-          '</button>' +
+        '<div class="lb-header-slot lb-header-slot--logo">' +
           '<a href="/index.html" class="lb-logo">SHOP</a>' +
         '</div>' +
-        '<div class="lb-icons">' +
-          '<a href="/order/basket.html" title="장바구니" class="lb-icon-cart">&#128717;</a>' +
-          '<a href="/member/login.html" title="로그인">&#128100;</a>' +
-          '<a href="/product/search.html" title="검색">&#128269;</a>' +
+        '<div class="lb-header-slot lb-header-slot--utils">' +
+          '<div class="lb-utils">' +
+            '<a href="/order/basket.html" title="장바구니" class="lb-util-icon">&#128717;</a>' +
+            '<a href="/member/login.html" title="로그인" class="lb-util-icon">&#128100;</a>' +
+            '<a href="/product/search.html" title="검색" class="lb-util-icon">&#128269;</a>' +
+          '</div>' +
         '</div>' +
-      '</div>';
+      '</div>' +
+      '<nav id="lb-nav">' +
+        '<button type="button" class="lb-hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="lb-fullmenu-panel">' +
+          '<span></span><span></span><span></span>' +
+        '</button>' +
+        '<div class="lb-nav-inner"></div>' +
+      '</nav>';
   }
 
   /* ④ 탐색경로(breadcrumb) 스타일 보정 */
@@ -270,21 +291,22 @@ $("body").on("click", ".eTab a", function(e){
 
   /* ⑥ 카테고리 목록 페이지 카피 */
   var CATEGORY_COPY = {
-    '26': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' },
-    '27': { label: 'TOP', desc: '매일의 조합을 가장 편하게 시작하는 기본' },
-    '28': { label: 'BOTTOM', desc: '움직임은 편안하게, 선은 자연스럽게' },
-    '29': { label: 'BAG & SHOES', desc: '룩의 균형을 마무리하는 작은 선택' },
-    '30': { label: 'ACCESSORY', desc: '룩의 균형을 마무리하는 작은 선택' }
+    '24': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' },
+    '25': { label: 'TOP', desc: '매일의 조합을 가장 편하게 시작하는 기본' },
+    '26': { label: 'DRESS', desc: '특별한 날과 평범한 날 사이에 있는 옷' },
+    '27': { label: 'BOTTOM', desc: '움직임은 편안하게, 선은 자연스럽게' },
+    '28': { label: 'ACCESSORY', desc: '룩의 균형을 마무리하는 작은 선택' },
+    '29': { label: 'OUTER', desc: '계절의 첫인상을 만드는 단정한 레이어' }
   };
 
   var CATEGORY_COPY_BY_KEY = {
-    outer: CATEGORY_COPY['26'],
-    top: CATEGORY_COPY['27'],
+    outer: CATEGORY_COPY['24'],
+    top: CATEGORY_COPY['25'],
     knit: { label: 'KNIT', desc: '부드러운 온도와 오래 남는 질감' },
     shirt: { label: 'SHIRT', desc: '힘을 빼도 정돈돼 보이는 한 벌' },
-    bottom: CATEGORY_COPY['28'],
-    dress: { label: 'DRESS', desc: '특별한 날과 평범한 날 사이에 있는 옷' },
-    bagshoes: CATEGORY_COPY['29']
+    bottom: CATEGORY_COPY['27'],
+    dress: CATEGORY_COPY['26'],
+    bagshoes: CATEGORY_COPY['28']
   };
 
   function initCategoryCopy() {

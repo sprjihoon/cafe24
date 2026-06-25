@@ -403,3 +403,12 @@ footer[module="layout_footerPackage"] .footerMenu {
 /* 숨김 섹션 */
 .lb-hidden-section { display: none !important; }
 p[module="Layout_attendBanner"] { display: none !important; }
+
+/* 빈 카테고리 숨김 */
+#aside #cate23,
+#aside #cate26,
+#aside #cate28,
+#aside #cate30,
+#aside #cate31 {
+  display: none !important;
+}

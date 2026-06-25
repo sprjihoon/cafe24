@@ -2,12 +2,12 @@
   'use strict';
 
   var CATEGORY_CATE = {
-    OUTER: '26',
-    TOP: '27',
-    BOTTOM: '28',
-    DRESS: '27',
-    BAG: '29',
-    SHOES: '29'
+    OUTER: '24',
+    TOP: '25',
+    BOTTOM: '27',
+    DRESS: '26',
+    BAG: '28',
+    SHOES: '28'
   };
 
   function escapeHtml(str) {

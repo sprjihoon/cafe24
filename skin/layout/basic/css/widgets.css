@@ -1,0 +1,92 @@
+/**
+ * LE BLANC 플로팅 위젯
+ * 우측: 채팅, 카카오톡, 위로 가기
+ * 좌측: 사이드 네비게이션
+ */
+
+/* ============================================================
+   우측 플로팅 버튼
+   ============================================================ */
+.lb-floating-right {
+  position:fixed;
+  right:max(var(--content-padding), env(safe-area-inset-right, 16px));
+  bottom:var(--space-8);
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-3);
+  opacity:0;
+  transform:translateX(100px);
+  transition:opacity var(--transition-base), transform var(--transition-base);
+}
+.lb-floating-right.is-visible {
+  opacity:1;
+  transform:translateX(0);
+}
+
+.lb-floating-btn {
+  width:52px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--color-bg);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-full);
+  box-shadow:var(--shadow-lg);
+  cursor:pointer;
+  transition:all var(--transition-base);
+  text-decoration:none;
+  color:var(--color-text);
+}
+.lb-floating-btn:hover {
+  background:var(--color-charcoal);
+  color:var(--color-ivory);
+  border-color:var(--color-charcoal);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-xl);
+}
+.lb-floating-btn svg {
+  width:24px;
+  height:24px;
+}
+
+/* 개별 버튼 색상 */
+.lb-floating-chat:hover {
+  background:#5865F2; /* Discord blue */
+  border-color:#5865F2;
+  color:#fff;
+}
+.lb-floating-kakao:hover {
+  background:#FEE500; /* KakaoTalk yellow */
+  border-color:#FEE500;
+  color:#3C1E1E;
+}
+.lb-floating-top {
+  background:var(--color-charcoal);
+  color:var(--color-ivory);
+  border-color:var(--color-charcoal);
+}
+.lb-floating-top:hover {
+  background:var(--color-text);
+}
+
+/* ============================================================
+   반응형
+   ============================================================ */
+
+@media (max-width:768px) {
+  .lb-floating-right {
+    right:var(--space-4);
+    bottom:var(--space-6);
+    gap:var(--space-2);
+  }
+  .lb-floating-btn {
+    width:48px;
+    height:48px;
+  }
+  .lb-floating-btn svg {
+    width:20px;
+    height:20px;
+  }
+}

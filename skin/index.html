@@ -3,20 +3,34 @@
 <!--edibot_skin_data:{"width":1014,"mo_width":640}-->
 
 <!-- ============================================================
-     ① HERO — 4슬라이드 (관리자 배너 이미지 등록 시 smart-banner로 교체 가능)
+     ① HERO — 4슬라이드 (전체 화면 + 영상 지원)
+     LE BLANC 스타일: 전체 화면 옵션, 영상 배경 지원
+     data-fullscreen="true" — 100vh 전체 화면
+     data-video="url" — MP4 영상 URL
+     data-youtube="id" — YouTube 영상 ID
      ============================================================ -->
 <div class="lb-hero lb-full-bleed">
   <div class="lb-hero-slider" id="lb-hero-slider">
     <div class="lb-hero-track">
-      <div class="lb-hero-slide lb-hero-slide--1">
+      <!-- 슬라이드 1: 일반 -->
+      <div class="lb-hero-slide lb-hero-slide--1" data-fullscreen="false" style="background-image:url('/web/upload/hero/hero-1.jpg');">
         <div class="lb-hero-placeholder">
           <p class="lb-hero-sub">THE QUIET EDIT</p>
           <h2 class="lb-hero-title">조용한 날들에<br>더 잘 어울리는 옷</h2>
           <p class="lb-hero-desc">유행을 서두르지 않고,<br>매일의 장면에 자연스럽게 남는 실루엣을 제안합니다.</p>
-          <a href="/product/list.html" class="lb-hero-btn">SHOP COLLECTION</a>
+          <a href="/product/list.html?cate_no=24" class="lb-hero-btn">SHOP COLLECTION</a>
         </div>
       </div>
-      <div class="lb-hero-slide lb-hero-slide--2">
+      
+      <!-- 슬라이드 2: 전체 화면 + 영상 배경 (예시) -->
+      <div class="lb-hero-slide lb-hero-slide--2" data-fullscreen="true" data-video="" style="background-image:url('/web/upload/hero/hero-2.jpg');">
+        <!-- 영상 배경 (data-video 설정 시 자동 삽입) -->
+        <div class="lb-hero-video-container" style="display:none;">
+          <video class="lb-hero-video" playsinline muted loop>
+            <source src="" type="video/mp4">
+          </video>
+          <div class="lb-hero-video-overlay"></div>
+        </div>
         <div class="lb-hero-placeholder">
           <p class="lb-hero-sub">MADE FOR EVERYDAY</p>
           <h2 class="lb-hero-title">가장 자주<br>손이 가는 이유</h2>
@@ -24,23 +38,29 @@
           <a href="/product/list.html?cate_no=24" class="lb-hero-btn">VIEW NEW ARRIVALS</a>
         </div>
       </div>
-      <div class="lb-hero-slide lb-hero-slide--3">
+      
+      <!-- 슬라이드 3: 일반 -->
+      <div class="lb-hero-slide lb-hero-slide--3" data-fullscreen="false" style="background-image:url('/web/upload/hero/hero-3.jpg');">
         <div class="lb-hero-placeholder">
           <p class="lb-hero-sub">2026 FALL COLLECTION</p>
           <h2 class="lb-hero-title">계절을<br>오래 입는 방식</h2>
           <p class="lb-hero-desc">가벼운 니트, 단정한 재킷,<br>그리고 매일 다른 조합으로 완성되는 기본.</p>
-          <a href="/product/list.html" class="lb-hero-btn">DISCOVER THE EDIT</a>
+          <a href="/product/list.html?cate_no=24" class="lb-hero-btn">DISCOVER THE EDIT</a>
         </div>
       </div>
-      <div class="lb-hero-slide lb-hero-slide--4">
+      
+      <!-- 슬라이드 4: 일반 -->
+      <div class="lb-hero-slide lb-hero-slide--4" data-fullscreen="false" style="background-image:url('/web/upload/hero/hero-4.jpg');">
         <div class="lb-hero-placeholder">
           <p class="lb-hero-sub">LESS, BUT BETTER</p>
           <h2 class="lb-hero-title">많이 필요하지<br>않은 옷장</h2>
           <p class="lb-hero-desc">잘 만들어진 한 벌은<br>당신의 일상을 조금 더 단정하게 만듭니다.</p>
-          <a href="/product/list.html" class="lb-hero-btn">SHOP ESSENTIALS</a>
+          <a href="/product/list.html?cate_no=27" class="lb-hero-btn">SHOP ESSENTIALS</a>
         </div>
       </div>
     </div>
+    
+    <!-- 페이지네이션 (하단 고정) -->
     <div class="lb-hero-dots" aria-label="히어로 슬라이드">
       <button type="button" class="lb-hero-dot is-active" aria-label="1번 슬라이드"></button>
       <button type="button" class="lb-hero-dot" aria-label="2번 슬라이드"></button>
@@ -52,33 +72,94 @@
 
 <script>
 (function () {
+  'use strict';
+
   function initLbHeroSlider() {
     var slider = document.getElementById('lb-hero-slider');
     if (!slider || slider.dataset.lbReady === '1') return;
     slider.dataset.lbReady = '1';
 
     var track = slider.querySelector('.lb-hero-track');
+    var slides = slider.querySelectorAll('.lb-hero-slide');
     var dots = slider.querySelectorAll('.lb-hero-dot');
-    if (!track || !dots.length) return;
+    if (!track || !slides.length || !dots.length) return;
 
     var current = 0;
-    var total = dots.length;
+    var total = slides.length;
     var timer = null;
+    var videos = [];
 
-    function goTo(index) {
-      current = (index + total) % total;
-      var slideWidth = slider.getBoundingClientRect().width;
-      track.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
-      for (var i = 0; i < dots.length; i++) {
-        dots[i].classList.toggle('is-active', i === current);
+    // 전체 화면 감지 및 CSS 클래스 추가
+    var hasFullscreen = false;
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].dataset.fullscreen === 'true') {
+        hasFullscreen = true;
+        slides[i].classList.add('lb-hero-slide--fullscreen');
+      }
+    }
+    if (hasFullscreen) {
+      slider.classList.add('lb-hero-slider--has-fullscreen');
+    }
+
+    // 영상 초기화
+    function initVideos() {
+      for (var i = 0; i < slides.length; i++) {
+        var slide = slides[i];
+        var videoUrl = slide.dataset.video;
+        var youtubeId = slide.dataset.youtube;
+
+        if (videoUrl) {
+          // MP4 영상
+          var container = slide.querySelector('.lb-hero-video-container');
+          var video = slide.querySelector('.lb-hero-video');
+          if (container && video) {
+            var source = video.querySelector('source');
+            if (source) {
+              source.src = videoUrl;
+              video.load();
+              container.style.display = 'block';
+              videos[i] = video;
+            }
+          }
+        } else if (youtubeId) {
+          // YouTube 임베드 (추후 구현)
+          // TODO: Phase 4에서 YouTube IFrame API 연동
+          console.log('YouTube video:', youtubeId);
+        }
       }
     }
 
+    // 슬라이드 이동
+    function goTo(index) {
+      // 이전 영상 정지
+      if (videos[current]) {
+        videos[current].pause();
+      }
+
+      current = (index + total) % total;
+      var slideWidth = slider.getBoundingClientRect().width;
+      track.style.transform = 'translateX(-' + (current * slideWidth) + 'px)';
+
+      // 닷 업데이트
+      for (var i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('is-active', i === current);
+      }
+
+      // 현재 슬라이드 영상 재생
+      if (videos[current]) {
+        videos[current].play().catch(function(err) {
+          console.log('Video autoplay failed:', err);
+        });
+      }
+    }
+
+    // 자동 재생
     function startAuto() {
       if (timer) clearInterval(timer);
       timer = setInterval(function () { goTo(current + 1); }, 6000);
     }
 
+    // 닷 클릭 이벤트
     for (var d = 0; d < dots.length; d++) {
       (function (idx) {
         dots[idx].addEventListener('click', function () {
@@ -88,53 +169,91 @@
       })(d);
     }
 
-    window.addEventListener('resize', function () { goTo(current); });
+    // 리사이즈 이벤트
+    var resizeTimeout;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        goTo(current);
+      }, 150);
+    });
+
+    // 초기화
+    initVideos();
     goTo(0);
     startAuto();
     setTimeout(function () { goTo(0); }, 150);
+
+    // 페이지 떠날 때 영상 정지
+    window.addEventListener('beforeunload', function() {
+      for (var i = 0; i < videos.length; i++) {
+        if (videos[i]) {
+          videos[i].pause();
+        }
+      }
+    });
   }
 
-  initLbHeroSlider();
+  // DOM 로드 후 또는 즉시 실행
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLbHeroSlider);
+  } else {
+    initLbHeroSlider();
+  }
 })();
 </script>
 
 <!-- ============================================================
      ② CATEGORY — 7카테고리 카피
      ============================================================ -->
-<div class="lb-cat-zone">
+<div class="lb-cat-zone" id="lb-cat-zone">
   <div class="lb-cat-inner">
-    <a href="/product/list.html?cate_no=26&amp;cat=outer" class="lb-cat-item" data-cat="outer">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">OT</span></div>
+    <a href="/product/list.html?cate_no=24&amp;cat=outer" class="lb-cat-item" data-cat="outer">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-1.jpg" alt="OUTER">
+      </div>
       <span class="lb-cat-label">OUTER</span>
       <span class="lb-cat-desc">계절의 첫인상을 만드는 단정한 레이어</span>
     </a>
-    <a href="/product/list.html?cate_no=27&amp;cat=top" class="lb-cat-item" data-cat="top">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">TP</span></div>
+    <a href="/product/list.html?cate_no=25&amp;cat=top" class="lb-cat-item" data-cat="top">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-2.jpg" alt="TOP">
+      </div>
       <span class="lb-cat-label">TOP</span>
       <span class="lb-cat-desc">매일의 조합을 가장 편하게 시작하는 기본</span>
     </a>
-    <a href="/product/list.html?cate_no=27&amp;cat=knit" class="lb-cat-item" data-cat="knit">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">KN</span></div>
+    <a href="/product/list.html?cate_no=25&amp;cat=knit" class="lb-cat-item" data-cat="knit">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-3.jpg" alt="KNIT">
+      </div>
       <span class="lb-cat-label">KNIT</span>
       <span class="lb-cat-desc">부드러운 온도와 오래 남는 질감</span>
     </a>
-    <a href="/product/list.html?cate_no=27&amp;cat=shirt" class="lb-cat-item" data-cat="shirt">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">SH</span></div>
+    <a href="/product/list.html?cate_no=25&amp;cat=shirt" class="lb-cat-item" data-cat="shirt">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-4.jpg" alt="SHIRT">
+      </div>
       <span class="lb-cat-label">SHIRT</span>
       <span class="lb-cat-desc">힘을 빼도 정돈돼 보이는 한 벌</span>
     </a>
-    <a href="/product/list.html?cate_no=28&amp;cat=bottom" class="lb-cat-item" data-cat="bottom">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">BT</span></div>
+    <a href="/product/list.html?cate_no=27&amp;cat=bottom" class="lb-cat-item" data-cat="bottom">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-5.jpg" alt="BOTTOM">
+      </div>
       <span class="lb-cat-label">BOTTOM</span>
       <span class="lb-cat-desc">움직임은 편안하게, 선은 자연스럽게</span>
     </a>
     <a href="/product/list.html?cate_no=27&amp;cat=dress" class="lb-cat-item" data-cat="dress">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">DR</span></div>
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-6.jpg" alt="DRESS">
+      </div>
       <span class="lb-cat-label">DRESS</span>
       <span class="lb-cat-desc">특별한 날과 평범한 날 사이에 있는 옷</span>
     </a>
-    <a href="/product/list.html?cate_no=29&amp;cat=bagshoes" class="lb-cat-item" data-cat="bagshoes">
-      <div class="lb-cat-circle"><span class="lb-cat-abbr">BS</span></div>
+    <a href="/product/list.html?cate_no=24&amp;cat=bagshoes" class="lb-cat-item" data-cat="bagshoes">
+      <div class="lb-cat-circle">
+        <img src="/web/upload/lookbook/look-7.jpg" alt="BAG & SHOES">
+      </div>
       <span class="lb-cat-label">BAG &amp; SHOES</span>
       <span class="lb-cat-desc">룩의 균형을 마무리하는 작은 선택</span>
     </a>
@@ -142,12 +261,527 @@
 </div>
 
 <!-- ============================================================
+     카테고리 배너 4개 박스
+     ============================================================ -->
+<div class="lb-feature-banners">
+  <div class="lb-feature-inner">
+    <a href="/product/list.html?cate_no=32" class="lb-feature-box lb-feature-sale">
+      <div class="lb-feature-image">
+        <img src="/web/upload/banner/feature-sale.jpg" alt="ON SALE" onerror="this.src='/web/upload/promo/promo-1.jpg'">
+      </div>
+      <div class="lb-feature-content">
+        <span class="lb-feature-badge">ON SALE</span>
+        <h3 class="lb-feature-title">클리어런스 세일</h3>
+        <p class="lb-feature-desc">매일 업데이트되는<br>상품을 보시려면 방문하세요.</p>
+      </div>
+    </a>
+    
+    <a href="/product/list.html?cate_no=25" class="lb-feature-box lb-feature-pick">
+      <div class="lb-feature-image">
+        <img src="/web/upload/banner/feature-pick.jpg" alt="MD'S PICK" onerror="this.src='/web/upload/promo/promo-2.jpg'">
+      </div>
+      <div class="lb-feature-content">
+        <span class="lb-feature-badge">MD'S PICK</span>
+        <h3 class="lb-feature-title">에디터의 선택</h3>
+        <p class="lb-feature-desc">일상을 담은 컬렉션,<br>매일 업데이트를 확인하세요.</p>
+      </div>
+    </a>
+    
+    <a href="/product/list.html?cate_no=24" class="lb-feature-box lb-feature-choice">
+      <div class="lb-feature-image">
+        <img src="/web/upload/banner/feature-choice.jpg" alt="BETTER CHOICE" onerror="this.src='/web/upload/banner/banner-1.jpg'">
+      </div>
+      <div class="lb-feature-content">
+        <span class="lb-feature-badge">BETTER CHOICE</span>
+        <h3 class="lb-feature-title">선택의 순간</h3>
+        <p class="lb-feature-desc">품질주의 추천상품<br>먼저 만나 오시지요.</p>
+      </div>
+    </a>
+    
+    <a href="/board/index.html" class="lb-feature-box lb-feature-story">
+      <div class="lb-feature-image">
+        <img src="/web/upload/banner/feature-story.jpg" alt="표현의 자유" onerror="this.src='/web/upload/banner/banner-2.jpg'">
+      </div>
+      <div class="lb-feature-content">
+        <span class="lb-feature-badge">표현의 자유</span>
+        <h3 class="lb-feature-title">다양한 백스트 레이아웃</h3>
+        <p class="lb-feature-desc">LEARN MORE</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================================
+     스플릿 배너 섹션 (왼쪽: 슬라이드, 오른쪽: 4개 그리드)
+     ============================================================ -->
+<div class="lb-split-banner">
+  <div class="lb-split-inner">
+    <!-- 왼쪽: 슬라이드 배너 (이미지/동영상 지원) -->
+    <div class="lb-split-slider">
+      <div class="swiper lb-promo-swiper">
+        <div class="swiper-wrapper">
+          <!-- 슬라이드 1: 이미지 -->
+          <div class="swiper-slide">
+            <a href="/product/list.html?cate_no=24" class="lb-promo-slide">
+              <img src="/web/upload/promo/slide-1.jpg" alt="보다 똑똑. 보다 또렷. 보다 강력." onerror="this.src='/web/upload/hero/hero-1.jpg'">
+              <div class="lb-promo-content">
+                <h3 class="lb-promo-title">보다 똑똑.<br>보다 또렷.<br>보다 강력.</h3>
+              </div>
+            </a>
+          </div>
+          
+          <!-- 슬라이드 2: 동영상 예제 (YouTube) -->
+          <div class="swiper-slide">
+            <div class="lb-promo-slide lb-promo-video">
+              <div class="lb-video-container">
+                <iframe 
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ" 
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+                </iframe>
+              </div>
+              <div class="lb-promo-content">
+                <h3 class="lb-promo-title">NEW<br>COLLECTION</h3>
+              </div>
+              <a href="/product/list.html?cate_no=25" class="lb-promo-overlay-link"></a>
+            </div>
+          </div>
+          
+          <!-- 슬라이드 3: 이미지 -->
+          <div class="swiper-slide">
+            <a href="/product/list.html?cate_no=27" class="lb-promo-slide">
+              <img src="/web/upload/promo/slide-3.jpg" alt="BEST SELLER" onerror="this.src='/web/upload/hero/hero-3.jpg'">
+              <div class="lb-promo-content">
+                <h3 class="lb-promo-title">BEST<br>SELLER</h3>
+              </div>
+            </a>
+          </div>
+          
+          <!-- 슬라이드 4: HTML5 동영상 예제 (로컬) -->
+          <div class="swiper-slide">
+            <div class="lb-promo-slide lb-promo-video">
+              <video autoplay muted loop playsinline class="lb-promo-video-bg">
+                <source src="/web/upload/video/promo.mp4" type="video/mp4">
+                <source src="/web/upload/video/promo.webm" type="video/webm">
+              </video>
+              <div class="lb-promo-content">
+                <h3 class="lb-promo-title">LATEST<br>ARRIVAL</h3>
+              </div>
+              <a href="/product/list.html?cate_no=32" class="lb-promo-overlay-link"></a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 커스텀 페이지네이션 (길쭉한 인디케이터) -->
+        <div class="swiper-pagination lb-promo-pagination"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 4개 그리드 배너 -->
+    <div class="lb-split-grid">
+      <a href="/product/list.html?cate_no=25" class="lb-grid-item">
+        <img src="/web/upload/banner/grid-1.jpg" alt="유명 쇼핑몰이 사용하는 이유" onerror="this.src='/web/upload/lookbook/look-1.jpg'">
+        <div class="lb-grid-content">
+          <span class="lb-grid-label">THINK DIFFERENT.</span>
+          <h4 class="lb-grid-title">유명 쇼핑몰이<br>사용하는 이유</h4>
+          <button class="lb-grid-btn">More</button>
+        </div>
+      </a>
+
+      <a href="/product/list.html?cate_no=24" class="lb-grid-item">
+        <img src="/web/upload/banner/grid-2.jpg" alt="어떤 일이든 빠르고 간편하게" onerror="this.src='/web/upload/lookbook/look-2.jpg'">
+        <div class="lb-grid-content">
+          <span class="lb-grid-label">미끄럼 누비는 표현의 자유.</span>
+          <h4 class="lb-grid-title">어떤 일이든<br>빠르고 간편하게.</h4>
+          <button class="lb-grid-btn">More</button>
+        </div>
+      </a>
+
+      <a href="/board/index.html" class="lb-grid-item">
+        <img src="/web/upload/banner/grid-3.jpg" alt="루이스폴센 램프" onerror="this.src='/web/upload/lookbook/look-3.jpg'">
+        <div class="lb-grid-content">
+          <h4 class="lb-grid-title">루이스폴센 램프</h4>
+          <button class="lb-grid-btn lb-grid-btn-outline">HAND MADE</button>
+        </div>
+      </a>
+
+      <a href="/product/list.html?cate_no=32" class="lb-grid-item">
+        <img src="/web/upload/banner/grid-4.jpg" alt="AirPods Max" onerror="this.src='/web/upload/lookbook/look-4.jpg'">
+        <div class="lb-grid-content">
+          <span class="lb-grid-label">AirPods Max</span>
+          <h4 class="lb-grid-title">과감하리만치<br>독창적인 구조.</h4>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// 프로모 슬라이더 초기화 (드래그, 스크롤, 키보드 지원)
+(function() {
+  if (typeof Swiper === 'undefined') return;
+  
+  const promoSwiper = new Swiper('.lb-promo-swiper', {
+    // 기본 설정
+    loop: true,
+    speed: 600,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    
+    // 페이지네이션 (커스텀 스타일)
+    pagination: {
+      el: '.lb-promo-pagination',
+      clickable: true,
+      renderBullet: function (index, className) {
+        return '<span class="' + className + ' lb-promo-bullet"></span>';
+      },
+    },
+    
+    // 마우스 드래그 스와이프
+    grabCursor: true,
+    simulateTouch: true,
+    touchRatio: 1,
+    touchAngle: 45,
+    
+    // 마우스 휠 스크롤
+    mousewheel: {
+      enabled: true,
+      sensitivity: 1,
+      releaseOnEdges: true,
+    },
+    
+    // 키보드 컨트롤
+    keyboard: {
+      enabled: true,
+      onlyInViewport: true,
+    },
+    
+    // 전환 효과
+    effect: 'fade',
+    fadeEffect: {
+      crossFade: true
+    },
+    
+    // 접근성
+    a11y: {
+      prevSlideMessage: '이전 슬라이드',
+      nextSlideMessage: '다음 슬라이드',
+    },
+    
+    // 이벤트
+    on: {
+      init: function() {
+        // 동영상 자동 재생
+        this.slides.forEach(function(slide) {
+          const video = slide.querySelector('video');
+          if (video) {
+            video.play().catch(function() {});
+          }
+        });
+      },
+      slideChange: function() {
+        // 슬라이드 변경 시 동영상 제어
+        this.slides.forEach(function(slide, index) {
+          const video = slide.querySelector('video');
+          if (video) {
+            if (index === this.activeIndex) {
+              video.play().catch(function() {});
+            } else {
+              video.pause();
+            }
+          }
+        }.bind(this));
+      }
+    }
+  });
+  
+  // 터치 이벤트 최적화
+  promoSwiper.el.addEventListener('touchstart', function() {
+    promoSwiper.autoplay.stop();
+  }, { passive: true });
+  
+  promoSwiper.el.addEventListener('touchend', function() {
+    promoSwiper.autoplay.start();
+  }, { passive: true });
+})();
+</script>
+
+<!-- ============================================================
+     프로모 배너 섹션 (2개 가로 배너)
+     ============================================================ -->
+<div class="lb-promo-section" id="lb-section-promo">
+  <div class="lb-promo-inner">
+    <a href="/product/list.html?cate_no=24" class="lb-promo-banner lb-promo-banner-dark">
+      <img src="/web/upload/banner/promo-trench.jpg" alt="TIMELESS TRENCH COAT" onerror="this.src='/web/upload/banner/banner-1.jpg'">
+      <div class="lb-promo-banner-content">
+        <span class="lb-promo-eyebrow">TIMELESS TRENCH COAT</span>
+        <h3 class="lb-promo-banner-title">계절을 넘나드는 클래식</h3>
+        <span class="lb-promo-link">SHOP NOW →</span>
+      </div>
+    </a>
+
+    <a href="/product/list.html?cate_no=25" class="lb-promo-banner lb-promo-banner-light">
+      <img src="/web/upload/banner/promo-essentials.jpg" alt="ESSENTIALS DAILY BASICS" onerror="this.src='/web/upload/banner/banner-2.jpg'">
+      <div class="lb-promo-banner-content">
+        <span class="lb-promo-eyebrow">ESSENTIALS</span>
+        <h3 class="lb-promo-banner-title">DAILY BASICS<br>매일 입는 기본</h3>
+        <span class="lb-promo-link">DISCOVER →</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ============================================================
+     ② WEEKLY BEST — Swiper 슬라이더 (LE BLANC 스타일)
+     product_listmain_1 사용
+     ============================================================ -->
+<div module="product_listmain_1" class="ec-base-product lb-product-section lb-weekly-best" id="lb-section-best">
+    <!--
+        $count = 12
+        ※ 12개 상품을 4개씩 슬라이드로 보여줍니다.
+    -->
+    <div class="lb-section-header">
+        <div class="lb-section-copy">
+            <p class="lb-section-eyebrow">WEEKLY BEST</p>
+            <h2 class="lb-section-title">이번 주 가장 많은 선택을 받은 옷</h2>
+            <span class="lb-section-cafe24" style="display: {$category_title_text_display};">{$category_title_text}</span>
+            <span style="display: {$category_title_img_display};"><img src="{$category_title_img}" alt="{$category_title_text}" /></span>
+        </div>
+        <a href="/product/list.html?cate_no=32" class="lb-section-more">전체 보기</a>
+    </div>
+
+    <!-- Swiper 슬라이더 컨테이너 -->
+    <div class="swiper lb-weekly-swiper">
+        <div class="swiper-wrapper">
+            <!-- 슬라이드 1 (4개 제품) -->
+            <div class="swiper-slide">
+                <ul class="prdList lb-weekly-grid">
+                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                        <div class="thumbnail">
+                            <div class="prdImg">
+                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
+                                    <span module="product_Imagestyle">
+                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
+                                    </span>
+                                </a>
+                                <span class="wish">{$list_wish_icon}</span>
+                            </div>
+                            <div class="icon">
+                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                                <div class="button">
+                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                            <ul module="product_ListItem" class="spec">
+                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                        <div class="thumbnail">
+                            <div class="prdImg">
+                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
+                                    <span module="product_Imagestyle">
+                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
+                                    </span>
+                                </a>
+                                <span class="wish">{$list_wish_icon}</span>
+                            </div>
+                            <div class="icon">
+                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                                <div class="button">
+                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                            <ul module="product_ListItem" class="spec">
+                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                        <div class="thumbnail">
+                            <div class="prdImg">
+                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
+                                    <span module="product_Imagestyle">
+                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
+                                    </span>
+                                </a>
+                                <span class="wish">{$list_wish_icon}</span>
+                            </div>
+                            <div class="icon">
+                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                                <div class="button">
+                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                            <ul module="product_ListItem" class="spec">
+                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                        <div class="thumbnail">
+                            <div class="prdImg">
+                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
+                                    <span module="product_Imagestyle">
+                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
+                                    </span>
+                                </a>
+                                <span class="wish">{$list_wish_icon}</span>
+                            </div>
+                            <div class="icon">
+                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                                <div class="button">
+                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                            <ul module="product_ListItem" class="spec">
+                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 네비게이션 버튼 -->
+        <div class="swiper-button-prev lb-weekly-prev"></div>
+        <div class="swiper-button-next lb-weekly-next"></div>
+
+        <!-- 페이지네이션 -->
+        <div class="swiper-pagination lb-weekly-pagination"></div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ② SHORTS — 숏폼 영상 슬라이더 (LE BLANC 스타일)
+     세로 영상(9:16) + 재생 버튼 + 상품 링크
+     ============================================================ -->
+<div class="lb-lookbook-section" id="lb-section-lookbook">
+    <div class="lb-section-header">
+        <div class="lb-section-copy">
+            <p class="lb-section-eyebrow">LOOKBOOK</p>
+            <h2 class="lb-section-title">일상을 정돈하는 스타일</h2>
+            <p class="lb-section-desc">시간이 지나도 흐트러지지 않는 기본</p>
+        </div>
+        <a href="/board/lookbook/list.html" class="lb-section-more">전체보기</a>
+    </div>
+
+    <!-- Lookbook Grid -->
+    <div class="lb-lookbook-grid">
+        <!-- Look 1 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-1.jpg" alt="Black Turtleneck & Midi Skirt">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">WINTER MOOD</span>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Look 2 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-2.jpg" alt="Dark Grey Coat">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">ESSENTIAL</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 3 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-3.jpg" alt="Ivory Coat">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">REFINED</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 4 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-4.jpg" alt="Beige Blazer">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">TIMELESS</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 5 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-5.jpg" alt="Beige Dress">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">EVERYDAY</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 6 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-6.jpg" alt="Back View">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">DETAIL</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 7 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-7.jpg" alt="Cream Sweater & Skirt">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">SOFT MOOD</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Look 8 -->
+        <div class="lb-lookbook-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/lookbook/look-8.jpg" alt="Ivory Blouse">
+                <div class="lb-lookbook-overlay">
+                    <span class="lb-lookbook-tag">MINIMAL</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      ③ NEW IN — product_listmain_2 (카페24 모듈 — 변경 금지)
      ============================================================ -->
-<div module="product_listmain_2" class="ec-base-product lb-product-section">
+<div module="product_listmain_2" class="ec-base-product lb-product-section lb-new-arrivals" id="lb-section-newin">
     <!--
-        $count = 8
-        ※ 상품진열갯수를 설정하는 변수입니다. 설정하지 않을 경우, 최대 200개의 상품이 진열 됩니다.
+        $count = 12
+        ※ NEW ARRIVALS 4x3 그리드 = 12개 상품
     -->
     <div class="lb-section-header">
         <div class="lb-section-copy">
@@ -208,6 +842,80 @@
             </div>
         </li>
     </ul>
+</div>
+
+<!-- ============================================================
+     ③ 타임세일 배너 + 카운트다운
+     ============================================================ -->
+<div class="lb-timesale-banner lb-full-bleed" id="lb-section-timesale">
+    <div class="lb-timesale-content">
+        <div class="lb-timesale-left">
+            <div class="lb-timesale-text">
+                <p class="lb-timesale-eyebrow">TIME SALE</p>
+                <h2 class="lb-timesale-title">끝이 없는<br>할인의 블랙홀</h2>
+            </div>
+            <div class="lb-timesale-countdown" id="lb-countdown">
+                <div class="lb-countdown-item">
+                    <span class="lb-countdown-value" id="countdown-days">189</span>
+                    <span class="lb-countdown-label">일</span>
+                </div>
+                <span class="lb-countdown-sep" aria-hidden="true">:</span>
+                <div class="lb-countdown-item lb-countdown-item--time">
+                    <span class="lb-countdown-value" id="countdown-hours">09</span>
+                </div>
+                <span class="lb-countdown-sep" aria-hidden="true">:</span>
+                <div class="lb-countdown-item lb-countdown-item--time">
+                    <span class="lb-countdown-value" id="countdown-minutes">11</span>
+                </div>
+                <span class="lb-countdown-sep" aria-hidden="true">:</span>
+                <div class="lb-countdown-item lb-countdown-item--time">
+                    <span class="lb-countdown-value" id="countdown-seconds">46</span>
+                </div>
+                <span class="lb-countdown-suffix">남음</span>
+            </div>
+            <a href="/product/list.html?cate_no=33" class="lb-timesale-btn">타임세일 전체보기</a>
+        </div>
+        <div class="lb-timesale-visual" aria-hidden="true">
+            <img src="/web/upload/timesale/watch.jpg" alt="타임세일 워치">
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ③-1 PROMO BANNERS — 프로모션 배너 2개 (이미지 활용)
+     ============================================================ -->
+<div class="lb-promo-section" id="lb-section-promo">
+    <div class="lb-promo-grid">
+        <!-- Promo 1 -->
+        <div class="lb-promo-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/promo/promo-1.jpg" alt="Trench Coat Collection">
+                <div class="lb-promo-overlay">
+                    <div class="lb-promo-content">
+                        <p class="lb-promo-eyebrow">TIMELESS</p>
+                        <h3 class="lb-promo-title">TRENCH COAT</h3>
+                        <p class="lb-promo-desc">계절을 넘나드는 클래식</p>
+                        <span class="lb-promo-cta">SHOP NOW →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Promo 2 -->
+        <div class="lb-promo-item">
+            <a href="/product/list.html">
+                <img src="/web/upload/promo/promo-2.jpg" alt="Everyday Essentials">
+                <div class="lb-promo-overlay">
+                    <div class="lb-promo-content">
+                        <p class="lb-promo-eyebrow">ESSENTIALS</p>
+                        <h3 class="lb-promo-title">DAILY BASICS</h3>
+                        <p class="lb-promo-desc">매일 입는 기본</p>
+                        <span class="lb-promo-cta">DISCOVER →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 
 <!-- ============================================================
@@ -280,6 +988,83 @@
 </div>
 
 <!-- ============================================================
+     ④ 영상 배너 (YouTube 임베드)
+     ============================================================ -->
+<div class="lb-video-banner" id="lb-section-video">
+    <div class="lb-video-content">
+        <div class="lb-video-text">
+            <p class="lb-video-eyebrow">BRAND STORY</p>
+            <h2 class="lb-video-title">가장 어디에도<br>없었던 방식으로</h2>
+            <p class="lb-video-desc">우리는 유행을 만들지 않고, 오래 남는 기본을 제안합니다. 브랜드 스토리를 영상으로 만나보세요.</p>
+            <button class="lb-video-play-btn" data-video-id="dQw4w9WgXcQ">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>영상 보기</span>
+            </button>
+        </div>
+        <div class="lb-video-player" id="lb-youtube-player">
+            <!-- YouTube iframe 동적 삽입 -->
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ④-1 BRAND STORY — 브랜드 스토리 배너 (이미지 활용)
+     ============================================================ -->
+<div class="lb-brand-story-section" id="lb-section-brand">
+    <div class="lb-brand-story-container">
+        <div class="lb-brand-story-image">
+            <img src="/web/upload/banner/banner-1.jpg" alt="LE BLANC Brand Story">
+        </div>
+        <div class="lb-brand-story-content">
+            <p class="lb-brand-eyebrow">OUR PHILOSOPHY</p>
+            <h2 class="lb-brand-title">오래 입는 기본,<br>정돈된 일상</h2>
+            <p class="lb-brand-desc">
+                유행을 좇지 않고, 시간이 지나도 변하지 않는 가치를 담습니다.<br>
+                단정하고 편안한 실루엣으로 당신의 매일을 완성합니다.
+            </p>
+            <a href="/about" class="lb-brand-link">브랜드 스토리 →</a>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ④-2 CATEGORY BANNERS — 카테고리 배너 2개 (이미지 활용)
+     ============================================================ -->
+<div class="lb-category-banners" id="lb-section-categories">
+    <div class="lb-category-grid">
+        <!-- Category Banner 1 -->
+        <div class="lb-category-banner">
+            <a href="/product/list.html">
+                <img src="/web/upload/banner/banner-2.jpg" alt="Accessories Collection">
+                <div class="lb-category-overlay">
+                    <div class="lb-category-content">
+                        <h3 class="lb-category-title">ACCESSORIES</h3>
+                        <p class="lb-category-subtitle">완성도를 높이는 디테일</p>
+                        <span class="lb-category-cta">SHOP NOW</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Category Banner 2 -->
+        <div class="lb-category-banner">
+            <a href="/product/list.html">
+                <img src="/web/upload/banner/banner-3.jpg" alt="Wardrobe Essentials">
+                <div class="lb-category-overlay">
+                    <div class="lb-category-content">
+                        <h3 class="lb-category-title">ESSENTIALS</h3>
+                        <p class="lb-category-subtitle">옷장의 기본이 되는</p>
+                        <span class="lb-category-cta">DISCOVER</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      ⑤ THE DAILY UNIFORM — product_listmain_1 (카페24 모듈 — 변경 금지)
      ============================================================ -->
 <div module="product_listmain_1" class="ec-base-product lb-product-section">
@@ -295,7 +1080,7 @@
             <span class="lb-section-cafe24" style="display: {$category_title_text_display};">{$category_title_text}</span>
             <span style="display: {$category_title_img_display};"><img src="{$category_title_img}" alt="{$category_title_text}" /></span>
         </div>
-        <a href="/product/list.html" class="lb-section-more">전체 보기</a>
+        <a href="/product/list.html?cate_no=25" class="lb-section-more">전체 보기</a>
     </div>
     <ul class="prdList">
         <li id="anchorBoxId_{$product_no}">
@@ -362,6 +1147,68 @@
     </div>
   </div>
 </section>
+
+<!-- ============================================================
+     ⑤ 포토리뷰 슬라이더 (카페24 게시판 모듈)
+     ============================================================ -->
+<div class="lb-photo-review-section" id="lb-section-review">
+    <div class="lb-section-header">
+        <div class="lb-section-copy">
+            <p class="lb-section-eyebrow">REAL CUSTOMER REVIEWS</p>
+            <h2 class="lb-section-title">고객이 직접 남긴 착용 후기</h2>
+        </div>
+        <a href="/board/review/list.html?board_no=4" class="lb-section-more">모두보기</a>
+    </div>
+
+    <!-- 카페24 게시판 모듈 -->
+    <div module="board_listpackage_4" class="lb-board-review-wrapper">
+        <div class="swiper lb-review-swiper">
+            <ul module="board_list_4" class="xans-board-list swiper-wrapper">
+                <!--
+                    $count = 8
+                    $main_list = yes
+                    $main_list_reply_view = no
+                -->
+                <li class="xans-record- swiper-slide">
+                    <div class="lb-review-item">
+                        <!-- 썸네일 -->
+                        <a href="{$link_board_detail}" class="lb-review-link">
+                            <div class="lb-review-image-wrapper">
+                                <img src="{$thumbnail_file}" alt="{$subject}" class="lb-review-image" onerror="this.src='//img.echosting.cafe24.com/thumb/img_product_small.gif'">
+                                {$display_board_attachment}
+                            </div>
+                            
+                            <!-- 리뷰 정보 -->
+                            <div class="lb-review-content">
+                                <!-- 평점 -->
+                                <div class="lb-review-stars">{$display_product_review}</div>
+                                
+                                <!-- 제목 -->
+                                <h3 class="lb-review-title">{$subject}</h3>
+                                
+                                <!-- 내용 -->
+                                <p class="lb-review-text">{$content_cut}</p>
+                                
+                                <!-- 작성자 및 날짜 -->
+                                <div class="lb-review-meta">
+                                    <span class="lb-review-author">{$writer}</span>
+                                    <span class="lb-review-date">{$write_date}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- 네비게이션 버튼 -->
+            <div class="swiper-button-prev lb-review-prev"></div>
+            <div class="swiper-button-next lb-review-next"></div>
+            
+            <!-- 페이지네이션 -->
+            <div class="swiper-pagination lb-review-pagination"></div>
+        </div>
+    </div>
+</div>
 
 <!-- product_listmain_4 ~ 7 은 사용시 섹션으로 활성화 (현재 hidden) -->
 <div module="product_listmain_4" class="ec-base-product" style="display:none;">
