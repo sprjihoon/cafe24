@@ -111,10 +111,10 @@
       <a href="/member/login.html" class="lb-util-link" module="Layout_statelogoff">
         <span>로그인</span>
       </a>
-      <!-- 2. 회원가입 (+2,000P 배지) -->
+      <!-- 2. 회원가입 (적립금 배지) -->
       <a href="/member/join.html" class="lb-util-link lb-util-join" module="Layout_statelogoff">
         <span>회원가입</span>
-        <span class="lb-badge">+2,000P</span>
+        <span class="lb-badge" module="Layout_joinInfo">+{$join_reserve}</span>
       </a>
       <!-- 3. 마이쇼핑 (로그인 시) -->
       <a href="/myshop/index.html" class="lb-util-link" module="Layout_stateLogon">
@@ -499,31 +499,32 @@
 
 <div id="footer" class="lb-footer">
     <!-- 푸터 메인 영역 -->
-    <div class="lb-footer-main">
+    <div class="lb-footer-main" module="Layout_footer">
         <div class="lb-footer-container">
             <!-- 로고 및 사업자 정보 -->
             <div class="lb-footer-col lb-footer-info">
                 <h2 class="lb-footer-logo">
-                    <a href="/index.html">LE BLANC</a>
+                    <a href="/index.html">{$mall_name}</a>
                 </h2>
                 <div class="lb-footer-company">
-                    <p>상호: 디자인 플로어　대표: 장성수　대표전화: 1544-4941　팩스: 070-4898-3313</p>
-                    <p>주소: 04564 서울특별시 중구 을지로6가 18-35 APM 1F FLOORCORP</p>
-                    <p>매장 주소: 서울특별시 강남구 삼성동 1F 디자인플로어</p>
-                    <p>사업자등록번호: 620-08-52026 [<a href="#none" onclick="window.open('http://www.ftc.go.kr/bizCommPop.do?wrkr_no=6200852026', 'bizCommPop', 'width=750, height=950;');return false;">사업자정보확인</a>]　통신판매업 신고번호: 2040-서울중구-1234</p>
-                    <p>개인정보 보호책임자: 박종규　E-mail: dfloor@naver.com</p>
+                    <p>상호: {$company_name}　대표: {$representative_name}　대표전화: {$company_phone}　팩스: {$company_fax}</p>
+                    <p>주소: {$company_addr_zipcode} {$company_addr}</p>
+                    <p>사업자등록번호: {$company_registration_no} [<a href="#none" onclick="window.open('http://www.ftc.go.kr/bizCommPop.do?wrkr_no={$company_registration_no_only}', 'bizCommPop', 'width=750, height=950;');return false;">사업자정보확인</a>]　통신판매업 신고번호: {$online_business_registration_no}</p>
+                    <p>개인정보 보호책임자: {$privacy_manager}　E-mail: {$contact_email}</p>
                 </div>
             </div>
 
             <!-- 고객센터 -->
             <div class="lb-footer-col lb-footer-cs">
                 <h3 class="lb-footer-title">고객센터</h3>
-                <a href="tel:1544-4941" class="lb-footer-tel">1544-4941</a>
-                <p class="lb-footer-time">
-                    평일 오전10:00 ~ 오후6:00<br>
-                    점심 오후12:00 ~ 오후1:00
-                </p>
-                <button class="lb-footer-account-btn" type="button">+ 입금계좌 정보</button>
+                <a href="tel:{$company_phone}" class="lb-footer-tel">{$company_phone}</a>
+                <p class="lb-footer-time">{$service_time}</p>
+                <div class="lb-footer-account-info" module="Layout_footer_bank_info">
+                    <p class="lb-footer-account-title">입금계좌 정보</p>
+                    <div class="lb-footer-account-details">
+                        <p>{$bank_account_info}</p>
+                    </div>
+                </div>
                 <div class="lb-footer-sns">
                     <a href="#" target="_blank" rel="noopener" title="Threads">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
@@ -556,12 +557,13 @@
     <!-- 푸터 하단 -->
     <div class="lb-footer-bottom">
         <div class="lb-footer-container">
-            <p class="lb-footer-copyright">Copyright © <strong>DESIGN FLOOR</strong> All rights reserved. Designed by dfloor</p>
-            <div class="lb-footer-badges">
+            <p class="lb-footer-copyright">Copyright © <strong>{$mall_name}</strong> All rights reserved.</p>
+            <div class="lb-footer-badges" module="Layout_escrow">
                 <a href="https://www.cafe24.com" target="_blank" rel="noopener">
                     <img src="//img.echosting.cafe24.com/skin/base_ko_KR/layout/logo_cafe24.png" alt="Cafe24">
                 </a>
-                <span>KG 이니시스 구매안전 휴대</span>
+                <!-- 구매안전 서비스 마크 -->
+                <span {$escrow_display}><img src="{$escrow_logo}" alt="{$escrow_name}"/></span>
             </div>
         </div>
     </div>

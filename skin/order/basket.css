@@ -1,0 +1,504 @@
+/**
+ * LE BLANC - 장바구니 페이지 스타일
+ */
+
+/* ============================================================
+   전역 설정
+   ============================================================ */
+#contents {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ============================================================
+   페이지 타이틀
+   ============================================================ */
+.titleArea {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.titleArea h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   단계 표시
+   ============================================================ */
+.orderStep {
+  text-align: center;
+  margin: 40px 0;
+  padding: 0;
+}
+
+.orderStep img {
+  display: none;
+}
+
+/* 커스텀 단계 표시 */
+.lb-order-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin: 40px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lb-order-steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: #8d8d8f;
+  position: relative;
+}
+
+.lb-order-steps li.active {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+.lb-order-steps li::before {
+  content: attr(data-step);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  color: #8d8d8f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lb-order-steps li.active::before {
+  background: #1d1d1f;
+  color: #fff;
+}
+
+.lb-order-steps li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -26px;
+  width: 12px;
+  height: 2px;
+  background: #e5e5e5;
+}
+
+/* ============================================================
+   탭 메뉴
+   ============================================================ */
+.ec-base-tab {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 40px;
+}
+
+.ec-base-tab .menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 40px;
+}
+
+.ec-base-tab .menu li {
+  margin: 0;
+  padding: 0;
+}
+
+.ec-base-tab .menu li a {
+  display: block;
+  padding: 16px 0;
+  font-size: 15px;
+  color: #8d8d8f;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.ec-base-tab .menu li a:hover {
+  color: #1d1d1f;
+}
+
+.ec-base-tab .menu li.selected a,
+.ec-base-tab .menu li.selected a:hover {
+  color: #1d1d1f;
+  font-weight: 600;
+  border-bottom-color: #1d1d1f;
+}
+
+.ec-base-tab .right {
+  float: right;
+  font-size: 13px;
+  color: #8d8d8f;
+  padding: 16px 0;
+}
+
+/* ============================================================
+   빈 장바구니 메시지
+   ============================================================ */
+.Order_Empty {
+  text-align: center;
+  padding: 120px 20px;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Order_Empty p {
+  font-size: 16px;
+  color: #8d8d8f;
+  margin: 0;
+}
+
+/* ============================================================
+   장바구니 테이블
+   ============================================================ */
+.orderListArea {
+  margin-bottom: 60px;
+}
+
+.orderListArea table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e5e5;
+}
+
+.orderListArea table thead th {
+  padding: 16px 12px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1d1d1f;
+  text-align: center;
+}
+
+.orderListArea table tbody td {
+  padding: 20px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #555;
+  vertical-align: middle;
+}
+
+.orderListArea table tbody td.thumb {
+  width: 92px;
+}
+
+.orderListArea table tbody td.thumb img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.orderListArea table tbody td.left {
+  text-align: left;
+}
+
+.orderListArea table tbody td .name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   상품 수량 조절
+   ============================================================ */
+.ec-base-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d2d2d7;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ec-base-qty a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  color: #1d1d1f;
+  text-decoration: none;
+  border: none;
+  transition: background 0.2s;
+}
+
+.ec-base-qty a:hover {
+  background: #f5f5f5;
+}
+
+.ec-base-qty input {
+  width: 50px;
+  height: 32px;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  color: #1d1d1f;
+}
+
+/* ============================================================
+   버튼 스타일
+   ============================================================ */
+.ec-base-button {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ec-base-button .btnSubmit,
+.ec-base-button .btnNormal {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.ec-base-button .btnSubmit {
+  background: #1d1d1f;
+  color: #fff;
+}
+
+.ec-base-button .btnSubmit:hover {
+  background: #000;
+}
+
+.ec-base-button .btnNormal {
+  background: #fff;
+  color: #1d1d1f;
+  border: 1px solid #d2d2d7;
+}
+
+.ec-base-button .btnNormal:hover {
+  border-color: #1d1d1f;
+  background: #f5f5f5;
+}
+
+/* ============================================================
+   총 주문금액
+   ============================================================ */
+.ec-base-box.total {
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 32px;
+  margin: 40px 0;
+}
+
+.ec-base-box.total .info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ec-base-box.total .info strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.ec-base-box.total .totalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  border-top: 2px solid #1d1d1f;
+}
+
+.ec-base-box.total .totalPrice strong {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.ec-base-box.total .totalPrice .price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ff0000;
+}
+
+/* ============================================================
+   주문하기 버튼
+   ============================================================ */
+.ec-base-button.gFull {
+  margin: 40px 0;
+}
+
+.ec-base-button.gFull a,
+.ec-base-button.gFull button {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  background: #1d1d1f;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ec-base-button.gFull a:hover,
+.ec-base-button.gFull button:hover {
+  background: #000;
+}
+
+/* ============================================================
+   이용안내
+   ============================================================ */
+.ec-base-help {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 32px;
+  margin: 60px 0;
+}
+
+.ec-base-help .title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0 0 20px 0;
+}
+
+.ec-base-help .content {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #555;
+}
+
+.ec-base-help ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ec-base-help ul li {
+  position: relative;
+  padding-left: 12px;
+  margin-bottom: 8px;
+}
+
+.ec-base-help ul li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: #8d8d8f;
+}
+
+/* ============================================================
+   혜택정보 박스
+   ============================================================ */
+.ec-base-box.typeMember {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.ec-base-box.typeMember .title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-bottom: 16px;
+}
+
+.ec-base-box.typeMember .description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.ec-base-box.typeMember .mileage {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  padding: 16px 0 0 0;
+  margin: 16px 0 0 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.ec-base-box.typeMember .mileage li {
+  font-size: 14px;
+  color: #555;
+}
+
+.ec-base-box.typeMember .mileage li a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ec-base-box.typeMember .mileage li strong {
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-left: 4px;
+}
+
+/* ============================================================
+   반응형
+   ============================================================ */
+@media (max-width: 768px) {
+  .titleArea h2 {
+    font-size: 24px;
+  }
+
+  .lb-order-steps {
+    gap: 20px;
+  }
+
+  .lb-order-steps li {
+    font-size: 13px;
+  }
+
+  .lb-order-steps li::before {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .ec-base-tab .menu {
+    gap: 20px;
+  }
+
+  .ec-base-tab .right {
+    display: none;
+  }
+
+  .orderListArea {
+    overflow-x: auto;
+  }
+
+  .ec-base-box.total {
+    padding: 20px;
+  }
+
+  .ec-base-box.total .totalPrice .price {
+    font-size: 24px;
+  }
+
+  .ec-base-help {
+    padding: 20px;
+  }
+}

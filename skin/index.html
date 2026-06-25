@@ -22,13 +22,16 @@
         </div>
       </div>
       
-      <!-- 슬라이드 2: 전체 화면 + 영상 배경 (예시) -->
-      <div class="lb-hero-slide lb-hero-slide--2" data-fullscreen="true" data-video="" style="background-image:url('/web/upload/hero/hero-2.jpg');">
-        <!-- 영상 배경 (data-video 설정 시 자동 삽입) -->
+      <!-- 슬라이드 2: 전체 화면 + YouTube 영상 배경 -->
+      <div class="lb-hero-slide lb-hero-slide--2" data-fullscreen="true" data-youtube="HAaJ9muLCqI" style="background-image:url('/web/upload/hero/hero-2.jpg');">
         <div class="lb-hero-video-container" style="display:none;">
-          <video class="lb-hero-video" playsinline muted loop>
-            <source src="" type="video/mp4">
-          </video>
+          <iframe
+            class="lb-hero-youtube"
+            title="ATELIER N brand film"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
           <div class="lb-hero-video-overlay"></div>
         </div>
         <div class="lb-hero-placeholder">
@@ -88,6 +91,30 @@
     var total = slides.length;
     var timer = null;
     var videos = [];
+    var youtubeSlides = {};
+
+    var YT_EMBED_BASE = 'https://www.youtube.com/embed/';
+
+    function buildYoutubeSrc(id, autoplay) {
+      return YT_EMBED_BASE + id +
+        '?controls=0&showinfo=0&rel=0&autoplay=' + (autoplay ? '1' : '0') +
+        '&mute=1&loop=1&playlist=' + id +
+        '&playsinline=1&modestbranding=1&enablejsapi=1';
+    }
+
+    function pauseYoutubeSlide(index) {
+      var yt = youtubeSlides[index];
+      if (yt && yt.iframe) {
+        yt.iframe.src = '';
+      }
+    }
+
+    function playYoutubeSlide(index) {
+      var yt = youtubeSlides[index];
+      if (yt && yt.iframe) {
+        yt.iframe.src = buildYoutubeSrc(yt.id, true);
+      }
+    }
 
     // 전체 화면 감지 및 CSS 클래스 추가
     var hasFullscreen = false;
@@ -122,9 +149,15 @@
             }
           }
         } else if (youtubeId) {
-          // YouTube 임베드 (추후 구현)
-          // TODO: Phase 4에서 YouTube IFrame API 연동
-          console.log('YouTube video:', youtubeId);
+          var ytContainer = slide.querySelector('.lb-hero-video-container');
+          var ytIframe = slide.querySelector('.lb-hero-youtube');
+          if (ytContainer && ytIframe) {
+            youtubeSlides[i] = {
+              id: youtubeId,
+              iframe: ytIframe
+            };
+            ytContainer.style.display = 'block';
+          }
         }
       }
     }
@@ -135,6 +168,7 @@
       if (videos[current]) {
         videos[current].pause();
       }
+      pauseYoutubeSlide(current);
 
       current = (index + total) % total;
       var slideWidth = slider.getBoundingClientRect().width;
@@ -151,6 +185,7 @@
           console.log('Video autoplay failed:', err);
         });
       }
+      playYoutubeSlide(current);
     }
 
     // 자동 재생
@@ -191,6 +226,9 @@
           videos[i].pause();
         }
       }
+      Object.keys(youtubeSlides).forEach(function(key) {
+        pauseYoutubeSlide(parseInt(key, 10));
+      });
     });
   }
 
@@ -323,9 +361,12 @@
           <!-- 슬라이드 1: 이미지 -->
           <div class="swiper-slide">
             <a href="/product/list.html?cate_no=24" class="lb-promo-slide">
-              <img src="/web/upload/promo/slide-1.jpg" alt="보다 똑똑. 보다 또렷. 보다 강력." onerror="this.src='/web/upload/hero/hero-1.jpg'">
               <div class="lb-promo-content">
-                <h3 class="lb-promo-title">보다 똑똑.<br>보다 또렷.<br>보다 강력.</h3>
+                <p class="lb-promo-eyebrow">일상을 완성하는 디테일</p>
+                <h3 class="lb-promo-title">보다 똑똑하게,<br>보다 또렷하게</h3>
+              </div>
+              <div class="lb-promo-visual">
+                <img src="/web/upload/promo/slide-1.jpg" alt="보다 똑똑. 보다 또렷. 보다 강력." onerror="this.src='/web/upload/hero/hero-1.jpg'">
               </div>
             </a>
           </div>
@@ -333,16 +374,20 @@
           <!-- 슬라이드 2: 동영상 예제 (YouTube) -->
           <div class="swiper-slide">
             <div class="lb-promo-slide lb-promo-video">
-              <div class="lb-video-container">
-                <iframe 
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ" 
-                  frameborder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowfullscreen>
-                </iframe>
-              </div>
               <div class="lb-promo-content">
-                <h3 class="lb-promo-title">NEW<br>COLLECTION</h3>
+                <p class="lb-promo-eyebrow">2026 FALL COLLECTION</p>
+                <h3 class="lb-promo-title">새로운 계절을<br>오래 입는 방식으로</h3>
+              </div>
+              <div class="lb-promo-visual">
+                <div class="lb-video-container">
+                  <iframe 
+                    src="https://www.youtube.com/embed/HAaJ9muLCqI?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&loop=1&playlist=HAaJ9muLCqI&playsinline=1&modestbranding=1" 
+                    title="2026 FALL COLLECTION"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
               </div>
               <a href="/product/list.html?cate_no=25" class="lb-promo-overlay-link"></a>
             </div>
@@ -351,31 +396,41 @@
           <!-- 슬라이드 3: 이미지 -->
           <div class="swiper-slide">
             <a href="/product/list.html?cate_no=27" class="lb-promo-slide">
-              <img src="/web/upload/promo/slide-3.jpg" alt="BEST SELLER" onerror="this.src='/web/upload/hero/hero-3.jpg'">
               <div class="lb-promo-content">
-                <h3 class="lb-promo-title">BEST<br>SELLER</h3>
+                <p class="lb-promo-eyebrow">가장 많이 선택받은</p>
+                <h3 class="lb-promo-title">BEST SELLER</h3>
+              </div>
+              <div class="lb-promo-visual">
+                <img src="/web/upload/promo/slide-3.jpg" alt="BEST SELLER" onerror="this.src='/web/upload/hero/hero-3.jpg'">
               </div>
             </a>
           </div>
           
-          <!-- 슬라이드 4: HTML5 동영상 예제 (로컬) -->
+          <!-- 슬라이드 4: YouTube 동영상 -->
           <div class="swiper-slide">
             <div class="lb-promo-slide lb-promo-video">
-              <video autoplay muted loop playsinline class="lb-promo-video-bg">
-                <source src="/web/upload/video/promo.mp4" type="video/mp4">
-                <source src="/web/upload/video/promo.webm" type="video/webm">
-              </video>
               <div class="lb-promo-content">
-                <h3 class="lb-promo-title">LATEST<br>ARRIVAL</h3>
+                <p class="lb-promo-eyebrow">지금 만나는</p>
+                <h3 class="lb-promo-title">LATEST ARRIVAL</h3>
+              </div>
+              <div class="lb-promo-visual">
+                <div class="lb-video-container">
+                  <iframe
+                    src="https://www.youtube.com/embed/HAaJ9muLCqI?controls=0&showinfo=0&rel=0&autoplay=1&mute=1&loop=1&playlist=HAaJ9muLCqI&playsinline=1&modestbranding=1"
+                    title="LATEST ARRIVAL"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                  </iframe>
+                </div>
               </div>
               <a href="/product/list.html?cate_no=32" class="lb-promo-overlay-link"></a>
             </div>
           </div>
         </div>
-        
-        <!-- 커스텀 페이지네이션 (길쭉한 인디케이터) -->
-        <div class="swiper-pagination lb-promo-pagination"></div>
       </div>
+
+      <div class="swiper-pagination lb-promo-pagination" aria-label="프로모 슬라이드"></div>
     </div>
 
     <!-- 오른쪽: 4개 그리드 배너 -->
@@ -434,13 +489,13 @@
     
     // 페이지네이션 (커스텀 스타일)
     pagination: {
-      el: '.lb-promo-pagination',
+      el: '.lb-split-slider .lb-promo-pagination',
       clickable: true,
       renderBullet: function (index, className) {
         return '<span class="' + className + ' lb-promo-bullet"></span>';
       },
     },
-    
+
     // 마우스 드래그 스와이프
     grabCursor: true,
     simulateTouch: true,
@@ -876,7 +931,7 @@
             <a href="/product/list.html?cate_no=33" class="lb-timesale-btn">타임세일 전체보기</a>
         </div>
         <div class="lb-timesale-visual" aria-hidden="true">
-            <img src="/web/upload/timesale/watch.jpg" alt="타임세일 워치">
+            <img src="/web/upload/timesale/watch-new.png" alt="타임세일 워치">
         </div>
     </div>
 </div>
