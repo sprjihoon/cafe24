@@ -377,99 +377,104 @@
   }
 
   /**
-   * 영상 컨트롤 초기화
+   * 영상 컨트롤 초기화 (이벤트 위임 사용)
    */
   function initVideoControls() {
-    var cards = document.querySelectorAll('.atelier-shorts__card');
+    var container = document.querySelector('.atelier-shorts__slider');
+    if (!container) return;
 
-    cards.forEach(function(card) {
-      var type = card.getAttribute('data-short-type');
-      
-      if (type === 'youtube') {
-        initYouTubeCard(card);
-      } else {
-        initMP4Card(card);
-      }
+    // 재생 버튼 클릭 (이벤트 위임)
+    container.addEventListener('click', function(e) {
+      var playBtn = e.target.closest('.atelier-shorts__play-btn');
+      if (!playBtn) return;
 
-      // 키보드 포커스 시 상품 링크 표시
-      var productLink = card.querySelector('.atelier-shorts__product-link');
-      if (productLink) {
-        productLink.addEventListener('focus', function() {
-          card.classList.add('atelier-shorts__card--focused');
-        });
-
-        productLink.addEventListener('blur', function() {
-          card.classList.remove('atelier-shorts__card--focused');
-        });
-      }
-    });
-  }
-
-  /**
-   * MP4 카드 초기화
-   */
-  function initMP4Card(card) {
-    var video = card.querySelector('.atelier-shorts__video');
-    var playBtn = card.querySelector('.atelier-shorts__play-btn');
-
-    if (!video) return;
-
-    if (playBtn) {
-      playBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (!isActiveSlide(card)) {
-          slideToCard(card);
-          return;
-        }
-
-        if (video.paused) {
-          playVideo(video, card);
-        } else {
-          pauseVideo(video);
-        }
-      });
-    }
-
-    // 영상 종료 시 다음 슬라이드로 전환
-    video.addEventListener('ended', function() {
-      console.log('ATELIER SHORTS: 영상 종료, 다음 슬라이드로 전환');
-      if (isActiveSlide(card)) {
-        goToNextSlide();
-      }
-    });
-
-    // 영상 로드 에러 처리
-    video.addEventListener('error', function() {
-      console.error('ATELIER SHORTS: 영상 로드 실패 -', video.src);
-      card.classList.add('atelier-shorts__card--error');
-    });
-  }
-
-  /**
-   * YouTube 카드 초기화
-   */
-  function initYouTubeCard(card) {
-    var playBtn = card.querySelector('.atelier-shorts__youtube-play');
-    if (!playBtn) return;
-
-    playBtn.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
 
-      var videoId = this.getAttribute('data-video-id');
-      if (!videoId) return;
+      var card = playBtn.closest('.atelier-shorts__card');
+      if (!card) return;
 
       if (!isActiveSlide(card)) {
         slideToCard(card);
         return;
       }
 
-      pauseAllVideos();
-      closeAllYouTubeIframes();
-      createYouTubeIframe(card, videoId, false);
+      var type = card.getAttribute('data-short-type');
+
+      if (type === 'youtube') {
+        var videoId = playBtn.getAttribute('data-video-id');
+        if (videoId) {
+          pauseAllVideos();
+          closeAllYouTubeIframes();
+          createYouTubeIframe(card, videoId, false);
+        }
+      } else {
+        var video = card.querySelector('.atelier-shorts__video');
+        if (video) {
+          if (video.paused) {
+            playVideo(video, card);
+          } else {
+            pauseVideo(video);
+          }
+        }
+      }
     });
+
+    // 비디오 ended 이벤트 (이벤트 위임)
+    container.addEventListener('ended', function(e) {
+      if (e.target.tagName === 'VIDEO') {
+        var card = e.target.closest('.atelier-shorts__card');
+        console.log('ATELIER SHORTS: 영상 종료, 다음 슬라이드로 전환');
+        if (card && isActiveSlide(card)) {
+          goToNextSlide();
+        }
+      }
+    }, true); // capture phase에서 처리
+
+    // 비디오 에러 이벤트 (이벤트 위임)
+    container.addEventListener('error', function(e) {
+      if (e.target.tagName === 'VIDEO') {
+        var card = e.target.closest('.atelier-shorts__card');
+        console.error('ATELIER SHORTS: 영상 로드 실패 -', e.target.src);
+        if (card) {
+          card.classList.add('atelier-shorts__card--error');
+        }
+      }
+    }, true); // capture phase에서 처리
+
+    // YouTube 닫기 버튼 (이벤트 위임)
+    container.addEventListener('click', function(e) {
+      var closeBtn = e.target.closest('.atelier-shorts__youtube-close');
+      if (!closeBtn) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      var card = closeBtn.closest('.atelier-shorts__card');
+      if (card) {
+        closeYouTubeIframe(card);
+        startAutoSlide();
+      }
+    });
+
+    // 상품 링크 포커스 처리 (이벤트 위임)
+    container.addEventListener('focus', function(e) {
+      if (e.target.classList.contains('atelier-shorts__product-link')) {
+        var card = e.target.closest('.atelier-shorts__card');
+        if (card) {
+          card.classList.add('atelier-shorts__card--focused');
+        }
+      }
+    }, true);
+
+    container.addEventListener('blur', function(e) {
+      if (e.target.classList.contains('atelier-shorts__product-link')) {
+        var card = e.target.closest('.atelier-shorts__card');
+        if (card) {
+          card.classList.remove('atelier-shorts__card--focused');
+        }
+      }
+    }, true);
   }
 
   function isActiveSlide(card) {
@@ -481,9 +486,11 @@
     if (!swiperInstance) return;
     var slide = card.closest('.swiper-slide');
     if (!slide) return;
-    var index = Array.prototype.indexOf.call(slide.parentNode.children, slide);
-    if (index >= 0) {
-      swiperInstance.slideTo(index);
+    
+    // loop 모드에서는 data-swiper-slide-index 사용
+    var realIndex = slide.getAttribute('data-swiper-slide-index');
+    if (realIndex !== null) {
+      swiperInstance.slideToLoop(parseInt(realIndex, 10));
     }
   }
 
@@ -497,10 +504,19 @@
     if (prefersReducedMotion) return;
 
     var activeSlide = document.querySelector('.atelier-shorts__slider .swiper-slide-active');
-    if (!activeSlide) return;
+    if (!activeSlide) {
+      console.warn('ATELIER SHORTS: 활성 슬라이드를 찾을 수 없습니다');
+      return;
+    }
 
     var card = activeSlide.querySelector('.atelier-shorts__card');
-    if (!card) return;
+    if (!card) {
+      console.warn('ATELIER SHORTS: 활성 슬라이드에 카드가 없습니다');
+      return;
+    }
+
+    var shortId = card.getAttribute('data-short-id');
+    console.log('ATELIER SHORTS: 슬라이드 활성화 -', shortId, 'realIndex:', swiperInstance ? swiperInstance.realIndex : 'N/A');
 
     card.classList.add('atelier-shorts__card--active');
 
@@ -540,6 +556,9 @@
     var poster = card.querySelector('.atelier-shorts__youtube-poster');
     var playBtn = card.querySelector('.atelier-shorts__youtube-play');
     var muteParam = muted ? '1' : '0';
+    
+    // 고유한 iframe ID 생성 (loop 모드에서 중복 방지)
+    var uniqueId = 'youtube-player-' + videoId + '-' + Date.now();
 
     // YouTube IFrame API를 사용하여 비디오 종료 감지 (enablejsapi=1 추가)
     var iframeSrc = 'https://www.youtube.com/embed/' + videoId +
@@ -554,7 +573,7 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
         class="atelier-shorts__youtube-iframe"
-        id="youtube-player-${videoId}"
+        id="${uniqueId}"
       ></iframe>
       <button class="atelier-shorts__youtube-close" type="button" aria-label="닫기">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -570,25 +589,13 @@
     card.classList.add('atelier-shorts__card--playing');
 
     // YouTube IFrame API를 사용하여 비디오 종료 감지
-    initYouTubePlayer(videoId, card);
-
-    // 닫기 버튼
-    var closeBtn = container.querySelector('.atelier-shorts__youtube-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        closeYouTubeIframe(card);
-        // iframe 닫을 때 타이머 재시작
-        startAutoSlide();
-      });
-    }
+    initYouTubePlayer(uniqueId, card);
   }
 
   /**
    * YouTube IFrame API를 사용하여 비디오 종료 감지
    */
-  function initYouTubePlayer(videoId, card) {
+  function initYouTubePlayer(iframeId, card) {
     // YouTube IFrame API가 로드되어 있는지 확인
     if (!window.YT || !window.YT.Player) {
       // API가 없으면 로드
@@ -602,20 +609,20 @@
       
       // API 로드 완료 후 플레이어 초기화
       window.onYouTubeIframeAPIReady = function() {
-        createYouTubePlayerInstance(videoId, card);
+        createYouTubePlayerInstance(iframeId, card);
       };
       return;
     }
     
-    createYouTubePlayerInstance(videoId, card);
+    createYouTubePlayerInstance(iframeId, card);
   }
 
   /**
    * YouTube Player 인스턴스 생성
    */
-  function createYouTubePlayerInstance(videoId, card) {
+  function createYouTubePlayerInstance(iframeId, card) {
     try {
-      var player = new YT.Player('youtube-player-' + videoId, {
+      var player = new YT.Player(iframeId, {
         events: {
           'onStateChange': function(event) {
             // 비디오 종료 시 (0 = YT.PlayerState.ENDED)
