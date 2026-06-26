@@ -256,11 +256,11 @@
       centeredSlides: true,
       slideToClickedSlide: true,
       spaceBetween: 16,
-      loop: true,  // 무한 루프 활성화
+      loop: false,  // loop 끄기 - 직접 구현
+      initialSlide: 2,  // 3번째 슬라이드부터 시작
       speed: 400,
       grabCursor: true,
-      allowTouchMove: true,  // 터치/드래그 허용
-      loopAdditionalSlides: 2,  // loop 모드에서 추가 복제 슬라이드 수
+      allowTouchMove: true,
 
       navigation: {
         nextEl: '.atelier-shorts__nav-next',
@@ -298,24 +298,20 @@
 
       on: {
         init: function() {
-          console.log('ATELIER SHORTS: Swiper init - activeIndex:', this.activeIndex, 'realIndex:', this.realIndex);
-          // loop 모드에서는 init 후에 slideToLoop으로 3번째 슬라이드로 이동
-          setTimeout(function() {
-            if (swiperInstance) {
-              console.log('ATELIER SHORTS: 3번째 슬라이드로 이동 (realIndex: 2)');
-              swiperInstance.slideToLoop(2, 0); // 0ms로 즉시 이동
-              playActiveSlide();
-              startAutoSlide();
-            }
-          }, 100);
+          console.log('ATELIER SHORTS: Swiper init - activeIndex:', this.activeIndex);
+          playActiveSlide();
+          startAutoSlide();
         },
         slideChange: function() {
-          console.log('ATELIER SHORTS: slideChange - activeIndex:', this.activeIndex, 'realIndex:', this.realIndex);
+          console.log('ATELIER SHORTS: slideChange - activeIndex:', this.activeIndex);
           pauseAllVideos();
           closeAllYouTubeIframes();
           clearActiveSlideState();
           playActiveSlide();
           startAutoSlide();
+        },
+        reachEnd: function() {
+          console.log('ATELIER SHORTS: 마지막 슬라이드 도달');
         },
       },
     });
@@ -334,8 +330,7 @@
     var total = window.ATELIER_SHORTS_DATA.length;
     var index = current;
     if (index == null && swiperInstance) {
-      // loop 모드에서는 realIndex 사용 (실제 슬라이드 인덱스)
-      index = (swiperInstance.realIndex || 0) + 1;
+      index = swiperInstance.activeIndex + 1;
     }
     progressTextEl.textContent = index + ' / ' + total;
   }
@@ -377,12 +372,20 @@
   }
 
   /**
-   * 다음 슬라이드로 전환 (무한 루프)
+   * 다음 슬라이드로 전환 (수동 루프 구현)
    */
   function goToNextSlide() {
     if (!swiperInstance) return;
-    // loop 모드에서는 자동으로 무한 반복됨
-    swiperInstance.slideNext();
+    
+    console.log('ATELIER SHORTS: goToNextSlide - current:', swiperInstance.activeIndex, 'isEnd:', swiperInstance.isEnd);
+    
+    // 마지막 슬라이드면 첫 번째로
+    if (swiperInstance.isEnd) {
+      console.log('ATELIER SHORTS: 첫 번째 슬라이드로 이동');
+      swiperInstance.slideTo(0);
+    } else {
+      swiperInstance.slideNext();
+    }
   }
 
   /**
@@ -492,19 +495,7 @@
     var slide = card.closest('.swiper-slide');
     if (!slide) return false;
     
-    // 활성 클래스가 있는지 확인
-    var hasActiveClass = slide.classList.contains('swiper-slide-active');
-    if (!hasActiveClass) return false;
-    
-    // loop 모드에서는 realIndex와 data-swiper-slide-index가 일치하는지 확인
-    var slideIndex = slide.getAttribute('data-swiper-slide-index');
-    if (slideIndex !== null) {
-      var isRealSlide = parseInt(slideIndex, 10) === swiperInstance.realIndex;
-      console.log('isActiveSlide 체크:', 'slideIndex:', slideIndex, 'realIndex:', swiperInstance.realIndex, 'match:', isRealSlide);
-      return isRealSlide;
-    }
-    
-    return hasActiveClass;
+    return slide.classList.contains('swiper-slide-active');
   }
 
   function slideToCard(card) {
@@ -512,10 +503,10 @@
     var slide = card.closest('.swiper-slide');
     if (!slide) return;
     
-    // loop 모드에서는 data-swiper-slide-index 사용
-    var realIndex = slide.getAttribute('data-swiper-slide-index');
-    if (realIndex !== null) {
-      swiperInstance.slideToLoop(parseInt(realIndex, 10));
+    var index = Array.prototype.indexOf.call(slide.parentNode.children, slide);
+    console.log('ATELIER SHORTS: slideToCard - index:', index);
+    if (index >= 0) {
+      swiperInstance.slideTo(index);
     }
   }
 
@@ -529,41 +520,20 @@
     if (prefersReducedMotion) return;
     if (!swiperInstance) return;
 
-    var realIndex = swiperInstance.realIndex;
-    console.log('ATELIER SHORTS: playActiveSlide 호출 - realIndex:', realIndex);
-
-    // loop 모드에서는 data-swiper-slide-index로 원본 슬라이드를 찾아야 함
-    var allSlides = document.querySelectorAll('.atelier-shorts__slider .swiper-slide');
-    var targetSlide = null;
-
-    for (var i = 0; i < allSlides.length; i++) {
-      var slide = allSlides[i];
-      var slideIndex = slide.getAttribute('data-swiper-slide-index');
-      var isActive = slide.classList.contains('swiper-slide-active');
-      
-      console.log('슬라이드 검사:', i, 'data-index:', slideIndex, 'active:', isActive);
-      
-      // realIndex와 일치하고 active인 슬라이드 찾기
-      if (slideIndex !== null && parseInt(slideIndex, 10) === realIndex && isActive) {
-        targetSlide = slide;
-        console.log('ATELIER SHORTS: 대상 슬라이드 찾음 - index:', i, 'realIndex:', realIndex);
-        break;
-      }
-    }
-
-    if (!targetSlide) {
-      console.warn('ATELIER SHORTS: realIndex', realIndex, '에 해당하는 활성 슬라이드를 찾을 수 없습니다');
+    var activeSlide = document.querySelector('.atelier-shorts__slider .swiper-slide-active');
+    if (!activeSlide) {
+      console.warn('ATELIER SHORTS: 활성 슬라이드를 찾을 수 없습니다');
       return;
     }
 
-    var card = targetSlide.querySelector('.atelier-shorts__card');
+    var card = activeSlide.querySelector('.atelier-shorts__card');
     if (!card) {
-      console.warn('ATELIER SHORTS: 슬라이드에 카드가 없습니다');
+      console.warn('ATELIER SHORTS: 활성 슬라이드에 카드가 없습니다');
       return;
     }
 
     var shortId = card.getAttribute('data-short-id');
-    console.log('ATELIER SHORTS: 재생 시작 -', shortId, 'realIndex:', realIndex);
+    console.log('ATELIER SHORTS: 재생 시작 - shortId:', shortId, 'activeIndex:', swiperInstance.activeIndex);
 
     card.classList.add('atelier-shorts__card--active');
 
