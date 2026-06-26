@@ -257,9 +257,9 @@
       slideToClickedSlide: true,
       spaceBetween: 16,
       loop: true,  // 무한 루프 활성화
-      initialSlide: 2,  // 3번째 슬라이드부터 시작 (0-based index)
       speed: 400,
       grabCursor: true,
+      allowTouchMove: true,  // 터치/드래그 허용
       loopAdditionalSlides: 2,  // loop 모드에서 추가 복제 슬라이드 수
 
       navigation: {
@@ -298,10 +298,19 @@
 
       on: {
         init: function() {
-          playActiveSlide();
-          startAutoSlide();
+          console.log('ATELIER SHORTS: Swiper init - activeIndex:', this.activeIndex, 'realIndex:', this.realIndex);
+          // loop 모드에서는 init 후에 slideToLoop으로 3번째 슬라이드로 이동
+          setTimeout(function() {
+            if (swiperInstance) {
+              console.log('ATELIER SHORTS: 3번째 슬라이드로 이동 (realIndex: 2)');
+              swiperInstance.slideToLoop(2, 0); // 0ms로 즉시 이동
+              playActiveSlide();
+              startAutoSlide();
+            }
+          }, 100);
         },
         slideChange: function() {
+          console.log('ATELIER SHORTS: slideChange - activeIndex:', this.activeIndex, 'realIndex:', this.realIndex);
           pauseAllVideos();
           closeAllYouTubeIframes();
           clearActiveSlideState();
