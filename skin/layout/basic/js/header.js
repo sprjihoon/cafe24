@@ -14,6 +14,7 @@
   }
 
   function init() {
+    removeNavDropdowns();
     initHamburgerMenu();
     initLanguageDropdown();
     initScrollHeader();
@@ -21,38 +22,44 @@
   }
 
   /**
+   * 0. 네비게이션 드롭다운 완전 제거
+   * 카페24가 자동 생성한 드롭다운 메뉴를 DOM에서 제거
+   */
+  function removeNavDropdowns() {
+    const dropdowns = document.querySelectorAll('#lb-nav .lb-dropdown-menu');
+    dropdowns.forEach(function(dropdown) {
+      if (dropdown && dropdown.parentNode) {
+        dropdown.parentNode.removeChild(dropdown);
+      }
+    });
+  }
+
+  /**
    * 1. 햄버거 메뉴 → X 변환 + nav 아래 전체 메뉴 드롭다운
+   * backdrop 제거 - 사용자 요청: 검정색 반투명 배경 없음
    */
   function initHamburgerMenu() {
     const hamburger = document.querySelector('.lb-hamburger');
     const fullmenu = document.getElementById('lb-fullmenu');
     const backdrop = fullmenu && fullmenu.querySelector('.lb-fullmenu-backdrop');
-    const header = document.getElementById('header');
+    
     if (!hamburger || !fullmenu) return;
 
-    function updateHeaderBottom() {
-      if (!header) return;
-      var bottom = header.getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty('--lb-header-bottom', bottom + 'px');
+    // backdrop 강제 제거
+    if (backdrop && backdrop.parentNode) {
+      backdrop.parentNode.removeChild(backdrop);
+      console.log('Backdrop removed from fullmenu');
     }
 
     function setMenuOpen(open) {
-      // 현재 스크롤 위치 저장
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-      
-      if (open) updateHeaderBottom();
       hamburger.classList.toggle('is-active', open);
       fullmenu.classList.toggle('is-open', open);
-      document.body.classList.toggle('lb-menu-open', open);
       hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
       hamburger.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
       fullmenu.setAttribute('aria-hidden', open ? 'false' : 'true');
-      if (open) updateHeaderBottom();
       
-      // 스크롤 위치 복원 (메뉴 열 때 스크롤이 튀는 것 방지)
-      setTimeout(function() {
-        window.scrollTo(0, currentScroll);
-      }, 0);
+      // body 스크롤 잠금 제거 - 사용자 요청
+      // 뒤 화면 스크롤 가능하도록
     }
 
     function toggleMenu() {
@@ -61,33 +68,16 @@
 
     hamburger.addEventListener('click', toggleMenu);
 
-    if (backdrop) {
-      backdrop.addEventListener('click', function() {
-        setMenuOpen(false);
-      });
-    }
+    // backdrop 클릭 이벤트 제거 - backdrop 자체를 제거했으므로 불필요
 
-    window.addEventListener('resize', function() {
-      if (fullmenu.classList.contains('is-open')) updateHeaderBottom();
-    });
-
-    // 스크롤 시 헤더 위치가 변경되므로 메뉴 위치도 업데이트
-    let scrollUpdateTimeout;
-    window.addEventListener('scroll', function() {
-      if (fullmenu.classList.contains('is-open')) {
-        clearTimeout(scrollUpdateTimeout);
-        scrollUpdateTimeout = setTimeout(function() {
-          updateHeaderBottom();
-        }, 10);
-      }
-    }, { passive: true });
-
+    // ESC 키로 닫기
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && fullmenu.classList.contains('is-open')) {
         setMenuOpen(false);
       }
     });
 
+    // 메뉴 링크 클릭 시 닫기
     fullmenu.querySelectorAll('.lb-fullmenu-link').forEach(function(link) {
       link.addEventListener('click', function() {
         setMenuOpen(false);

@@ -16,7 +16,7 @@
 
   function init() {
     removeOldNavStructure();
-    initDropdownMenus();
+    // initDropdownMenus(); // 드롭다운 제거 - 사용자 요청
     initMobileMenu();
     initLanguageDropdown();
     initScrollHeader();

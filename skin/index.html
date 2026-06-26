@@ -1,6 +1,6 @@
 <!--@layout(/layout/basic/layout.html)-->
 
-<!-- 🔥 긴급: 구 네비게이션 강제 제거 -->
+<!-- 🔥 긴급: 구 네비게이션 강제 제거 + backdrop 완전 제거 -->
 <style>
 #lb-nav,
 #lb-nav *,
@@ -8,17 +8,20 @@
 .lb-nav-center,
 .lb-dropdown-menu,
 .lb-dropdown-menu *,
-#lb-fullmenu,
 .lb-fullmenu-backdrop,
-.lb-fullmenu-panel {
+div.lb-fullmenu-backdrop,
+#lb-fullmenu .lb-fullmenu-backdrop,
+.lb-fullmenu .lb-fullmenu-backdrop {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
   position: absolute !important;
   left: -99999px !important;
+  top: -99999px !important;
   width: 0 !important;
   height: 0 !important;
+  background: transparent !important;
 }
 </style>
 
