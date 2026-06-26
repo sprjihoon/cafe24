@@ -188,10 +188,10 @@
       playYoutubeSlide(current);
     }
 
-    // 자동 재생
+    // 자동 재생 (3분 = 180000ms)
     function startAuto() {
       if (timer) clearInterval(timer);
-      timer = setInterval(function () { goTo(current + 1); }, 6000);
+      timer = setInterval(function () { goTo(current + 1); }, 180000);
     }
 
     // 닷 클릭 이벤트
@@ -203,6 +203,91 @@
         });
       })(d);
     }
+
+    // 드래그 슬라이드 기능
+    var isDragging = false;
+    var startX = 0;
+    var currentX = 0;
+    var dragThreshold = 50; // 최소 드래그 거리 (px)
+
+    // 마우스 드래그
+    slider.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      startX = e.clientX;
+      slider.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      currentX = e.clientX;
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      slider.style.cursor = '';
+      
+      var diff = startX - currentX;
+      if (Math.abs(diff) > dragThreshold) {
+        if (diff > 0) {
+          // 왼쪽으로 드래그 = 다음 슬라이드
+          goTo(current + 1);
+        } else {
+          // 오른쪽으로 드래그 = 이전 슬라이드
+          goTo(current - 1);
+        }
+        startAuto();
+      }
+    });
+
+    // 터치 드래그 (모바일)
+    slider.addEventListener('touchstart', function(e) {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', function(e) {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+    }, { passive: true });
+
+    slider.addEventListener('touchend', function(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      var diff = startX - currentX;
+      if (Math.abs(diff) > dragThreshold) {
+        if (diff > 0) {
+          goTo(current + 1);
+        } else {
+          goTo(current - 1);
+        }
+        startAuto();
+      }
+    });
+
+    // 마우스 휠로 슬라이드 변경
+    var wheelTimeout;
+    slider.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      
+      // 연속 휠 이벤트 방지 (쓰로틀링)
+      if (wheelTimeout) return;
+      
+      wheelTimeout = setTimeout(function() {
+        wheelTimeout = null;
+      }, 500);
+      
+      if (e.deltaY > 0) {
+        // 아래로 스크롤 = 다음 슬라이드
+        goTo(current + 1);
+      } else {
+        // 위로 스크롤 = 이전 슬라이드
+        goTo(current - 1);
+      }
+      startAuto();
+    }, { passive: false });
 
     // 리사이즈 이벤트
     var resizeTimeout;
@@ -482,7 +567,7 @@
     loop: true,
     speed: 600,
     autoplay: {
-      delay: 5000,
+      delay: 180000, // 3분 = 180000ms
       disableOnInteraction: false,
       pauseOnMouseEnter: true,
     },
@@ -612,10 +697,9 @@
     <!-- Swiper 슬라이더 컨테이너 -->
     <div class="swiper lb-weekly-swiper">
         <div class="swiper-wrapper">
-            <!-- 슬라이드 1 (4개 제품) -->
+            <!-- 각 제품이 개별 슬라이드 -->
             <div class="swiper-slide">
-                <ul class="prdList lb-weekly-grid">
-                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                <div id="anchorBoxId_{$product_no}" class="lb-product-card">
                         <div class="thumbnail">
                             <div class="prdImg">
                                 <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
@@ -640,8 +724,10 @@
                                 <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
                             </ul>
                         </div>
-                    </li>
-                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div id="anchorBoxId_{$product_no}" class="lb-product-card">
                         <div class="thumbnail">
                             <div class="prdImg">
                                 <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
@@ -666,60 +752,35 @@
                                 <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
                             </ul>
                         </div>
-                    </li>
-                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
-                        <div class="thumbnail">
-                            <div class="prdImg">
-                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
-                                    <span module="product_Imagestyle">
-                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
-                                    </span>
-                                </a>
-                                <span class="wish">{$list_wish_icon}</span>
-                            </div>
-                            <div class="icon">
-                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
-                                <div class="button">
-                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
-                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div id="anchorBoxId_{$product_no}" class="lb-product-card">
+                    <div class="thumbnail">
+                        <div class="prdImg">
+                            <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                                <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
+                                <span module="product_Imagestyle">
+                                    <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
+                                </span>
+                            </a>
+                            <span class="wish">{$list_wish_icon}</span>
                         </div>
-                        <div class="description">
-                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
-                            <ul module="product_ListItem" class="spec">
-                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li id="anchorBoxId_{$product_no}" class="lb-product-card">
-                        <div class="thumbnail">
-                            <div class="prdImg">
-                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
-                                    <span module="product_Imagestyle">
-                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
-                                    </span>
-                                </a>
-                                <span class="wish">{$list_wish_icon}</span>
-                            </div>
-                            <div class="icon">
-                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
-                                <div class="button">
-                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
-                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
-                                </div>
+                        <div class="icon">
+                            <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                            <div class="button">
+                                <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                                <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
                             </div>
                         </div>
-                        <div class="description">
-                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
-                            <ul module="product_ListItem" class="spec">
-                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+                    </div>
+                    <div class="description">
+                        <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                        <ul module="product_ListItem" class="spec">
+                            <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -733,102 +794,56 @@
 </div>
 
 <!-- ============================================================
-     ② SHORTS — 숏폼 영상 슬라이더 (LE BLANC 스타일)
-     세로 영상(9:16) + 재생 버튼 + 상품 링크
+     ②-1 띠형 프로모 배너 (WEEKLY BEST 하단)
      ============================================================ -->
-<div class="lb-lookbook-section" id="lb-section-lookbook">
-    <div class="lb-section-header">
-        <div class="lb-section-copy">
-            <p class="lb-section-eyebrow">LOOKBOOK</p>
-            <h2 class="lb-section-title">일상을 정돈하는 스타일</h2>
-            <p class="lb-section-desc">시간이 지나도 흐트러지지 않는 기본</p>
+<section class="lb-band-banner lb-full-bleed" id="lb-section-band" aria-label="메인 프로모션">
+    <div class="lb-band-inner">
+        <div class="lb-band-content">
+            <p class="lb-band-eyebrow">Fabric Design</p>
+            <h2 class="lb-band-title">입을수록 편안해야,<br>오래 함께할 수 있어야 합니다.</h2>
+            <p class="lb-band-desc">
+                소재와 실루엣에 오래 고민한 옷들입니다.<br>
+                시간이 지나도 옷장을 정돈해 주는 기본이 됩니다.
+            </p>
+            <a href="#lb-section-brand" class="lb-band-cta">더 알아보기</a>
         </div>
-        <a href="/board/lookbook/list.html" class="lb-section-more">전체보기</a>
-    </div>
-
-    <!-- Lookbook Grid -->
-    <div class="lb-lookbook-grid">
-        <!-- Look 1 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-1.jpg" alt="Black Turtleneck & Midi Skirt">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">WINTER MOOD</span>
-                </div>
-            </a>
-        </div>
-        
-        <!-- Look 2 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-2.jpg" alt="Dark Grey Coat">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">ESSENTIAL</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 3 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-3.jpg" alt="Ivory Coat">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">REFINED</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 4 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-4.jpg" alt="Beige Blazer">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">TIMELESS</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 5 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-5.jpg" alt="Beige Dress">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">EVERYDAY</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 6 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-6.jpg" alt="Back View">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">DETAIL</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 7 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-7.jpg" alt="Cream Sweater & Skirt">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">SOFT MOOD</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Look 8 -->
-        <div class="lb-lookbook-item">
-            <a href="/product/list.html">
-                <img src="/web/upload/lookbook/look-8.jpg" alt="Ivory Blouse">
-                <div class="lb-lookbook-overlay">
-                    <span class="lb-lookbook-tag">MINIMAL</span>
-                </div>
-            </a>
+        <div class="lb-band-visual">
+            <img src="/web/upload/lookbook/look-3.jpg" alt="ATELIER N — Fabric Design" onerror="this.src='/web/upload/hero/hero-3.jpg'">
         </div>
     </div>
-</div>
+</section>
+
+<!-- ============================================================
+     ATELIER SHORTS — 세로형 영상 카드 슬라이더
+     ============================================================ -->
+<section class="atelier-shorts" id="atelier-shorts-container">
+    <div class="atelier-shorts__header">
+        <div class="atelier-shorts__title-group">
+            <p class="atelier-shorts__eyebrow">ATELIER SHORTS</p>
+            <h2 class="atelier-shorts__title">새로운 컬렉션의 움직임을 만나보세요.</h2>
+            <p class="atelier-shorts__desc">짧은 영상으로 경험하는 일상의 스타일</p>
+        </div>
+        <div class="atelier-shorts__nav">
+            <button class="atelier-shorts__nav-btn atelier-shorts__nav-prev" type="button" aria-label="이전 영상">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="atelier-shorts__pagination"></div>
+            <button class="atelier-shorts__nav-btn atelier-shorts__nav-next" type="button" aria-label="다음 영상">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="swiper atelier-shorts__slider">
+        <div class="swiper-wrapper atelier-shorts__slider-wrapper">
+            <!-- JavaScript로 동적 생성됨 -->
+        </div>
+    </div>
+</section>
 
 <!-- ============================================================
      ③ NEW IN — product_listmain_2 (카페24 모듈 — 변경 금지)
@@ -1122,9 +1137,11 @@
 <!-- ============================================================
      ⑤ THE DAILY UNIFORM — product_listmain_1 (카페24 모듈 — 변경 금지)
      ============================================================ -->
-<div module="product_listmain_1" class="ec-base-product lb-product-section">
+<div module="product_listmain_1" class="ec-base-product lb-product-section lb-daily-uniform" id="lb-section-daily">
     <!--
         $count = 8
+        $moreview = yes
+        $cache = yes
         $basket_result = /product/add_basket.html
         $basket_option = /product/basket_option.html
     -->
@@ -1187,6 +1204,13 @@
             </div>
         </li>
     </ul>
+</div>
+
+<div module="product_listmore_1" class="ec-base-paginate typeMoreview lb-product-more">
+    <a href="#none" onclick="{$more_action}" class="btnMore">
+        제품 더보기
+        <span class="icoMore"></span>
+    </a>
 </div>
 
 <!-- ============================================================

@@ -25,9 +25,8 @@
     <!--@css(/layout/basic/css/ec-base-table.css)-->
     <!--@css(/layout/basic/css/ec-base-desc.css)-->
     <!--@css(/layout/basic/css/leblanc.css)-->
-    
-    <!-- Product Detail Styles (전체 페이지 통일) -->
-    <!--@css(/product/product-detail.css)-->
+    <!--@css(/css/design-tokens.css)-->
+    <!--@css(/css/components.css)-->
     
     <!-- Swiper.js CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -44,6 +43,10 @@
     <!-- Sliders JS -->
     <!--@js(/layout/basic/js/sliders.js)-->
     
+    <!-- ATELIER SHORTS -->
+    <!--@js(/layout/basic/js/atelier-shorts-data.js)-->
+    <!--@js(/layout/basic/js/atelier-shorts.js)-->
+    
     <!-- Countdown JS -->
     <!--@js(/layout/basic/js/countdown.js)-->
     
@@ -53,8 +56,6 @@
     <!-- Product Icons JS -->
     <!--@js(/layout/basic/js/product-icons.js)-->
     
-    <!-- Product Detail JS (전체 페이지 통일) -->
-    <!--@js(/product/product-detail.js)-->
 </head>
 <body>
 <div id="skipNavigation">
@@ -497,9 +498,9 @@
     </div>
 </div><hr class="layout" />
 
-<div id="footer" class="lb-footer">
+<div id="footer" class="lb-footer" module="Layout_footer">
     <!-- 푸터 메인 영역 -->
-    <div class="lb-footer-main" module="Layout_footer">
+    <div class="lb-footer-main">
         <div class="lb-footer-container">
             <!-- 로고 및 사업자 정보 -->
             <div class="lb-footer-col lb-footer-info">

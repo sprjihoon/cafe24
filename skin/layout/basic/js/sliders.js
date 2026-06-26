@@ -33,8 +33,8 @@
     // Swiper 초기화
     new Swiper('.lb-weekly-swiper', {
       // 기본 설정
-      slidesPerView: 1,
-      spaceBetween: 24,
+      slidesPerView: 1.5,
+      spaceBetween: 16,
       loop: false,
       speed: 600,
 
@@ -54,22 +54,25 @@
       pagination: {
         el: '.lb-weekly-pagination',
         clickable: true,
-        dynamicBullets: true,
+        dynamicBullets: false,
       },
 
       // 반응형
       breakpoints: {
         // 640px 이상
         640: {
-          slidesPerView: 1,
+          slidesPerView: 2,
+          spaceBetween: 20,
         },
         // 768px 이상
         768: {
-          slidesPerView: 1,
+          slidesPerView: 3,
+          spaceBetween: 24,
         },
         // 1024px 이상
         1024: {
-          slidesPerView: 1,
+          slidesPerView: 4,
+          spaceBetween: 24,
         },
       },
 
