@@ -299,16 +299,25 @@
       on: {
         init: function() {
           console.log('ATELIER SHORTS: Swiper init - activeIndex:', this.activeIndex);
-          playActiveSlide();
-          startAutoSlide();
+          // 잠시 후에 정리하고 재생
+          setTimeout(function() {
+            pauseAllVideos();
+            closeAllYouTubeIframes();
+            playActiveSlide();
+            startAutoSlide();
+          }, 200);
         },
         slideChange: function() {
           console.log('ATELIER SHORTS: slideChange - activeIndex:', this.activeIndex);
+          // 모든 비디오 즉시 정지
           pauseAllVideos();
           closeAllYouTubeIframes();
           clearActiveSlideState();
-          playActiveSlide();
-          startAutoSlide();
+          // 약간의 지연 후 새 슬라이드 재생
+          setTimeout(function() {
+            playActiveSlide();
+            startAutoSlide();
+          }, 100);
         },
         reachEnd: function() {
           console.log('ATELIER SHORTS: 마지막 슬라이드 도달');
@@ -520,6 +529,8 @@
     if (prefersReducedMotion) return;
     if (!swiperInstance) return;
 
+    console.log('ATELIER SHORTS: playActiveSlide 호출 - activeIndex:', swiperInstance.activeIndex);
+
     var activeSlide = document.querySelector('.atelier-shorts__slider .swiper-slide-active');
     if (!activeSlide) {
       console.warn('ATELIER SHORTS: 활성 슬라이드를 찾을 수 없습니다');
@@ -533,16 +544,16 @@
     }
 
     var shortId = card.getAttribute('data-short-id');
-    console.log('ATELIER SHORTS: 재생 시작 - shortId:', shortId, 'activeIndex:', swiperInstance.activeIndex);
+    var type = card.getAttribute('data-short-type');
+    console.log('ATELIER SHORTS: 재생 시작 - shortId:', shortId, 'type:', type, 'activeIndex:', swiperInstance.activeIndex);
 
     card.classList.add('atelier-shorts__card--active');
-
-    var type = card.getAttribute('data-short-type');
 
     if (type === 'youtube') {
       var playBtn = card.querySelector('.atelier-shorts__youtube-play');
       var videoId = playBtn && playBtn.getAttribute('data-video-id');
       if (videoId) {
+        console.log('ATELIER SHORTS: YouTube 재생 - videoId:', videoId);
         createYouTubeIframe(card, videoId, true);
       }
       return;
@@ -550,7 +561,10 @@
 
     var video = card.querySelector('.atelier-shorts__video');
     if (video) {
+      console.log('ATELIER SHORTS: MP4 재생 시작 - src:', video.src);
       playVideo(video, card);
+    } else {
+      console.warn('ATELIER SHORTS: 비디오를 찾을 수 없습니다');
     }
   }
 
@@ -691,20 +705,30 @@
    * 영상 재생
    */
   function playVideo(video, card) {
-    // 다른 영상이 재생 중이면 정지
-    if (currentPlayingVideo && currentPlayingVideo !== video) {
-      pauseVideo(currentPlayingVideo);
-    }
+    console.log('ATELIER SHORTS: playVideo 호출 - src:', video.src);
+    
+    // 모든 다른 비디오 강제 정지
+    var allVideos = document.querySelectorAll('.atelier-shorts__video');
+    allVideos.forEach(function(v) {
+      if (v !== video && !v.paused) {
+        console.log('ATELIER SHORTS: 다른 비디오 정지:', v.src);
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
 
     // 비디오 재생 중에는 자동 슬라이드 타이머 중지
     clearAutoSlide();
     pauseProgressFill();
 
+    // 비디오를 처음부터 재생
+    video.currentTime = 0;
     var playPromise = video.play();
 
     if (playPromise !== undefined) {
       playPromise
         .then(function() {
+          console.log('ATELIER SHORTS: 비디오 재생 성공 - src:', video.src);
           currentPlayingVideo = video;
           card.classList.add('atelier-shorts__card--playing');
           
@@ -746,13 +770,30 @@
   }
 
   /**
-   * 모든 영상 정지
+   * 모든 영상 정지 (강제)
    */
   function pauseAllVideos() {
+    console.log('ATELIER SHORTS: pauseAllVideos 호출');
+    
     var videos = document.querySelectorAll('.atelier-shorts__video');
+    console.log('ATELIER SHORTS: 정지할 비디오 수:', videos.length);
+    
     videos.forEach(function(video) {
-      pauseVideo(video);
+      if (!video.paused) {
+        console.log('ATELIER SHORTS: 비디오 정지:', video.src);
+        video.pause();
+        video.currentTime = 0;
+        
+        var card = video.closest('.atelier-shorts__card');
+        if (card) {
+          card.classList.remove('atelier-shorts__card--playing');
+          card.classList.remove('atelier-shorts__card--active');
+        }
+      }
     });
+    
+    // currentPlayingVideo 초기화
+    currentPlayingVideo = null;
   }
 
   // 페이지 이탈 시 모든 영상 정지
