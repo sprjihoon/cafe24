@@ -1,5 +1,97 @@
 <!--@layout(/layout/basic/layout.html)-->
 
+<!-- 🔥 긴급: 구 네비게이션 강제 제거 -->
+<style>
+#lb-nav,
+#lb-nav *,
+.lb-nav-inner,
+.lb-nav-center,
+.lb-dropdown-menu,
+.lb-dropdown-menu *,
+#lb-fullmenu,
+.lb-fullmenu-backdrop,
+.lb-fullmenu-panel {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -99999px !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+</style>
+
+<script>
+(function(){
+  'use strict';
+  var selectors = '#lb-nav,nav#lb-nav,#lb-fullmenu,.lb-fullmenu,.lb-fullmenu-backdrop,.lb-fullmenu-panel,.lb-hamburger,.lb-dropdown-menu,.lb-nav-inner,.lb-nav-center';
+  
+  function forceRemove(){
+    try{
+      document.querySelectorAll(selectors).forEach(function(el){
+        if(el && el.parentNode){
+          el.parentNode.removeChild(el);
+          console.log('[INDEX] ✅ Removed:', el.id || el.className);
+        }
+      });
+    }catch(e){
+      console.error('[INDEX] Remove error:', e);
+    }
+  }
+  
+  // 즉시 실행
+  forceRemove();
+  
+  // DOMContentLoaded
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', forceRemove);
+  } else {
+    forceRemove();
+  }
+  
+  // 여러 시점에서 실행
+  setTimeout(forceRemove, 100);
+  setTimeout(forceRemove, 500);
+  setTimeout(forceRemove, 1000);
+  setTimeout(forceRemove, 2000);
+  
+  // MutationObserver
+  if(typeof MutationObserver !== 'undefined'){
+    var observer = new MutationObserver(function(mutations){
+      var needsRemove = false;
+      mutations.forEach(function(mutation){
+        mutation.addedNodes.forEach(function(node){
+          if(node.nodeType === 1){
+            var id = node.id || '';
+            var cls = node.className || '';
+            if(id === 'lb-nav' || id === 'lb-fullmenu' || cls.indexOf('lb-hamburger') >= 0 || cls.indexOf('lb-dropdown') >= 0){
+              needsRemove = true;
+            }
+          }
+        });
+      });
+      if(needsRemove){
+        console.log('[INDEX] 🔍 Detected injection, removing...');
+        forceRemove();
+      }
+    });
+    
+    function startObserver(){
+      if(document.body){
+        observer.observe(document.body, {childList: true, subtree: true});
+        console.log('[INDEX] 🔍 MutationObserver started');
+      } else {
+        setTimeout(startObserver, 50);
+      }
+    }
+    startObserver();
+  }
+  
+  console.log('[INDEX] 🚀 Old nav removal script loaded');
+})();
+</script>
+
 <!--edibot_skin_data:{"width":1014,"mo_width":640}-->
 
 <!-- ============================================================
@@ -829,7 +921,6 @@
                     <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            <div class="atelier-shorts__pagination"></div>
             <button class="atelier-shorts__nav-btn atelier-shorts__nav-next" type="button" aria-label="다음 영상">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -838,9 +929,17 @@
         </div>
     </div>
 
-    <div class="swiper atelier-shorts__slider">
-        <div class="swiper-wrapper atelier-shorts__slider-wrapper">
-            <!-- JavaScript로 동적 생성됨 -->
+    <div class="atelier-shorts__slider-wrap">
+        <div class="swiper atelier-shorts__slider">
+            <div class="swiper-wrapper atelier-shorts__slider-wrapper">
+                <!-- JavaScript로 동적 생성됨 -->
+            </div>
+        </div>
+        <div class="atelier-shorts__pagination-bar">
+            <div class="atelier-shorts__pagination" role="status" aria-live="polite">
+                <span class="atelier-shorts__pagination-fill"></span>
+                <span class="atelier-shorts__pagination-text">1 / 7</span>
+            </div>
         </div>
     </div>
 </section>
@@ -1239,10 +1338,18 @@
         <a href="/board/review/list.html?board_no=4" class="lb-section-more">모두보기</a>
     </div>
 
+    <!-- 빈 상태 (리뷰가 없을 때 표시) -->
+    <div class="lb-review-empty-state" id="lb-review-empty-state" style="display:none;">
+        <div class="lb-review-empty-content">
+            <p class="lb-review-empty-title">아직 첫 번째 착용 후기를 기다리고 있습니다.</p>
+            <p class="lb-review-empty-desc">상품을 경험하신 뒤, 당신의 일상을 들려주세요.</p>
+        </div>
+    </div>
+
     <!-- 카페24 게시판 모듈 -->
-    <div module="board_listpackage_4" class="lb-board-review-wrapper">
-        <div class="swiper lb-review-swiper">
-            <ul module="board_list_4" class="xans-board-list swiper-wrapper">
+    <div module="board_listpackage_4" class="lb-board-review-wrapper" id="lb-review-wrapper">
+        <div class="swiper lb-review-swiper" id="lb-review-swiper">
+            <ul module="board_list_4" class="xans-board-list swiper-wrapper" id="lb-review-list">
                 <!--
                     $count = 8
                     $main_list = yes
@@ -1250,25 +1357,18 @@
                 -->
                 <li class="xans-record- swiper-slide">
                     <div class="lb-review-item">
-                        <!-- 썸네일 -->
                         <a href="{$link_board_detail}" class="lb-review-link">
+                            <!-- 리뷰 이미지 -->
                             <div class="lb-review-image-wrapper">
                                 <img src="{$thumbnail_file}" alt="{$subject}" class="lb-review-image" onerror="this.src='//img.echosting.cafe24.com/thumb/img_product_small.gif'">
                                 {$display_board_attachment}
                             </div>
                             
-                            <!-- 리뷰 정보 -->
+                            <!-- 리뷰 콘텐츠 -->
                             <div class="lb-review-content">
-                                <!-- 평점 -->
                                 <div class="lb-review-stars">{$display_product_review}</div>
-                                
-                                <!-- 제목 -->
                                 <h3 class="lb-review-title">{$subject}</h3>
-                                
-                                <!-- 내용 -->
                                 <p class="lb-review-text">{$content_cut}</p>
-                                
-                                <!-- 작성자 및 날짜 -->
                                 <div class="lb-review-meta">
                                     <span class="lb-review-author">{$writer}</span>
                                     <span class="lb-review-date">{$write_date}</span>
@@ -1280,14 +1380,209 @@
             </ul>
             
             <!-- 네비게이션 버튼 -->
-            <div class="swiper-button-prev lb-review-prev"></div>
-            <div class="swiper-button-next lb-review-next"></div>
+            <div class="swiper-button-prev lb-review-prev" id="lb-review-prev"></div>
+            <div class="swiper-button-next lb-review-next" id="lb-review-next"></div>
             
             <!-- 페이지네이션 -->
-            <div class="swiper-pagination lb-review-pagination"></div>
+            <div class="swiper-pagination lb-review-pagination" id="lb-review-pagination"></div>
         </div>
     </div>
 </div>
+
+<!-- 포토리뷰 데모 데이터 (디자인센터 전용) -->
+<script src="/layout/basic/js/atelier-review-demo-data.js"></script>
+
+<script>
+/**
+ * ATELIER N - 포토리뷰 슬라이더 초기화
+ * 실제 리뷰와 데모 모드를 지원합니다.
+ */
+(function() {
+  'use strict';
+
+  // Swiper가 없으면 종료
+  if (typeof Swiper === 'undefined') {
+    console.warn('[ATELIER N] Swiper가 로드되지 않았습니다.');
+    return;
+  }
+
+  var reviewSwiper = null;
+
+  /**
+   * 리뷰 개수 확인
+   */
+  function getReviewCount() {
+    var reviewList = document.getElementById('lb-review-list');
+    if (!reviewList) return 0;
+    
+    var realReviews = reviewList.querySelectorAll('.xans-record-:not(.atelier-demo-review)');
+    return realReviews.length;
+  }
+
+  /**
+   * 데모 리뷰 삽입
+   */
+  function insertDemoReviews() {
+    if (!window.ATELIER_DEMO_MODE) return;
+    if (!window.ATELIER_DEMO_REVIEWS) return;
+    
+    var reviewList = document.getElementById('lb-review-list');
+    if (!reviewList) return;
+
+    console.log('[ATELIER N] 데모 모드 활성화 - 데모 리뷰 삽입');
+
+    var demoHTML = '';
+    window.ATELIER_DEMO_REVIEWS.forEach(function(review) {
+      demoHTML += window.generateDemoReviewCard(review);
+    });
+    
+    reviewList.insertAdjacentHTML('beforeend', demoHTML);
+  }
+
+  /**
+   * 빈 상태 표시/숨김
+   */
+  function toggleEmptyState(show) {
+    var emptyState = document.getElementById('lb-review-empty-state');
+    var reviewWrapper = document.getElementById('lb-review-wrapper');
+    
+    if (!emptyState || !reviewWrapper) return;
+    
+    if (show) {
+      emptyState.style.display = 'block';
+      reviewWrapper.style.display = 'none';
+    } else {
+      emptyState.style.display = 'none';
+      reviewWrapper.style.display = 'block';
+    }
+  }
+
+  /**
+   * 슬라이더 컨트롤 표시/숨김
+   */
+  function toggleSliderControls(show) {
+    var prevBtn = document.getElementById('lb-review-prev');
+    var nextBtn = document.getElementById('lb-review-next');
+    var pagination = document.getElementById('lb-review-pagination');
+    
+    if (prevBtn) prevBtn.style.display = show ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = show ? 'flex' : 'none';
+    if (pagination) pagination.style.display = show ? 'block' : 'none';
+  }
+
+  /**
+   * 리뷰 슬라이더 초기화
+   */
+  function initReviewSlider() {
+    var reviewCount = getReviewCount();
+    console.log('[ATELIER N] 실제 리뷰 개수:', reviewCount);
+
+    // 실제 리뷰가 0개일 때
+    if (reviewCount === 0) {
+      // 데모 모드가 활성화되어 있으면 데모 리뷰 삽입
+      if (window.ATELIER_DEMO_MODE) {
+        insertDemoReviews();
+        toggleEmptyState(false);
+        
+        // 데모 리뷰 개수 확인 후 슬라이더 초기화
+        var totalReviews = document.querySelectorAll('#lb-review-list li').length;
+        if (totalReviews <= 2) {
+          toggleSliderControls(false);
+        } else {
+          toggleSliderControls(true);
+          initSwiper();
+        }
+      } else {
+        // 데모 모드가 아니면 빈 상태 표시
+        toggleEmptyState(true);
+      }
+      return;
+    }
+
+    // 실제 리뷰가 있으면 슬라이더 초기화
+    toggleEmptyState(false);
+    
+    if (reviewCount <= 2) {
+      toggleSliderControls(false);
+    } else {
+      toggleSliderControls(true);
+      initSwiper();
+    }
+  }
+
+  /**
+   * Swiper 초기화
+   */
+  function initSwiper() {
+    var swiperEl = document.getElementById('lb-review-swiper');
+    if (!swiperEl) return;
+
+    // 기존 Swiper 제거
+    if (reviewSwiper) {
+      reviewSwiper.destroy(true, true);
+    }
+
+    reviewSwiper = new Swiper('#lb-review-swiper', {
+      slidesPerView: 1.2,
+      spaceBetween: 16,
+      loop: false,
+      speed: 600,
+      
+      // 반응형 브레이크포인트
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 24
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 24
+        },
+        1280: {
+          slidesPerView: 5,
+          spaceBetween: 24
+        }
+      },
+      
+      // 네비게이션
+      navigation: {
+        nextEl: '#lb-review-next',
+        prevEl: '#lb-review-prev',
+      },
+      
+      // 페이지네이션
+      pagination: {
+        el: '#lb-review-pagination',
+        clickable: true,
+      },
+      
+      // 드래그
+      grabCursor: true,
+      
+      // 접근성
+      a11y: {
+        prevSlideMessage: '이전 리뷰',
+        nextSlideMessage: '다음 리뷰',
+      },
+    });
+
+    console.log('[ATELIER N] 리뷰 슬라이더 초기화 완료');
+  }
+
+  // DOM 로드 후 초기화
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initReviewSlider, 500);
+    });
+  } else {
+    setTimeout(initReviewSlider, 500);
+  }
+})();
+</script>
 
 <!-- product_listmain_4 ~ 7 은 사용시 섹션으로 활성화 (현재 hidden) -->
 <div module="product_listmain_4" class="ec-base-product" style="display:none;">

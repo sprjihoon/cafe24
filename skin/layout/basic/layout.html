@@ -14,6 +14,7 @@
     <title>기본 레이아웃</title>
     <!--@css(/layout/basic/css/common.css)--><!-- 해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요. -->
     <!--@css(/layout/basic/css/layout.css)-->
+    <!--@css(/layout/basic/css/atelier-nav.css)--><!-- ATELIER 단순 네비게이션 스타일 -->
     <!--@css(/layout/basic/css/ec-base-ui.css)-->
     <!--@css(/layout/basic/css/ec-base-tooltip.css)-->
     <!--@css(/layout/basic/css/ec-base-help.css)-->
@@ -31,8 +32,74 @@
     <!-- Swiper.js CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     
+    <!-- ATELIER 네비게이션 초기화 (최우선) -->
+    <script>
+      (function(){
+        var oldNavSelectors = '#lb-nav,nav#lb-nav,#lb-fullmenu,.lb-fullmenu,.lb-fullmenu-backdrop,.lb-fullmenu-panel,.lb-hamburger,.lb-dropdown-menu';
+        
+        // 강제 제거 함수
+        function forceRemove(){
+          document.querySelectorAll(oldNavSelectors).forEach(function(el){
+            if(el&&el.parentNode){
+              el.parentNode.removeChild(el);
+              console.log('Removed old nav element:', el.id || el.className);
+            }
+          });
+        }
+        
+        // 즉시 실행
+        forceRemove();
+        
+        // DOM 로드 후
+        if(document.readyState==='loading'){
+          document.addEventListener('DOMContentLoaded',forceRemove);
+        }
+        
+        // 500ms 후
+        setTimeout(forceRemove,500);
+        
+        // 1초 후
+        setTimeout(forceRemove,1000);
+        
+        // 2초 후
+        setTimeout(forceRemove,2000);
+        
+        // MutationObserver로 동적 추가 감시
+        if(typeof MutationObserver!=='undefined'){
+          var observer=new MutationObserver(function(mutations){
+            mutations.forEach(function(mutation){
+              mutation.addedNodes.forEach(function(node){
+                if(node.nodeType===1){
+                  // 추가된 노드가 구 nav인지 확인
+                  if(node.id==='lb-nav'||node.id==='lb-fullmenu'||node.classList.contains('lb-hamburger')){
+                    console.log('Detected dynamic injection, removing:',node.id||node.className);
+                    if(node.parentNode){node.parentNode.removeChild(node);}
+                  }
+                  // 자식 중에 구 nav가 있는지 확인
+                  node.querySelectorAll&&node.querySelectorAll(oldNavSelectors).forEach(function(el){
+                    if(el.parentNode){el.parentNode.removeChild(el);}
+                  });
+                }
+              });
+            });
+          });
+          
+          // body 감시 시작
+          var startObserver=function(){
+            if(document.body){
+              observer.observe(document.body,{childList:true,subtree:true});
+              console.log('MutationObserver started for old nav removal');
+            }else{
+              setTimeout(startObserver,100);
+            }
+          };
+          startObserver();
+        }
+      })();
+    </script>
+    
     <!--@js(/layout/basic/js/basic.js)-->
-    <!--@js(/layout/basic/js/header.js)-->
+    <!--@js(/layout/basic/js/atelier-nav.js)-->
     <!--@js(/js/common.js)-->
     <!--@js(/js/module/layout/quick_view.js)-->
     <!--@js(/js/login_redirect.js)-->
@@ -45,7 +112,7 @@
     
     <!-- ATELIER SHORTS -->
     <!--@js(/layout/basic/js/atelier-shorts-data.js)-->
-    <!--@js(/layout/basic/js/atelier-shorts.js)-->
+    <script src="/ecudemo394315/layout/basic/js/atelier-shorts.js?v=20260626-sync2"></script>
     
     <!-- Countdown JS -->
     <!--@js(/layout/basic/js/countdown.js)-->
@@ -170,64 +237,66 @@
     </div>
   </div>
 
-  <!-- LE BLANC 네비게이션: 햄버거(좌) · 메뉴 링크 (카페24 카테고리 자동 반영) -->
-  <nav id="lb-nav">
-    <button type="button" class="lb-hamburger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="lb-fullmenu-panel">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="lb-nav-inner">
-      <!-- 카테고리 자동 반영 (카페24 모듈) -->
-      <div class="lb-nav-center" module="Layout_category">
-        <!-- 
-          $depth = 2 (2단계 카테고리까지 표시)
-          $is_display_icon = F (아이콘 미사용)
-        -->
-        <div class="lb-nav-item" data-category="{$cate_no}">
-          <a href="{$link_product_list}" class="lb-nav-link">{$name}</a>
-          <!-- 2단계 카테고리가 있을 경우 드롭다운 메뉴 -->
-          <div class="lb-dropdown-menu" data-category="{$cate_no}">
-            <div class="lb-dropdown-inner">
-              <div class="lb-dropdown-content">
-                <div class="lb-dropdown-links">
-                  <div class="lb-dropdown-col" module="Layout_category">
-                    <!-- $depth = 2 (하위 카테고리) -->
-                    <a href="{$link_product_list}" class="lb-dropdown-link">{$name}</a>
-                  </div>
-                </div>
-                <div class="lb-dropdown-image">
-                  <img src="/web/upload/category/{$cate_no}.jpg" alt="{$name}" onerror="this.src='/web/upload/category/default.jpg'">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- ATELIER 네비게이션 메뉴 -->
+  <nav id="atelier-main-nav" class="atelier-main-nav" aria-label="상품 메뉴">
+    <a href="/product/list.html?cate_no=23" class="atelier-nav-link" data-menu="shop-all">SHOP ALL</a>
+    <a href="/product/list.html?cate_no=25" class="atelier-nav-link" data-menu="tops">TOPS</a>
+    <a href="/product/list.html?cate_no=26" class="atelier-nav-link" data-menu="dresses">DRESSES</a>
+    <a href="/product/list.html?cate_no=24" class="atelier-nav-link" data-menu="outerwear">OUTERWEAR</a>
   </nav>
 
-  <!-- 전체 메뉴 (nav 바로 아래 드롭다운) - 카테고리 자동 반영 -->
-  <div id="lb-fullmenu" class="lb-fullmenu" aria-hidden="true">
-    <div class="lb-fullmenu-backdrop"></div>
-    <div class="lb-fullmenu-panel" id="lb-fullmenu-panel" role="dialog" aria-modal="true" aria-label="전체 메뉴">
-      <div class="lb-fullmenu-inner">
-        <p class="lb-fullmenu-eyebrow">MENU</p>
-        <div class="lb-fullmenu-groups">
-          <!-- 카테고리 자동 반영 -->
-          <div class="lb-fullmenu-group" module="Layout_category">
-            <p class="lb-fullmenu-label">Shop</p>
-            <!-- $depth = 1 -->
-            <a href="{$link_product_list}" class="lb-fullmenu-link">{$name}</a>
-          </div>
-          
-          <div class="lb-fullmenu-group">
-            <p class="lb-fullmenu-label">Account</p>
-            <a href="/member/login.html" class="lb-fullmenu-link" module="Layout_statelogoff">로그인</a>
-            <a href="/member/join.html" class="lb-fullmenu-link" module="Layout_statelogoff">회원가입</a>
-            <a href="/myshop/index.html" class="lb-fullmenu-link" module="Layout_stateLogon">마이쇼핑</a>
-            <a href="/order/basket.html" class="lb-fullmenu-link">장바구니</a>
-            <a href="/board/index.html" class="lb-fullmenu-link">커뮤니티</a>
-          </div>
-        </div>
+  <!-- 드롭다운 메뉴 (헤더 inner 기준) -->
+  <div id="atelier-dropdowns" class="atelier-dropdowns">
+    <!-- TOPS 드롭다운 -->
+    <div class="atelier-dropdown" data-dropdown="tops">
+      <div class="atelier-dropdown-inner">
+        <a href="/product/list.html?cate_no=27">Knit</a>
+        <a href="/product/list.html?cate_no=28">Blouse</a>
+        <a href="/product/list.html?cate_no=29">Shirt</a>
+        <a href="/product/list.html?cate_no=30">T-Shirt</a>
+      </div>
+    </div>
+
+    <!-- DRESSES 드롭다운 -->
+    <div class="atelier-dropdown" data-dropdown="dresses">
+      <div class="atelier-dropdown-inner">
+        <a href="/product/list.html?cate_no=31">Midi Dress</a>
+        <a href="/product/list.html?cate_no=32">Long Dress</a>
+        <a href="/product/list.html?cate_no=33">Mini Dress</a>
+      </div>
+    </div>
+
+    <!-- OUTERWEAR 드롭다운 -->
+    <div class="atelier-dropdown" data-dropdown="outerwear">
+      <div class="atelier-dropdown-inner">
+        <a href="/product/list.html?cate_no=34">Coat</a>
+        <a href="/product/list.html?cate_no=35">Jacket</a>
+        <a href="/product/list.html?cate_no=36">Cardigan</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 모바일 메뉴 버튼 -->
+  <button type="button" class="atelier-mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- 모바일 메뉴 패널 -->
+  <div class="atelier-mobile-menu" aria-hidden="true">
+    <div class="atelier-mobile-menu-backdrop"></div>
+    <div class="atelier-mobile-menu-panel">
+      <button type="button" class="atelier-mobile-menu-close" aria-label="메뉴 닫기">×</button>
+      <nav class="atelier-mobile-menu-nav">
+        <a href="/product/list.html?cate_no=23">SHOP ALL</a>
+        <a href="/product/list.html?cate_no=25">TOPS</a>
+        <a href="/product/list.html?cate_no=26">DRESSES</a>
+        <a href="/product/list.html?cate_no=24">OUTERWEAR</a>
+      </nav>
+      <div class="atelier-mobile-menu-account">
+        <a href="/member/login.html" module="Layout_statelogoff">로그인</a>
+        <a href="/member/join.html" module="Layout_statelogoff">회원가입</a>
+        <a href="/myshop/index.html">마이쇼핑</a>
+        <a href="/order/basket.html">장바구니</a>
       </div>
     </div>
   </div>

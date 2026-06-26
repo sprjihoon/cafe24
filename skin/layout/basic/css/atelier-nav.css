@@ -1,0 +1,324 @@
+@charset "utf-8";
+
+/* ============================================================
+   ATELIER 네비게이션 스타일
+   - 드롭다운은 헤더 inner 기준으로 외부 배치
+   ============================================================ */
+
+/* ── 헤더 inner 컨테이너 ── */
+#header .inner {
+  position: relative;
+}
+
+/* ── 데스크톱 메인 네비게이션 ── */
+.atelier-main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px var(--content-padding, 24px);
+  border-bottom: 1px solid var(--color-border, #e5ddd5);
+  background: var(--color-bg, #faf8f5);
+  position: relative;
+}
+
+/* 메뉴 링크 */
+.atelier-nav-link {
+  display: inline-block;
+  font-family: var(--font-display, 'Nanum Gothic', sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1d1b1a;
+  text-decoration: none;
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  cursor: pointer;
+}
+
+.atelier-nav-link:hover,
+.atelier-nav-link:focus,
+.atelier-nav-link.is-active {
+  color: #6b5344;
+  border-bottom-color: #6b5344;
+}
+
+/* ── 드롭다운 컨테이너 (헤더 inner 기준) ── */
+.atelier-dropdowns {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* 각 드롭다운 */
+.atelier-dropdown {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #e5ddd5;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+.atelier-dropdown.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.atelier-dropdown-inner {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.atelier-dropdown-inner a {
+  display: block;
+  padding: 10px 24px;
+  font-family: var(--font-sans, 'Nanum Gothic', sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #1d1b1a;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.atelier-dropdown-inner a:hover {
+  background: #f5f1ed;
+  color: #6b5344;
+}
+
+/* ── 모바일 메뉴 버튼 (데스크톱 숨김) ── */
+.atelier-mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  gap: 5px;
+  padding: 0;
+  position: absolute;
+  left: var(--content-padding, 24px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+}
+
+.atelier-mobile-menu-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #1d1b1a;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.atelier-mobile-menu-btn.is-active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.atelier-mobile-menu-btn.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.atelier-mobile-menu-btn.is-active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── 모바일 메뉴 패널 (데스크톱 숨김) ── */
+.atelier-mobile-menu {
+  display: none;
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 768px) {
+  /* 데스크톱 nav 숨김 */
+  .atelier-main-nav {
+    display: none;
+  }
+
+  /* 드롭다운 숨김 */
+  .atelier-dropdowns,
+  .atelier-dropdown {
+    display: none !important;
+  }
+
+  /* 모바일 버튼 표시 */
+  .atelier-mobile-menu-btn {
+    display: flex;
+  }
+
+  /* 모바일 메뉴 패널 */
+  .atelier-mobile-menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .atelier-mobile-menu.is-open {
+    visibility: visible;
+  }
+
+  /* 배경 오버레이 제거 - 사용자 요청: 다른 영역 비활성화 제거 */
+  .atelier-mobile-menu-backdrop {
+    display: none !important;
+  }
+
+  /* 사이드 패널 */
+  .atelier-mobile-menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 280px;
+    max-width: 80vw;
+    height: 100%;
+    background: #faf8f5;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-y: auto;
+    padding: 80px 24px 40px;
+    pointer-events: auto; /* 패널만 클릭 가능 */
+  }
+
+  .atelier-mobile-menu.is-open .atelier-mobile-menu-panel {
+    transform: translateX(0);
+  }
+
+  /* 닫기 버튼 */
+  .atelier-mobile-menu-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    line-height: 1;
+    color: #1d1b1a;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 메뉴 링크 */
+  .atelier-mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5ddd5;
+  }
+
+  .atelier-mobile-menu-nav a {
+    display: block;
+    padding: 14px 0;
+    font-family: var(--font-display, 'Nanum Gothic', sans-serif);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1d1b1a;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease;
+  }
+
+  .atelier-mobile-menu-nav a:hover {
+    color: #6b5344;
+  }
+
+  /* ACCOUNT 섹션 */
+  .atelier-mobile-menu-account {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .atelier-mobile-menu-account a {
+    display: block;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    color: #6b5344;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .atelier-mobile-menu-account a:hover {
+    color: #1d1b1a;
+  }
+}
+
+/* ============================================================
+   기존 복잡한 네비게이션 스타일 완전 비활성화
+   ============================================================ */
+
+/* 구 네비게이션 강제 숨김 - 최우선 처리 */
+#lb-nav,
+#lb-nav *,
+.lb-nav-inner,
+.lb-nav-inner *,
+.lb-nav-center,
+.lb-nav-center *,
+.lb-nav-item,
+.lb-nav-link,
+.lb-hamburger,
+.lb-hamburger *,
+.lb-dropdown-menu,
+.lb-dropdown-menu *,
+.lb-fullmenu,
+.lb-fullmenu *,
+#lb-fullmenu,
+#lb-fullmenu *,
+.lb-fullmenu-backdrop,
+.lb-fullmenu-panel,
+.lb-fullmenu-inner {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -99999px !important;
+  top: -99999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  z-index: -9999 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
