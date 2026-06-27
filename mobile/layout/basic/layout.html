@@ -30,12 +30,40 @@
     <!--@import(/layout/basic/sidebar.html)-->
     <hr class="layout">
     <div id="container">
+
+        <!-- LE BLANC 모바일 헤더 -->
         <header id="header">
-            <div class="header">
-                <section id="topArea">
+            <div class="header lb-m-header">
+                <!-- 좌: 햄버거 -->
+                <button type="button" class="lb-m-header__hamburger fold" aria-label="메뉴 열기">
+                    <span></span><span></span><span></span>
+                </button>
+
+                <!-- 중: 로고 -->
+                <h1 class="lb-m-header__logo" module="Layout_LogoTop">
+                    <a href="/">
+                        <span class="lb-logo-brand">LE BLANC</span>
+                        <span class="lb-logo-tagline">ATELIER N.</span>
+                    </a>
+                </h1>
+
+                <!-- 우: 아이콘 -->
+                <div class="lb-m-header__utils">
+                    <button type="button" class="lb-m-header__icon lb-m-search-trigger" aria-label="검색">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                    <p class="lb-m-header__basket" module="Layout_orderBasketcount">
+                        <a href="/order/basket.html" class="lb-m-header__icon" aria-label="장바구니">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                            <span class="lb-m-basket-count {$basket_count_display|display} {$basket_count_display_class}"><span class="{$basket_count_class}">{$basket_count}</span></span>
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Cafe24 필수: 검색 패널 -->
+                <section id="topArea" style="display:none;">
                     <div class="searchWrap">
                         <p class="category"><a href="#none" class="fold">카테고리</a></p>
-                        <h1 module="Layout_LogoTop"><a href="/">{$mobile_title}</a></h1>
                         <p class="search"><button type="button">검색</button></p>
                         <p module="Layout_orderBasketcount">
                             <a href="/order/basket.html" class="btnBasket">장바구니<span class="count {$basket_count_display|display} {$basket_count_display_class}"><span class="{$basket_count_class}">{$basket_count}</span></span></a>
@@ -46,6 +74,7 @@
                 <!--@import(/layout/basic/search.html)-->
             </div>
         </header>
+
         <hr class="layout">
         <div id="contents">
             <!--@contents-->
@@ -54,5 +83,52 @@
         <!--@import(/layout/basic/footer.html)-->
     </div>
 </div>
+
+<!-- 하단 탭 네비게이션 -->
+<nav class="lb-m-tabnav" aria-label="하단 네비게이션">
+    <a href="/" class="lb-m-tabnav__item" data-tab="home">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>홈</span>
+    </a>
+    <button type="button" class="lb-m-tabnav__item fold" data-tab="category">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>카테고리</span>
+    </button>
+    <button type="button" class="lb-m-tabnav__item lb-m-search-trigger" data-tab="search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>검색</span>
+    </button>
+    <a href="/myshop/index.html" class="lb-m-tabnav__item" data-tab="mypage">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>마이</span>
+    </a>
+    <a href="/order/basket.html" class="lb-m-tabnav__item lb-m-tabnav__basket" data-tab="basket">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="lb-m-tabnav__badge {$basket_count_display|display}"><span class="{$basket_count_class}">{$basket_count}</span></span>
+        <span>장바구니</span>
+    </a>
+</nav>
+
+<script>
+(function(){
+    /* 검색 트리거: 헤더 검색 버튼과 동일 동작 */
+    document.querySelectorAll('.lb-m-search-trigger').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var searchBtn = document.querySelector('#topArea .search button');
+            if(searchBtn) searchBtn.click();
+        });
+    });
+
+    /* 탭 활성 표시 */
+    var path = location.pathname;
+    var map = { '/': 'home', '/myshop': 'mypage', '/order/basket.html': 'basket' };
+    var active = 'home';
+    if(path.indexOf('/myshop') === 0) active = 'mypage';
+    else if(path.indexOf('/order/basket') >= 0) active = 'basket';
+    else if(path === '/') active = 'home';
+    var el = document.querySelector('.lb-m-tabnav__item[data-tab="' + active + '"]');
+    if(el) el.classList.add('is-active');
+})();
+</script>
 </body>
 </html>
