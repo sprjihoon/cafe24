@@ -19,6 +19,56 @@
     enhanceProductOptions();
     enhanceQuantitySelector();
     initProductTabs();
+    dedupeProductNameRow();
+    initWishlistButton();
+  }
+
+  /**
+   * 관심상품 아이콘 버튼 — 클릭 시 찜 상태 토글
+   */
+  function initWishlistButton() {
+    var wishBtn = document.querySelector('.xans-product-detail .lb-buy-wish');
+    if (!wishBtn) return;
+
+    wishBtn.addEventListener('click', function() {
+      var self = this;
+      window.setTimeout(function() {
+        self.classList.toggle('is-wished');
+      }, 300);
+    });
+  }
+
+  /**
+   * 상품정보표의 '상품명' 행이 headingArea와 중복되면 숨김
+   */
+  function dedupeProductNameRow() {
+    var root = document.querySelector('.xans-product-detail');
+    if (!root) return;
+
+    var titleEl = root.querySelector('.headingArea .lb-product-title, .headingArea h2');
+    if (!titleEl) return;
+
+    var titleText = titleEl.textContent.replace(/\[.*?\]\s*/, '').trim();
+    if (!titleText) return;
+
+    root.querySelectorAll('.xans-product-detaildesign table tr').forEach(function(tr) {
+      var th = tr.querySelector('th');
+      var td = tr.querySelector('td');
+      if (!th || !td) return;
+
+      var label = th.textContent.trim();
+      if (label !== '상품명' && label !== 'Product Name') return;
+
+      var cellText = td.textContent.trim();
+      if (cellText === titleText || cellText.indexOf(titleText) === 0) {
+        tr.classList.add('is-duplicate-name');
+        tr.setAttribute('aria-hidden', 'true');
+        var cells = tr.querySelectorAll('th, td');
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].setAttribute('hidden', 'hidden');
+        }
+      }
+    });
   }
 
   /**

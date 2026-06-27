@@ -1,0 +1,540 @@
+@charset "utf-8";
+
+/* ============================================
+   ATELIER N - 네비게이션 (수정됨 - 동작 보장)
+   ============================================ */
+
+/* ── #lb-nav 기본 스타일 ── */
+#lb-nav {
+  display: block;
+  position: relative; /* 드롭다운 기준점 */
+  width: 100%;
+  background: #faf8f5;
+  border-bottom: 1px solid #e5ddd5;
+  z-index: 100;
+}
+
+.lb-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: 56px;
+  position: relative;
+}
+
+/* ── 전체메뉴 버튼 (햄버거 스타일, 왼쪽 끝) ── */
+#lb-nav .atelier-allmenu-btn,
+.lb-nav-inner .atelier-allmenu-btn,
+button.atelier-allmenu-btn,
+.atelier-allmenu-btn {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 12px !important;
+  position: absolute !important;
+  left: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 44px !important;
+  height: 44px !important;
+  z-index: 1001 !important;
+  pointer-events: auto !important;
+  outline: none !important;
+}
+
+/* 햄버거 라인 */
+#lb-nav .atelier-allmenu-btn .line,
+.lb-nav-inner .atelier-allmenu-btn .line,
+button.atelier-allmenu-btn .line,
+.atelier-allmenu-btn .line {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 22px !important;
+  height: 2px !important;
+  background: #1d1b1a !important;
+  border-radius: 2px !important;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  transform-origin: center !important;
+  pointer-events: none !important;
+}
+
+/* X로 변환 (is-active 상태) */
+.atelier-allmenu-btn.is-active {
+  gap: 0 !important;
+}
+
+.atelier-allmenu-btn.is-active .line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg) !important;
+}
+
+.atelier-allmenu-btn.is-active .line:nth-child(2) {
+  opacity: 0 !important;
+  transform: scaleX(0) !important;
+}
+
+.atelier-allmenu-btn.is-active .line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg) !important;
+}
+
+.atelier-allmenu-btn .text {
+  display: none !important;
+}
+
+.atelier-allmenu-btn:hover .line {
+  background: #6b5344 !important;
+}
+
+/* ── 메뉴 링크 컨테이너 ── */
+.atelier-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  margin-left: 60px; /* 전체메뉴 버튼 공간 확보 */
+}
+
+.atelier-nav-item {
+  position: relative;
+}
+
+/* 메뉴 링크 - 취소선 완전 제거 */
+.atelier-nav-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1d1b1a;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+  padding: 18px 0;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.atelier-nav-link:link,
+.atelier-nav-link:visited,
+.atelier-nav-link:hover,
+.atelier-nav-link:active {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+
+.atelier-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 12px; /* 더 아래로 이동 */
+  left: 0;
+  right: 0;
+  height: 1px; /* 더 얇게 */
+  background: #6b5344;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.atelier-nav-link:hover,
+.atelier-nav-item:hover .atelier-nav-link {
+  color: #6b5344;
+  text-decoration: none !important;
+}
+
+.atelier-nav-link:hover::after,
+.atelier-nav-item:hover .atelier-nav-link::after {
+  transform: scaleX(1);
+}
+
+/* ── 드롭다운 메뉴 ── */
+.atelier-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 16px 0;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1000;
+}
+
+.atelier-nav-item:hover .atelier-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.atelier-dropdown-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.atelier-dropdown-inner a {
+  display: block;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #1d1b1a;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.atelier-dropdown-inner a:hover {
+  background: #faf8f5;
+  color: #6b5344;
+  padding-left: 28px;
+}
+
+/* ── 전체메뉴 (nav 외부, absolute 위치) ── */
+#lb-fullmenu,
+#lb-fullmenu.atelier-fullmenu-dropdown {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  width: 100% !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e5ddd5 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  max-height: 0 !important;
+  height: auto !important; /* 높이 자동 */
+  overflow: hidden !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  z-index: 9999 !important;
+}
+
+#lb-fullmenu.is-open {
+  max-height: 600px !important;
+  height: auto !important; /* 높이 자동 */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.lb-fullmenu-panel,
+.atelier-fullmenu-panel {
+  width: 100% !important;
+  height: auto !important;
+  padding: 0 !important;
+  background: #faf8f5 !important;
+}
+
+.atelier-fullmenu-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  background: #faf8f5;
+}
+
+/* 왼쪽: 카테고리 섹션 */
+.atelier-fullmenu-left {
+  display: flex;
+  gap: 48px;
+  flex: 0 0 auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+}
+
+.atelier-fullmenu-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.atelier-fullmenu-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b5344;
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #6b5344;
+}
+
+.atelier-fullmenu-link {
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #1d1b1a;
+  text-decoration: none;
+  padding: 12px 0;
+  transition: all 0.2s;
+}
+
+.atelier-fullmenu-link:hover {
+  color: #6b5344;
+  padding-left: 8px;
+}
+
+/* 중앙: 프로모션 이미지 */
+.atelier-fullmenu-center {
+  flex: 1 1 auto;
+  max-width: 400px;
+}
+
+.atelier-fullmenu-promo {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6b5344 0%, #8b7355 100%);
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.atelier-fullmenu-promo:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.atelier-fullmenu-promo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+}
+
+.atelier-fullmenu-promo-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+  padding: 24px;
+}
+
+.atelier-fullmenu-promo-text h3 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #fff;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.atelier-fullmenu-promo-text p {
+  font-size: 14px;
+  color: #faf8f5;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 오른쪽: CTA 버튼들 */
+.atelier-fullmenu-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 0 0 auto;
+  min-width: 240px;
+}
+
+.atelier-fullmenu-cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.atelier-fullmenu-cta-btn.primary {
+  background: linear-gradient(135deg, #6b5344 0%, #8b7355 100%);
+  color: #fff;
+  border-color: #6b5344;
+}
+
+.atelier-fullmenu-cta-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 83, 68, 0.35);
+}
+
+.atelier-fullmenu-cta-btn.secondary {
+  background: #fff;
+  border-color: #6b5344;
+  color: #1d1b1a;
+}
+
+.atelier-fullmenu-cta-btn.secondary:hover {
+  background: #6b5344;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 83, 68, 0.25);
+}
+
+.atelier-fullmenu-cta-btn.tertiary {
+  background: #fff;
+  border-color: #e5ddd5;
+  color: #1d1b1a;
+}
+
+.atelier-fullmenu-cta-btn.tertiary:hover {
+  background: #faf8f5;
+  border-color: #6b5344;
+  transform: translateY(-2px);
+}
+
+.cta-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cta-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.cta-text small {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.atelier-fullmenu-info {
+  margin-top: 12px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid #6b5344;
+}
+
+.info-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b5344;
+  margin: 0 0 4px 0;
+}
+
+.info-detail {
+  font-size: 12px;
+  color: #8b7355;
+  margin: 0;
+}
+
+/* 백드롭, 닫기버튼 숨김 */
+.atelier-fullmenu-backdrop,
+.atelier-fullmenu-close {
+  display: none;
+}
+
+/* ── 모바일 햄버거 버튼 ── */
+.atelier-mobile-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.atelier-mobile-btn .line {
+  width: 22px;
+  height: 2px;
+  background: #1d1b1a;
+  border-radius: 2px;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+/* ── 기존 lb- 드롭다운 제거 ── */
+.lb-dropdown-menu,
+.lb-dropdown-inner,
+.lb-dropdown-links,
+.xans-layout-category {
+  display: none !important;
+}
+
+/* ── 반응형: PC ── */
+@media (min-width: 769px) {
+  #lb-nav .atelier-allmenu-btn,
+  .lb-nav-inner .atelier-allmenu-btn,
+  nav .atelier-allmenu-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .atelier-mobile-btn {
+    display: none !important;
+  }
+}
+
+/* ── 반응형: 모바일 ── */
+@media (max-width: 768px) {
+  .atelier-allmenu-btn {
+    display: none !important;
+  }
+
+  .atelier-nav-links {
+    display: none;
+  }
+
+  .atelier-mobile-btn {
+    display: flex !important;
+  }
+
+  .atelier-fullmenu-inner {
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px 24px;
+  }
+}
+
+/* ── 태블릿 최적화 ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .lb-nav-inner {
+    gap: 48px;
+  }
+
+  .atelier-nav-links {
+    gap: 48px;
+  }
+
+  .atelier-nav-link {
+    font-size: 12px;
+  }
+}

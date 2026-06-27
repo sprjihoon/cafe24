@@ -1,0 +1,57 @@
+<!-- ============================================
+     ATELIER N - 새 네비게이션 메뉴
+     - 단순하고 깔끔한 링크형 메뉴
+     - 드롭다운 없음
+     - PC/모바일 반응형
+     ============================================ -->
+
+  <!-- PC 네비게이션 -->
+  <nav class="atelier-nav" aria-label="메인 메뉴">
+    <div class="atelier-nav-inner">
+      <a href="/product/list.html?cate_no=23" class="atelier-nav-link">
+        <span>SHOP ALL</span>
+      </a>
+      <a href="/product/list.html?cate_no=25" class="atelier-nav-link">
+        <span>TOPS</span>
+      </a>
+      <a href="/product/list.html?cate_no=26" class="atelier-nav-link">
+        <span>DRESSES</span>
+      </a>
+      <a href="/product/list.html?cate_no=24" class="atelier-nav-link">
+        <span>OUTERWEAR</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- 모바일 메뉴 버튼 -->
+  <button type="button" class="atelier-mobile-btn" aria-label="메뉴 열기" aria-expanded="false">
+    <span class="line"></span>
+    <span class="line"></span>
+    <span class="line"></span>
+  </button>
+
+  <!-- 모바일 메뉴 -->
+  <aside class="atelier-mobile-panel" aria-hidden="true">
+    <button type="button" class="atelier-mobile-close" aria-label="메뉴 닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    
+    <nav class="atelier-mobile-nav">
+      <h2 class="atelier-mobile-title">MENU</h2>
+      <a href="/product/list.html?cate_no=23" class="atelier-mobile-link">SHOP ALL</a>
+      <a href="/product/list.html?cate_no=25" class="atelier-mobile-link">TOPS</a>
+      <a href="/product/list.html?cate_no=26" class="atelier-mobile-link">DRESSES</a>
+      <a href="/product/list.html?cate_no=24" class="atelier-mobile-link">OUTERWEAR</a>
+    </nav>
+    
+    <div class="atelier-mobile-account">
+      <h2 class="atelier-mobile-title">ACCOUNT</h2>
+      <a href="/member/login.html" module="Layout_statelogoff">로그인</a>
+      <a href="/member/join.html" module="Layout_statelogoff">회원가입</a>
+      <a href="/myshop/index.html">마이쇼핑</a>
+      <a href="/order/basket.html">장바구니</a>
+    </div>
+  </aside>

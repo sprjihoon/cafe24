@@ -222,6 +222,27 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 - ✅ Sticky 탭 메뉴 구현
 - ✅ 포토 리뷰 섹션 추가
 
+### Updates (2026.06.26)
+- 🔧 ATELIER SHORTS 초기 진입 재생 인덱스를 `START_INDEX = 2`(화면 3번) 기준으로 고정
+- 🔧 ATELIER SHORTS 루프/카드 클릭 동작 유지하면서 상태 동기화 로직 정리
+- 🔧 카드 상품 링크 배너 노출 조건 보완 (hover / focus-within / 활성 카드)
+- 🔧 배포 경로 다중 반영 운영 절차 유지 (`/sde_design`, `/www`, `/ecudemo394315`)
+- ✅ **네비게이션 구조 완전 재설계**: 카테고리 중첩 문제 해결, 전체 메뉴 패널 미니멀 메가메뉴 스타일로 개선
+- ✅ **전체 메뉴(Full Menu) 패널 레이아웃 개선**: 콘텐츠 반응형 auto-fill 그리드, 닫기 버튼 추가
+- ✅ **장바구니/주문서 페이지 UI 전면 개선**: `basket.css` 421줄 리디자인, 모바일 최적화
+- ✅ **상품 상세 CSS 대규모 리팩토링**: `product-detail.css` 1318줄 전면 개편
+- ✅ **상품 상세 JS 개선**: `product-detail.js` 50줄 신규 기능 추가
+
+### Updates (2026.06.27)
+- ✅ **메인페이지 포토리뷰 섹션 완성**: "고객이 직접 남긴 착용 후기" 카드 슬라이더 구현
+  - 디자인센터 데모 모드 분기 처리 (`ATELIER_DEMO_MODE`)
+  - 실제 리뷰 0개 시 빈 상태(empty state) UI 표시
+  - 5개 샘플 데모 리뷰 데이터 포함 (`atelier-review-demo-data.js`)
+  - 상품 연결 정보 표시 (`.lb-review-product`)
+- ✅ **드롭다운 메뉴 완전 제거**: 모든 nav 드롭다운 및 backdrop overlay 삭제, 심플 플랫 네비게이션
+- ✅ **모바일 네비게이션 backdrop 제거**: 터치 UX 개선
+- 🔧 레이아웃 내 불필요한 스크립트 정리 (`atelier-nav-cleanup.js`)
+
 ## 라이선스
 
 이 프로젝트는 Cafe24 쇼핑몰 전용 스킨으로 개발되었습니다.
@@ -232,6 +253,6 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 
 ---
 
-**Last Updated**: 2026.06.25  
-**Version**: 1.0.0  
+**Last Updated**: 2026.06.27  
+**Version**: 1.1.0  
 **Status**: Production Ready 🚀

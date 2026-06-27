@@ -1,9 +1,12 @@
-# ATELIER SHORTS 가이드
+# ATELIER SHORTS 가이드 (URL 입력형)
 
 ## 개요
 
 메인페이지에 추가된 세로형 영상 카드 슬라이더 섹션입니다.  
-PC에서는 hover 시 영상이 자동 재생되며, 영상 재생 중 하단에 상품 링크 카드가 나타납니다.
+**운영자가 코드 수정 없이 URL만 입력**하면 새로운 영상 카드를 추가할 수 있습니다.  
+**MP4 직접 업로드**와 **YouTube Shorts** 두 가지 방식을 모두 지원합니다.
+
+> 📘 **상세 사용법**: [ATELIER_SHORTS_URL_GUIDE.md](./ATELIER_SHORTS_URL_GUIDE.md) 참조
 
 ---
 
@@ -64,49 +67,64 @@ skin/
 
 ---
 
-## 콘텐츠 관리 방법
+## 콘텐츠 관리 방법 (URL 입력형)
 
 ### 데이터 파일 수정
 
-`/skin/layout/basic/js/atelier-shorts-data.js` 파일을 열어 아래 형식으로 데이터를 수정합니다:
+`/skin/layout/basic/js/atelier-shorts-data.js` 파일을 열어 URL만 교체하면 됩니다:
 
 ```javascript
 window.ATELIER_SHORTS_DATA = [
+  // MP4 영상 예시
   {
-    id: "shorts-01",                                    // 고유 식별자
-    video: "/web/upload/atelier-shorts/shorts-01.mp4", // 영상 파일 경로
-    poster: "/web/upload/atelier-shorts/shorts-01.jpg", // 썸네일 이미지
+    id: "shorts-01",
+    type: "mp4",                                        // "mp4" 또는 "youtube"
+    videoUrl: "https://cdn.example.com/video.mp4",     // 영상 URL (HTTPS)
+    posterUrl: "https://cdn.example.com/poster.jpg",   // 썸네일 URL (HTTPS)
     productUrl: "/product/detail.html?product_no=1",   // 상품 URL
-    productThumb: "/web/product/medium/sample.png",    // 상품 썸네일
+    productThumbUrl: "https://shop.com/thumb.jpg",     // 상품 썸네일 URL
     productName: "Marlow Wool Jacket",                 // 상품명
     price: "159,000원"                                  // 가격
   },
-  // ... 추가 데이터
+  
+  // YouTube Shorts 예시
+  {
+    id: "shorts-02",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/VIDEO_ID",
+    posterUrl: "https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg",
+    productUrl: "/product/detail.html?product_no=2",
+    productThumbUrl: "https://shop.com/thumb2.jpg",
+    productName: "Lena Fine Knit",
+    price: "69,000원"
+  }
 ];
 ```
 
-### 영상 파일 업로드
+### 영상 등록 방법
 
-1. **영상 파일 요구사항**
-   - 형식: MP4
-   - 비율: 9:16 (세로형)
-   - 해상도: 1080x1920 권장
-   - 용량: 10MB 이하 권장
-   - 길이: 15~60초 권장
+**방법 1: MP4 영상 (외부 CDN 또는 카페24 서버)**
+- 외부 CDN: AWS S3, Cloudflare, Google Cloud Storage 등
+- 카페24 서버: `/web/upload/atelier-shorts/`에 업로드
+- HTTPS URL 필수
+- PC hover 시 자동 재생
 
-2. **업로드 경로**
-   ```
-   /web/upload/atelier-shorts/
-   ├── shorts-01.mp4
-   ├── shorts-01.jpg  (포스터 이미지)
-   ├── shorts-02.mp4
-   ├── shorts-02.jpg
-   └── ...
-   ```
+**방법 2: YouTube Shorts**
+- YouTube Shorts URL 직접 입력
+- 클릭 시 iframe으로 재생
+- hover 자동재생 없음 (YouTube 제약)
 
-3. **FTP 업로드**
-   - 로컬 경로: `c:\Users\one\cafe24d\web\upload\atelier-shorts\`
-   - 서버 경로: `/ecudemo394315/www/web/upload/atelier-shorts/`
+### 영상 파일 요구사항
+
+| 항목 | MP4 | YouTube Shorts |
+|------|-----|----------------|
+| 형식 | MP4 (H.264) | YouTube URL |
+| 비율 | 9:16 세로형 | 9:16 세로형 |
+| 해상도 | 1080x1920 권장 | YouTube 자동 |
+| 용량 | 10MB 이하 권장 | 무관 |
+| URL | HTTPS 필수 | HTTPS 필수 |
+| PC 자동재생 | ✅ 지원 | ❌ 불가 |
+| 모바일 재생 | 버튼 클릭 | 버튼 클릭 |
 
 ### 상품 정보 연결
 

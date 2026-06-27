@@ -1,97 +1,40 @@
 <!--@layout(/layout/basic/layout.html)-->
 
-<!-- 🔥 긴급: 구 네비게이션 강제 제거 + backdrop 완전 제거 -->
+<!-- 🔥 구 드롭다운만 제거 (#lb-nav 구조는 유지) -->
 <style>
-#lb-nav,
-#lb-nav *,
-.lb-nav-inner,
-.lb-nav-center,
 .lb-dropdown-menu,
 .lb-dropdown-menu *,
+.lb-dropdown-inner,
+.lb-dropdown-links,
 .lb-fullmenu-backdrop,
-div.lb-fullmenu-backdrop,
-#lb-fullmenu .lb-fullmenu-backdrop,
-.lb-fullmenu .lb-fullmenu-backdrop {
+.xans-layout-category {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  position: absolute !important;
-  left: -99999px !important;
-  top: -99999px !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
 }
 </style>
 
 <script>
 (function(){
   'use strict';
-  var selectors = '#lb-nav,nav#lb-nav,#lb-fullmenu,.lb-fullmenu,.lb-fullmenu-backdrop,.lb-fullmenu-panel,.lb-hamburger,.lb-dropdown-menu,.lb-nav-inner,.lb-nav-center';
+  var selectors = '.lb-dropdown-menu,.lb-fullmenu-backdrop,.xans-layout-category';
   
-  function forceRemove(){
+  function removeDropdowns(){
     try{
       document.querySelectorAll(selectors).forEach(function(el){
         if(el && el.parentNode){
           el.parentNode.removeChild(el);
-          console.log('[INDEX] ✅ Removed:', el.id || el.className);
         }
       });
-    }catch(e){
-      console.error('[INDEX] Remove error:', e);
-    }
+    }catch(e){}
   }
   
-  // 즉시 실행
-  forceRemove();
-  
-  // DOMContentLoaded
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', forceRemove);
+    document.addEventListener('DOMContentLoaded', removeDropdowns);
   } else {
-    forceRemove();
+    removeDropdowns();
   }
-  
-  // 여러 시점에서 실행
-  setTimeout(forceRemove, 100);
-  setTimeout(forceRemove, 500);
-  setTimeout(forceRemove, 1000);
-  setTimeout(forceRemove, 2000);
-  
-  // MutationObserver
-  if(typeof MutationObserver !== 'undefined'){
-    var observer = new MutationObserver(function(mutations){
-      var needsRemove = false;
-      mutations.forEach(function(mutation){
-        mutation.addedNodes.forEach(function(node){
-          if(node.nodeType === 1){
-            var id = node.id || '';
-            var cls = node.className || '';
-            if(id === 'lb-nav' || id === 'lb-fullmenu' || cls.indexOf('lb-hamburger') >= 0 || cls.indexOf('lb-dropdown') >= 0){
-              needsRemove = true;
-            }
-          }
-        });
-      });
-      if(needsRemove){
-        console.log('[INDEX] 🔍 Detected injection, removing...');
-        forceRemove();
-      }
-    });
-    
-    function startObserver(){
-      if(document.body){
-        observer.observe(document.body, {childList: true, subtree: true});
-        console.log('[INDEX] 🔍 MutationObserver started');
-      } else {
-        setTimeout(startObserver, 50);
-      }
-    }
-    startObserver();
-  }
-  
-  console.log('[INDEX] 🚀 Old nav removal script loaded');
 })();
 </script>
 
@@ -948,6 +891,75 @@ div.lb-fullmenu-backdrop,
 </section>
 
 <!-- ============================================================
+     ②-2 THE ESSENTIALS — product_listmain_4 (4×2 그리드, 하의 카테고리)
+     ============================================================ -->
+<div module="product_listmain_1" class="ec-base-product lb-product-section lb-essentials-grid" id="lb-section-essentials">
+    <!--
+        $count = 8
+        ※ THE ESSENTIALS 4x2 그리드 = 8개 상품
+    -->
+    <div class="lb-section-header">
+        <div class="lb-section-copy">
+            <p class="lb-section-eyebrow">THE ESSENTIALS</p>
+            <h2 class="lb-section-title">이 계절, 가장 자주 손이 가는 기본들</h2>
+            <span class="lb-section-cafe24" style="display: {$category_title_text_display};">{$category_title_text}</span>
+            <span style="display: {$category_title_img_display};"><img src="{$category_title_img}" alt="{$category_title_text}" /></span>
+        </div>
+        <a href="/product/list.html?cate_no=27" class="lb-section-more">전체 보기</a>
+    </div>
+    <ul class="prdList">
+        <li id="anchorBoxId_{$product_no}">
+            <div class="thumbnail">
+                <div class="prdImg">
+                    <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" /><span module="product_Imagestyle"><span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span></span></a>
+                    <span class="wish">{$list_wish_icon}</span>
+                </div>
+                <div class="icon">
+                    <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                    <div class="button">
+                        <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                        <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                <p class="ec-base-help txtWarn txt11 {$exclusive_purchase_olny|display}"> 단독구매상품</p>
+                <span class="name {$rental_icon|display}">월 {$rental_maximum_price|numberformat}원 / {$rental_maximum_term}개월</span>
+                <ul module="product_ListItem" class="spec">
+                    <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                </ul>
+            </div>
+        </li>
+        <li id="anchorBoxId_{$product_no}">
+            <div class="thumbnail">
+                <div class="prdImg">
+                    <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" /><span module="product_Imagestyle"><span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span></span></a>
+                    <span class="wish">{$list_wish_icon}</span>
+                </div>
+                <div class="icon">
+                    <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
+                    <div class="button">
+                        <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
+                        <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                <p class="ec-base-help txtWarn txt11 {$exclusive_purchase_olny|display}"> 단독구매상품</p>
+                <span class="name {$rental_icon|display}">월 {$rental_maximum_price|numberformat}원 / {$rental_maximum_term}개월</span>
+                <ul module="product_ListItem" class="spec">
+                    <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<!-- ============================================================
      ③ NEW IN — product_listmain_2 (카페24 모듈 — 변경 금지)
      ============================================================ -->
 <div module="product_listmain_2" class="ec-base-product lb-product-section lb-new-arrivals" id="lb-section-newin">
@@ -1024,7 +1036,7 @@ div.lb-fullmenu-backdrop,
         <div class="lb-timesale-left">
             <div class="lb-timesale-text">
                 <p class="lb-timesale-eyebrow">TIME SALE</p>
-                <h2 class="lb-timesale-title">끝이 없는<br>할인의 블랙홀</h2>
+                <h2 class="lb-timesale-title">지금 이 순간,<br>최대 할인</h2>
             </div>
             <div class="lb-timesale-countdown" id="lb-countdown">
                 <div class="lb-countdown-item">
@@ -1048,7 +1060,7 @@ div.lb-fullmenu-backdrop,
             <a href="/product/list.html?cate_no=33" class="lb-timesale-btn">타임세일 전체보기</a>
         </div>
         <div class="lb-timesale-visual" aria-hidden="true">
-            <img src="/web/upload/timesale/watch-new.png" alt="타임세일 워치">
+            <img src="/web/upload/timesale/watch-white.png" alt="타임세일 워치">
         </div>
     </div>
 </div>
@@ -1588,14 +1600,6 @@ div.lb-fullmenu-backdrop,
 </script>
 
 <!-- product_listmain_4 ~ 7 은 사용시 섹션으로 활성화 (현재 hidden) -->
-<div module="product_listmain_4" class="ec-base-product" style="display:none;">
-    <!-- $count = 8 -->
-    <div class="title"><h2><span style="display: {$category_title_text_display};">{$category_title_text}</span></h2></div>
-    <ul class="prdList grid2">
-        <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" /></a><span class="wish">{$list_wish_icon}</span></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
-        <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" /></a><span class="wish">{$list_wish_icon}</span></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
-    </ul>
-</div>
 <div module="product_listmain_5" class="ec-base-product" style="display:none;">
     <!-- $count = 8 -->
     <div class="title"><h2><span style="display: {$category_title_text_display};">{$category_title_text}</span></h2></div>
@@ -1621,84 +1625,6 @@ div.lb-fullmenu-backdrop,
     </ul>
 </div>
 
-<!-- ============================================================
-     ⑧ 게시판 (board_listpackage — 카페24 모듈 — 변경 금지)
-     ============================================================ -->
-<div id="boardArea" class="lb-board-area">
-    <div module="board_listpackage_5">
-        <!--@css(/css/module/layout/board_listpackage_5.css)-->
-        <h2><span>자유게시판</span></h2>
-        <div class="ec-base-table typeList gLine">
-            <table border="1" summary="">
-                <caption>자유 게시판</caption>
-                <colgroup>
-                    <col style="width:auto" />
-                    <col style="width:100px" />
-                </colgroup>
-                <thead class="blind">
-                <tr>
-                    <th scope="col">제목</th>
-                    <th scope="col">날짜</th>
-                </tr>
-                </thead>
-                <tbody module="board_list_5">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                    -->
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_target_class}" {$block_data_attr}>{$subject}</a></td>
-                        <td>{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_target_class}" {$block_data_attr}>{$subject}</a></td>
-                        <td>{$write_date}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="more"><a href="/board/free/list.html?board_no=5" class="btnNormal">더보기</a></p>
-    </div>
-
-    <div module="board_listpackage_6">
-        <!--@css(/css/module/layout/board_listpackage_6.css)-->
-        <h2><span>상품 Q&amp;A</span></h2>
-        <div class="ec-base-table typeList gLine">
-            <table border="1" summary="">
-                <caption>상품 Q&amp;A</caption>
-                <colgroup>
-                    <col style="width:auto" />
-                    <col style="width:100px" />
-                </colgroup>
-                <thead class="blind">
-                <tr>
-                    <th scope="col">제목</th>
-                    <th scope="col">날짜</th>
-                </tr>
-                </thead>
-                <tbody module="board_list_6">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                    -->
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_target_class}" {$block_data_attr}>{$subject}</a></td>
-                        <td>{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_target_class}" {$block_data_attr}>{$subject}</a></td>
-                        <td>{$write_date}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="more"><a href="/board/product/list.html?board_no=6" class="btnNormal">더보기</a></p>
-    </div>
-</div>
 
 <!--@import(/product/shoppQ/searchContent.html)-->
 <!--@define(cmc_log)-->

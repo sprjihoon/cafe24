@@ -1,34 +1,15 @@
 @charset "utf-8";
 
 /* ============================================================
-   🔥 긴급: 구 네비게이션 시스템 완전 비활성화
-   PC 버전 드롭다운 메뉴 및 스크롤 문제 해결
+   🔥 구 드롭다운 메뉴만 비활성화 (#lb-nav 구조는 유지)
    ============================================================ */
-#lb-nav,
-nav#lb-nav,
-#lb-nav *,
-.lb-nav-inner,
-.lb-nav-inner *,
-.lb-nav-center,
-.lb-nav-center *,
-.lb-nav-left,
-.lb-nav-right,
-.lb-nav-item,
-.lb-nav-link,
-.lb-hamburger,
-.lb-hamburger *,
 .lb-dropdown-menu,
 .lb-dropdown-menu *,
 .lb-dropdown-inner,
 .lb-dropdown-links,
-#lb-fullmenu,
-#lb-fullmenu *,
-.lb-fullmenu,
-.lb-fullmenu *,
+.lb-dropdown-content,
 .lb-fullmenu-backdrop,
-.lb-fullmenu-panel,
-.lb-fullmenu-inner,
-.lb-fullmenu-close {
+.xans-layout-category {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -38,11 +19,6 @@ nav#lb-nav,
   top: -99999px !important;
   width: 0 !important;
   height: 0 !important;
-  max-height: 0 !important;
-  overflow: hidden !important;
-  z-index: -9999 !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 /* ============================================================
@@ -709,6 +685,7 @@ body {
   border-bottom:1px solid var(--color-border);
   box-shadow:0 8px 24px rgba(0, 0, 0, 0.08);
   max-height:0;
+  height:auto !important; /* 🔹 높이 자동 (메가메뉴 수정) */
   overflow:hidden;
   opacity:0;
   transform:translateY(-4px);
@@ -3213,26 +3190,26 @@ img[src*="btn_prd_zoom.gif"] {
 
 .lb-timesale-eyebrow {
   font-family:var(--font-body);
-  font-size:var(--font-size-base);
+  font-size:var(--font-size-sm);
   font-weight:var(--font-weight-medium);
-  letter-spacing:0.04em;
+  letter-spacing:0.18em;
   text-transform:uppercase;
-  color:#ff4d4d;
+  color:#ff6b6b;
   margin:0;
+  opacity:0.9;
 }
 
 .lb-timesale-title {
   font-family:var(--font-display);
-  font-size:clamp(2.25rem, 4.2vw, 3.75rem);
+  font-size:clamp(2rem, 3.8vw, 3.25rem);
   font-weight:var(--font-weight-bold);
-  letter-spacing:-0.01em;
-  line-height:1.08;
+  letter-spacing:-0.02em;
+  line-height:1.12;
   margin:0;
   color:#fff;
   text-shadow:
-    0 0 18px rgba(236,72,153,0.75),
-    0 0 36px rgba(236,72,153,0.45),
-    0 0 64px rgba(236,72,153,0.25);
+    0 0 24px rgba(236,72,153,0.55),
+    0 0 48px rgba(236,72,153,0.3);
 }
 
 .lb-timesale-desc {
@@ -3338,11 +3315,11 @@ img[src*="btn_prd_zoom.gif"] {
 }
 
 .lb-timesale-visual img {
-  max-height:180px;
+  max-height:280px;
   width:auto;
   max-width:100%;
   object-fit:contain;
-  filter:drop-shadow(0 4px 16px rgba(255,255,255,0.15));
+  filter:drop-shadow(0 8px 32px rgba(236,72,153,0.25));
   position:relative;
   z-index:1;
 }
@@ -4529,6 +4506,7 @@ body {
 
 .atelier-shorts__slider-wrap {
   position: relative;
+  overflow: visible;
 }
 
 .atelier-shorts__pagination-bar {
@@ -4562,7 +4540,7 @@ body {
 }
 
 .atelier-shorts__pagination-fill--active {
-  animation: atelier-shorts-progress 30s linear forwards;
+  animation: atelier-shorts-progress 20s linear forwards;
 }
 
 .atelier-shorts__pagination-fill--paused {
@@ -4720,6 +4698,14 @@ body {
 .atelier-shorts__card:hover .atelier-shorts__product-banner,
 .atelier-shorts__card.is-hovered .atelier-shorts__product-link,
 .atelier-shorts__card.is-hovered .atelier-shorts__product-banner,
+.atelier-shorts__card--active .atelier-shorts__product-link,
+.atelier-shorts__card--active .atelier-shorts__product-banner,
+.atelier-shorts__card--playing .atelier-shorts__product-link,
+.atelier-shorts__card--playing .atelier-shorts__product-banner,
+.atelier-shorts__card.is-active .atelier-shorts__product-link,
+.atelier-shorts__card.is-active .atelier-shorts__product-banner,
+.atelier-shorts__card.is-playing .atelier-shorts__product-link,
+.atelier-shorts__card.is-playing .atelier-shorts__product-banner,
 .atelier-shorts__card:focus-within .atelier-shorts__product-link,
 .atelier-shorts__card:focus-within .atelier-shorts__product-banner {
   opacity: 1;
@@ -4938,7 +4924,7 @@ body {
 }
 
 .atelier-shorts__youtube-play circle {
-  fill: rgba(255, 0, 0, 0.9);
+  fill: var(--color-primary, #2d2825);
 }
 
 .atelier-shorts__youtube-iframe-container {

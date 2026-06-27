@@ -1,28 +1,22 @@
 /**
- * ATELIER SHORTS - 세로형 영상 카드 슬라이더 (URL 입력형)
- * 
- * 기능:
- * - MP4: 활성 슬라이드 자동 재생 (음소거), 모바일 버튼 재생
- * - YouTube Shorts: 활성 슬라이드 자동 재생 (음소거), 클릭 시 음성 재생
- * - 영상 재생 중 상품 링크 카드 표시
- * - Swiper 라이브러리 활용
- * - 접근성 및 안정성 고려
- * - HTTPS URL 검증
+ * ATELIER SHORTS
  */
-
 (function() {
   'use strict';
 
-  var currentPlayingVideo = null;
-  var swiperInstance = null;
-  var autoSlideTimer = null;
+  var START_INDEX = 2;
+  var AUTO_SLIDE_MS = 20000;
+  var swiper = null;
   var progressFillEl = null;
   var progressTextEl = null;
-  var AUTO_SLIDE_MS = 30000;
-  var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var autoSlideTimer = null;
 
-  // DOM 로드 대기
+  window.__ATELIER_SHORTS_BUILD__ = 'LOOP-FIX-20260627-F';
+  console.log('[ATELIER SHORTS] loaded DEBUG-20260626-A');
+  window.__atelierShortsInitCount = (window.__atelierShortsInitCount || 0) + 1;
+  console.log('[ATELIER SHORTS] init count:', window.__atelierShortsInitCount);
+  window.__atelierShortsCurrentIndex = -1;
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
@@ -30,156 +24,56 @@
   }
 
   function init() {
-    console.log('ATELIER SHORTS: 초기화 시작');
-    
-    // 데이터가 없으면 종료
-    if (!window.ATELIER_SHORTS_DATA || !window.ATELIER_SHORTS_DATA.length) {
-      console.warn('ATELIER SHORTS: 데이터가 없습니다.');
-      return;
-    }
-    
-    console.log('ATELIER SHORTS: 데이터 확인 완료', window.ATELIER_SHORTS_DATA.length, '개');
-
-    var container = document.getElementById('atelier-shorts-container');
-    if (!container) {
-      console.warn('ATELIER SHORTS: 컨테이너가 없습니다.');
-      return;
-    }
-    
-    console.log('ATELIER SHORTS: 컨테이너 확인 완료');
+    if (!window.ATELIER_SHORTS_DATA || !window.ATELIER_SHORTS_DATA.length) return;
+    if (!document.getElementById('atelier-shorts-container')) return;
 
     renderShorts();
-    initProgressPagination();
+    progressFillEl = document.querySelector('.atelier-shorts__pagination-fill');
+    progressTextEl = document.querySelector('.atelier-shorts__pagination-text');
+
     initSwiper();
-    initVideoControls();
-    
-    console.log('ATELIER SHORTS: 초기화 완료');
+    bindCardEvents();
   }
 
-  /**
-   * 영상 카드 렌더링
-   */
   function renderShorts() {
     var wrapper = document.querySelector('.atelier-shorts__slider-wrapper');
-    if (!wrapper) {
-      console.error('ATELIER SHORTS: wrapper를 찾을 수 없습니다.');
-      return;
-    }
-
-    var html = window.ATELIER_SHORTS_DATA.map(function(item) {
-      return createShortCard(item);
-    }).join('');
-
-    wrapper.innerHTML = html;
-    console.log('ATELIER SHORTS: 카드 렌더링 완료', window.ATELIER_SHORTS_DATA.length, '개');
-  }
-
-  /**
-   * YouTube Shorts URL에서 VIDEO_ID 추출
-   */
-  function extractYouTubeId(url) {
-    if (!url) return null;
-    
-    // https://www.youtube.com/shorts/VIDEO_ID
-    var shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
-    if (shortsMatch) return shortsMatch[1];
-    
-    // https://youtu.be/VIDEO_ID
-    var shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-    if (shortMatch) return shortMatch[1];
-    
-    // https://www.youtube.com/watch?v=VIDEO_ID
-    var watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
-    if (watchMatch) return watchMatch[1];
-    
-    return null;
-  }
-
-  /**
-   * URL이 HTTPS인지 검증
-   */
-  function isSecureUrl(url) {
-    if (!url) return false;
-    return url.toLowerCase().startsWith('https://');
-  }
-
-  /**
-   * 개별 카드 HTML 생성
-   */
-  function createShortCard(item) {
-    // URL 검증
-    var videoUrl = isSecureUrl(item.videoUrl) ? item.videoUrl : '';
-    var posterUrl = isSecureUrl(item.posterUrl) ? item.posterUrl : '';
-    
-    // 타입 결정
-    var type = item.type === 'youtube' ? 'youtube' : 'mp4';
-    var hasProduct = item.productUrl && item.productName;
-    
-    // YouTube 처리
-    var videoHTML = '';
-    if (type === 'youtube') {
-      var videoId = extractYouTubeId(videoUrl);
-      if (videoId) {
-        videoHTML = createYouTubeCard(item, videoId, posterUrl);
-      } else {
-        console.warn('ATELIER SHORTS: 잘못된 YouTube URL -', item.id);
-        videoHTML = createPlaceholderCard(posterUrl);
+    if (!wrapper) return;
+    wrapper.innerHTML = window.ATELIER_SHORTS_DATA.map(function(item, index) {
+      var type = item.type === 'youtube' ? 'youtube' : 'mp4';
+      var videoHtml = type === 'youtube' ? createYouTubeCard(item) : createMp4Card(item);
+      var productHtml = '';
+      if (item.productUrl && item.productName) {
+        productHtml = `
+          <a href="${item.productUrl}" class="atelier-shorts__product-link atelier-shorts__product-banner" aria-label="${item.productName} 상품 보기">
+            <div class="atelier-shorts__product-thumb">
+              <img src="${item.productThumbUrl || ''}" alt="${item.productName}" loading="lazy" />
+            </div>
+            <div class="atelier-shorts__product-info">
+              <p class="atelier-shorts__product-name">${item.productName}</p>
+              <p class="atelier-shorts__product-price">${item.price || ''}</p>
+            </div>
+            <svg class="atelier-shorts__product-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        `;
       }
-    } else {
-      // MP4 처리
-      if (videoUrl) {
-        videoHTML = createMP4Card(item, videoUrl, posterUrl);
-      } else {
-        console.warn('ATELIER SHORTS: 영상 URL이 없습니다 -', item.id);
-        videoHTML = createPlaceholderCard(posterUrl);
-      }
-    }
 
-    // 상품 링크 카드
-    var productCardHTML = '';
-    if (hasProduct) {
-      productCardHTML = `
-        <a href="${item.productUrl}" class="atelier-shorts__product-link" aria-label="${item.productName} 상품 보기">
-          <div class="atelier-shorts__product-thumb">
-            <img src="${item.productThumbUrl || ''}" alt="${item.productName}" loading="lazy" onerror="this.style.opacity='0.3'" />
+      return `
+        <div class="swiper-slide atelier-shorts__slide" data-short-index="${index}">
+          <div class="atelier-shorts__card" data-short-index="${index}" data-short-type="${type}">
+            ${videoHtml}
+            ${productHtml}
           </div>
-          <div class="atelier-shorts__product-info">
-            <p class="atelier-shorts__product-name">${item.productName}</p>
-            <p class="atelier-shorts__product-price">${item.price || ''}</p>
-          </div>
-          <svg class="atelier-shorts__product-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-      `;
-    }
-
-    return `
-      <div class="swiper-slide">
-        <div class="atelier-shorts__card" data-short-id="${item.id}" data-short-type="${type}">
-          ${videoHTML}
-          ${productCardHTML}
         </div>
-      </div>
-    `;
+      `;
+    }).join('');
   }
 
-  /**
-   * MP4 카드 생성
-   */
-  function createMP4Card(item, videoUrl, posterUrl) {
+  function createMp4Card(item) {
     return `
       <div class="atelier-shorts__video-wrapper">
-        <video 
-          class="atelier-shorts__video"
-          src="${videoUrl}"
-          poster="${posterUrl}"
-          muted
-          playsinline
-          preload="metadata"
-          aria-label="영상: ${item.productName || item.id}"
-        ></video>
-        
+        <video class="atelier-shorts__video" src="${item.videoUrl || ''}" poster="${item.posterUrl || ''}" muted playsinline preload="metadata"></video>
         <button class="atelier-shorts__play-btn" type="button" aria-label="영상 재생">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
             <circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.4)"/>
@@ -190,630 +84,265 @@
     `;
   }
 
-  /**
-   * YouTube 카드 생성
-   */
-  function createYouTubeCard(item, videoId, posterUrl) {
+  function getYoutubeId(url) {
+    if (!url) return '';
+    var shorts = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (shorts) return shorts[1];
+    var shortUrl = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+    if (shortUrl) return shortUrl[1];
+    var watch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    return watch ? watch[1] : '';
+  }
+
+  function createYouTubeCard(item) {
+    var videoId = getYoutubeId(item.videoUrl);
     return `
       <div class="atelier-shorts__video-wrapper atelier-shorts__youtube-wrapper">
-        <div class="atelier-shorts__youtube-poster" style="background-image: url('${posterUrl}')">
-          <img src="${posterUrl}" alt="${item.productName || 'YouTube Shorts'}" class="atelier-shorts__poster-img" />
+        <div class="atelier-shorts__youtube-poster" style="background-image:url('${item.posterUrl || ''}')">
+          <img src="${item.posterUrl || ''}" alt="${item.productName || ''}" class="atelier-shorts__poster-img" />
         </div>
-        
-        <button 
-          class="atelier-shorts__play-btn atelier-shorts__youtube-play" 
-          type="button" 
-          aria-label="YouTube Shorts 재생"
-          data-video-id="${videoId}"
-        >
+        <button class="atelier-shorts__play-btn atelier-shorts__youtube-play" type="button" data-video-id="${videoId}" aria-label="YouTube Shorts 재생">
           <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
             <circle cx="24" cy="24" r="24" fill="rgba(255,0,0,0.9)"/>
             <path d="M19 15L33 24L19 33V15Z" fill="white"/>
           </svg>
         </button>
-        
-        <div class="atelier-shorts__youtube-iframe-container" style="display: none;"></div>
+        <div class="atelier-shorts__youtube-iframe-container" style="display:none;"></div>
       </div>
     `;
   }
 
-  /**
-   * Placeholder 카드 생성 (에러 시)
-   */
-  function createPlaceholderCard(posterUrl) {
-    return `
-      <div class="atelier-shorts__video-wrapper atelier-shorts__placeholder">
-        ${posterUrl ? `<img src="${posterUrl}" alt="Placeholder" class="atelier-shorts__poster-img" />` : ''}
-        <div class="atelier-shorts__placeholder-icon">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-            <circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.2)"/>
-            <path d="M24 14V24M24 30V34" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Swiper 초기화
-   */
   function initSwiper() {
-    if (!window.Swiper) {
-      console.error('ATELIER SHORTS: Swiper 라이브러리가 없습니다.');
-      return;
-    }
-    
-    console.log('ATELIER SHORTS: Swiper 라이브러리 확인 완료');
-
-    var container = document.querySelector('.atelier-shorts__slider');
-    if (!container) {
-      console.error('ATELIER SHORTS: Swiper 컨테이너를 찾을 수 없습니다.');
-      return;
-    }
-
-    swiperInstance = new Swiper('.atelier-shorts__slider', {
+    if (!window.Swiper) return;
+    // Swiper 11 loop = 슬라이드 DOM 재배치 방식 (클론 없음)
+    // initialSlide로 시작 위치 설정 → slideToLoop 불필요
+    // findActiveCardByIndex는 data-swiper-slide-index 기준으로 검색해야 함
+    swiper = new Swiper('.atelier-shorts__slider', {
       slidesPerView: 1.2,
       centeredSlides: true,
-      slideToClickedSlide: true,
+      slideToClickedSlide: false,
+      initialSlide: START_INDEX,
       spaceBetween: 16,
-      loop: false,  // loop 끄기 - 직접 구현
-      initialSlide: 2,  // 3번째 슬라이드부터 시작
+      loop: true,
       speed: 400,
       grabCursor: true,
       allowTouchMove: true,
-
       navigation: {
         nextEl: '.atelier-shorts__nav-next',
         prevEl: '.atelier-shorts__nav-prev',
       },
-
       breakpoints: {
-        480: {
-          slidesPerView: 1.35,
-          spaceBetween: 16,
-        },
-        640: {
-          slidesPerView: 2.2,
-          spaceBetween: 20,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 24,
-        },
-        1440: {
-          slidesPerView: 4,
-          spaceBetween: 24,
-        },
+        480: { slidesPerView: 1.4, spaceBetween: 16 },
+        640: { slidesPerView: 2.2, spaceBetween: 20 },
+        1024: { slidesPerView: 3, spaceBetween: 24 },
+        1440: { slidesPerView: 4, spaceBetween: 24 },
       },
-
-      a11y: {
-        prevSlideMessage: '이전 영상',
-        nextSlideMessage: '다음 영상',
-      },
-
-      keyboard: {
-        enabled: true,
-        onlyInViewport: true,
-      },
-
       on: {
         init: function() {
-          console.log('ATELIER SHORTS: Swiper init - activeIndex:', this.activeIndex);
-          // 잠시 후에 정리하고 재생
-          setTimeout(function() {
-            pauseAllVideos();
-            closeAllYouTubeIframes();
-            playActiveSlide();
-            startAutoSlide();
-          }, 200);
+          var self = this;
+          // loopFix(): 초기 진입 시 순환 버퍼를 즉시 구성
+          // 이걸 호출해야 initialSlide 주변에 루프 슬라이드(7,1,2 등)가 배치됨
+          if (typeof self.loopFix === 'function') {
+            self.loopFix();
+          }
+          requestAnimationFrame(function() {
+            setActiveShort(self.realIndex, { autoplay: true, source: 'initial' });
+          });
         },
-        slideChange: function() {
-          console.log('ATELIER SHORTS: slideChange - activeIndex:', this.activeIndex);
-          // 모든 비디오 즉시 정지
-          pauseAllVideos();
-          closeAllYouTubeIframes();
-          clearActiveSlideState();
-          // 약간의 지연 후 새 슬라이드 재생
-          setTimeout(function() {
-            playActiveSlide();
-            startAutoSlide();
-          }, 100);
-        },
-        reachEnd: function() {
-          console.log('ATELIER SHORTS: 마지막 슬라이드 도달');
+        slideChangeTransitionEnd: function() {
+          setActiveShort(this.realIndex, { autoplay: true, source: 'transition' });
         },
       },
     });
-
-    console.log('ATELIER SHORTS: Swiper 초기화 완료');
   }
 
-  function initProgressPagination() {
-    progressFillEl = document.querySelector('.atelier-shorts__pagination-fill');
-    progressTextEl = document.querySelector('.atelier-shorts__pagination-text');
-    updatePaginationText();
+  function bindCardEvents() {
+    var slider = document.querySelector('.atelier-shorts__slider');
+    if (!slider) return;
+
+    slider.addEventListener('click', function(e) {
+      var card = e.target.closest('.atelier-shorts__card');
+      if (!card || !swiper) return;
+      var index = parseInt(card.dataset.shortIndex, 10);
+      if (Number.isNaN(index)) return;
+      swiper.slideToLoop(index);
+    });
+
+    slider.addEventListener('ended', function(e) {
+      if (e.target.tagName !== 'VIDEO' || !swiper) return;
+      if (window.__atelierShortsCurrentIndex !== swiper.realIndex) return;
+      swiper.slideNext();
+    }, true);
+
+    slider.querySelectorAll('.atelier-shorts__card').forEach(function(card) {
+      card.addEventListener('mouseenter', function() {
+        card.classList.add('is-hovered');
+        playCardMedia(card, false);
+      });
+
+      card.addEventListener('mouseleave', function() {
+        card.classList.remove('is-hovered');
+        pauseCardMedia(card);
+      });
+
+      card.addEventListener('focusin', function(e) {
+        if (e.target.closest('.atelier-shorts__product-link')) {
+          card.classList.add('is-hovered');
+        }
+      });
+
+      card.addEventListener('focusout', function(e) {
+        if (!card.contains(e.relatedTarget)) {
+          card.classList.remove('is-hovered');
+        }
+      });
+    });
   }
 
-  function updatePaginationText(current) {
-    if (!progressTextEl) return;
-    var total = window.ATELIER_SHORTS_DATA.length;
-    var index = current;
-    if (index == null && swiperInstance) {
-      index = swiperInstance.activeIndex + 1;
-    }
-    progressTextEl.textContent = index + ' / ' + total;
-  }
-
-  function clearAutoSlide() {
+  function clearProgressTimer() {
     if (autoSlideTimer) {
       clearTimeout(autoSlideTimer);
       autoSlideTimer = null;
     }
   }
 
-  function pauseProgressFill() {
-    if (progressFillEl) {
-      progressFillEl.classList.add('atelier-shorts__pagination-fill--paused');
-    }
-  }
-
-  function resetProgressFill() {
+  function resetProgressBar() {
     if (!progressFillEl) return;
     progressFillEl.classList.remove('atelier-shorts__pagination-fill--active');
     progressFillEl.classList.remove('atelier-shorts__pagination-fill--paused');
     void progressFillEl.offsetWidth;
-    progressFillEl.classList.add('atelier-shorts__pagination-fill--active');
   }
 
-  function startAutoSlide() {
-    clearAutoSlide();
-    if (!swiperInstance) return;
-
-    updatePaginationText();
-
-    if (prefersReducedMotion) return;
-
-    resetProgressFill();
-
+  function startProgress(index) {
+    clearProgressTimer();
+    resetProgressBar();
+    if (progressFillEl) progressFillEl.classList.add('atelier-shorts__pagination-fill--active');
     autoSlideTimer = setTimeout(function() {
-      goToNextSlide();
+      if (!swiper) return;
+      swiper.slideNext();
     }, AUTO_SLIDE_MS);
   }
 
-  /**
-   * 다음 슬라이드로 전환 (수동 루프 구현)
-   */
-  function goToNextSlide() {
-    if (!swiperInstance) return;
-    
-    console.log('ATELIER SHORTS: goToNextSlide - current:', swiperInstance.activeIndex, 'isEnd:', swiperInstance.isEnd);
-    
-    // 마지막 슬라이드면 첫 번째로
-    if (swiperInstance.isEnd) {
-      console.log('ATELIER SHORTS: 첫 번째 슬라이드로 이동');
-      swiperInstance.slideTo(0);
-    } else {
-      swiperInstance.slideNext();
-    }
-  }
-
-  /**
-   * 영상 컨트롤 초기화 (이벤트 위임 사용)
-   */
-  function initVideoControls() {
-    var container = document.querySelector('.atelier-shorts__slider');
-    if (!container) return;
-
-    // 재생 버튼 클릭 (이벤트 위임)
-    container.addEventListener('click', function(e) {
-      var playBtn = e.target.closest('.atelier-shorts__play-btn');
-      if (!playBtn) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      var card = playBtn.closest('.atelier-shorts__card');
-      if (!card) return;
-
-      if (!isActiveSlide(card)) {
-        slideToCard(card);
-        return;
-      }
-
-      var type = card.getAttribute('data-short-type');
-
-      if (type === 'youtube') {
-        var videoId = playBtn.getAttribute('data-video-id');
-        if (videoId) {
-          pauseAllVideos();
-          closeAllYouTubeIframes();
-          createYouTubeIframe(card, videoId, false);
-        }
-      } else {
-        var video = card.querySelector('.atelier-shorts__video');
-        if (video) {
-          if (video.paused) {
-            playVideo(video, card);
-          } else {
-            pauseVideo(video);
-          }
-        }
-      }
-    });
-
-    // 비디오 ended 이벤트 (이벤트 위임)
-    container.addEventListener('ended', function(e) {
-      if (e.target.tagName === 'VIDEO') {
-        var card = e.target.closest('.atelier-shorts__card');
-        console.log('ATELIER SHORTS: 영상 종료, 다음 슬라이드로 전환');
-        if (card && isActiveSlide(card)) {
-          goToNextSlide();
-        }
-      }
-    }, true); // capture phase에서 처리
-
-    // 비디오 에러 이벤트 (이벤트 위임)
-    container.addEventListener('error', function(e) {
-      if (e.target.tagName === 'VIDEO') {
-        var card = e.target.closest('.atelier-shorts__card');
-        console.error('ATELIER SHORTS: 영상 로드 실패 -', e.target.src);
-        if (card) {
-          card.classList.add('atelier-shorts__card--error');
-        }
-      }
-    }, true); // capture phase에서 처리
-
-    // YouTube 닫기 버튼 (이벤트 위임)
-    container.addEventListener('click', function(e) {
-      var closeBtn = e.target.closest('.atelier-shorts__youtube-close');
-      if (!closeBtn) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      var card = closeBtn.closest('.atelier-shorts__card');
-      if (card) {
-        closeYouTubeIframe(card);
-        startAutoSlide();
-      }
-    });
-
-    // 상품 링크 포커스 처리 (이벤트 위임)
-    container.addEventListener('focus', function(e) {
-      if (e.target.classList.contains('atelier-shorts__product-link')) {
-        var card = e.target.closest('.atelier-shorts__card');
-        if (card) {
-          card.classList.add('atelier-shorts__card--focused');
-        }
-      }
-    }, true);
-
-    container.addEventListener('blur', function(e) {
-      if (e.target.classList.contains('atelier-shorts__product-link')) {
-        var card = e.target.closest('.atelier-shorts__card');
-        if (card) {
-          card.classList.remove('atelier-shorts__card--focused');
-        }
-      }
-    }, true);
-  }
-
-  function isActiveSlide(card) {
-    if (!swiperInstance) return false;
-    
-    var slide = card.closest('.swiper-slide');
-    if (!slide) return false;
-    
-    return slide.classList.contains('swiper-slide-active');
-  }
-
-  function slideToCard(card) {
-    if (!swiperInstance) return;
-    var slide = card.closest('.swiper-slide');
-    if (!slide) return;
-    
-    var index = Array.prototype.indexOf.call(slide.parentNode.children, slide);
-    console.log('ATELIER SHORTS: slideToCard - index:', index);
-    if (index >= 0) {
-      swiperInstance.slideTo(index);
-    }
-  }
-
-  function clearActiveSlideState() {
-    document.querySelectorAll('.atelier-shorts__card--active').forEach(function(card) {
-      card.classList.remove('atelier-shorts__card--active');
-    });
-  }
-
-  function playActiveSlide() {
-    if (prefersReducedMotion) return;
-    if (!swiperInstance) return;
-
-    console.log('ATELIER SHORTS: playActiveSlide 호출 - activeIndex:', swiperInstance.activeIndex);
-
-    var activeSlide = document.querySelector('.atelier-shorts__slider .swiper-slide-active');
-    if (!activeSlide) {
-      console.warn('ATELIER SHORTS: 활성 슬라이드를 찾을 수 없습니다');
-      return;
-    }
-
-    var card = activeSlide.querySelector('.atelier-shorts__card');
-    if (!card) {
-      console.warn('ATELIER SHORTS: 활성 슬라이드에 카드가 없습니다');
-      return;
-    }
-
-    var shortId = card.getAttribute('data-short-id');
-    var type = card.getAttribute('data-short-type');
-    console.log('ATELIER SHORTS: 재생 시작 - shortId:', shortId, 'type:', type, 'activeIndex:', swiperInstance.activeIndex);
-
-    card.classList.add('atelier-shorts__card--active');
-
-    if (type === 'youtube') {
+  function closeAllYoutubeIframes() {
+    document.querySelectorAll('.atelier-shorts__card').forEach(function(card) {
+      var container = card.querySelector('.atelier-shorts__youtube-iframe-container');
+      var poster = card.querySelector('.atelier-shorts__youtube-poster');
       var playBtn = card.querySelector('.atelier-shorts__youtube-play');
-      var videoId = playBtn && playBtn.getAttribute('data-video-id');
-      if (videoId) {
-        console.log('ATELIER SHORTS: YouTube 재생 - videoId:', videoId);
-        createYouTubeIframe(card, videoId, true);
+      if (container) {
+        container.innerHTML = '';
+        container.style.display = 'none';
       }
+      if (poster) poster.style.display = 'block';
+      if (playBtn) playBtn.style.display = 'flex';
+    });
+  }
+
+  function pauseAllVideos() {
+    document.querySelectorAll('.atelier-shorts__video').forEach(function(video) {
+      video.pause();
+      video.currentTime = 0;
+    });
+  }
+
+  function clearCardState() {
+    document.querySelectorAll('.atelier-shorts__card').forEach(function(card) {
+      card.classList.remove('atelier-shorts__card--active', 'atelier-shorts__card--playing', 'is-active', 'is-playing');
+    });
+  }
+
+  function findActiveCardByIndex(index) {
+    // Swiper 11 loop = DOM 재배치 방식 (swiper-slide-duplicate 없음)
+    // data-swiper-slide-index 속성으로 논리 인덱스 조회 (DOM 순서와 무관)
+    var slide = document.querySelector(
+      '.atelier-shorts__slider .swiper-slide[data-swiper-slide-index="' + index + '"]'
+    );
+    if (slide) {
+      var card = slide.querySelector('.atelier-shorts__card');
+      if (card) return card;
+    }
+    // 폴백: 카드의 data-short-index로 직접 검색
+    return document.querySelector(
+      '.atelier-shorts__card[data-short-index="' + index + '"]'
+    );
+  }
+
+  function setActiveShort(index, opts) {
+    if (!swiper) return;
+    if (index < 0 || index >= window.ATELIER_SHORTS_DATA.length) return;
+
+    clearProgressTimer();
+    pauseAllVideos();
+    closeAllYoutubeIframes();
+    clearCardState();
+
+    var card = findActiveCardByIndex(index);
+    if (!card) return;
+
+    card.classList.add('atelier-shorts__card--active', 'atelier-shorts__card--playing', 'is-active', 'is-playing');
+    window.__atelierShortsCurrentIndex = index;
+    if (progressTextEl) {
+      progressTextEl.textContent = (index + 1) + ' / ' + window.ATELIER_SHORTS_DATA.length;
+    }
+
+    playCardMedia(card, true);
+    startProgress(index);
+    logState(index, opts && opts.source ? opts.source : 'unknown');
+  }
+
+  function playCardMedia(card, muted) {
+    var type = card.getAttribute('data-short-type');
+    if (type === 'youtube') {
+      var videoId = card.querySelector('.atelier-shorts__youtube-play')?.getAttribute('data-video-id');
+      if (!videoId) return;
+      var container = card.querySelector('.atelier-shorts__youtube-iframe-container');
+      var poster = card.querySelector('.atelier-shorts__youtube-poster');
+      var playBtn = card.querySelector('.atelier-shorts__youtube-play');
+      var muteParam = muted ? '1' : '0';
+      var src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&mute=' + muteParam + '&playsinline=1&controls=1&enablejsapi=1&rel=0';
+      if (container) {
+        container.innerHTML = '<iframe src="' + src + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="atelier-shorts__youtube-iframe"></iframe>';
+        container.style.display = 'block';
+      }
+      if (poster) poster.style.display = 'none';
+      if (playBtn) playBtn.style.display = 'none';
       return;
     }
 
     var video = card.querySelector('.atelier-shorts__video');
+    if (!video) return;
+    video.currentTime = 0;
+    video.muted = !!muted;
+    video.play().catch(function() {});
+  }
+
+  function pauseCardMedia(card) {
+    if (!card) return;
+    var video = card.querySelector('.atelier-shorts__video');
     if (video) {
-      console.log('ATELIER SHORTS: MP4 재생 시작 - src:', video.src);
-      playVideo(video, card);
-    } else {
-      console.warn('ATELIER SHORTS: 비디오를 찾을 수 없습니다');
+      video.pause();
+      video.currentTime = 0;
     }
-  }
-
-  /**
-   * YouTube iframe 생성 및 재생
-   */
-  function createYouTubeIframe(card, videoId, muted) {
-    var container = card.querySelector('.atelier-shorts__youtube-iframe-container');
-    if (!container) return;
-
-    var existingIframe = container.querySelector('iframe');
-    if (existingIframe && container.style.display !== 'none') {
-      return;
-    }
-
-    // 비디오 재생 중에는 자동 슬라이드 타이머 중지
-    clearAutoSlide();
-    pauseProgressFill();
-
-    var poster = card.querySelector('.atelier-shorts__youtube-poster');
-    var playBtn = card.querySelector('.atelier-shorts__youtube-play');
-    var muteParam = muted ? '1' : '0';
-    
-    // 고유한 iframe ID 생성 (loop 모드에서 중복 방지)
-    var uniqueId = 'youtube-player-' + videoId + '-' + Date.now();
-
-    // YouTube IFrame API를 사용하여 비디오 종료 감지 (enablejsapi=1 추가)
-    var iframeSrc = 'https://www.youtube.com/embed/' + videoId +
-                    '?autoplay=1&mute=' + muteParam +
-                    '&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1';
-
-    // iframe HTML (loop 제거 - 비디오 종료 감지를 위해)
-    container.innerHTML = `
-      <iframe
-        src="${iframeSrc}"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        class="atelier-shorts__youtube-iframe"
-        id="${uniqueId}"
-      ></iframe>
-      <button class="atelier-shorts__youtube-close" type="button" aria-label="닫기">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M6 6L18 18M18 6L6 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    `;
-
-    // 표시
-    container.style.display = 'block';
-    if (poster) poster.style.display = 'none';
-    if (playBtn) playBtn.style.display = 'none';
-    card.classList.add('atelier-shorts__card--playing');
-
-    // YouTube IFrame API를 사용하여 비디오 종료 감지
-    initYouTubePlayer(uniqueId, card);
-  }
-
-  /**
-   * YouTube IFrame API를 사용하여 비디오 종료 감지
-   */
-  function initYouTubePlayer(iframeId, card) {
-    // YouTube IFrame API가 로드되어 있는지 확인
-    if (!window.YT || !window.YT.Player) {
-      // API가 없으면 로드
-      if (!window.youtubeAPILoading) {
-        window.youtubeAPILoading = true;
-        var tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      }
-      
-      // API 로드 완료 후 플레이어 초기화
-      window.onYouTubeIframeAPIReady = function() {
-        createYouTubePlayerInstance(iframeId, card);
-      };
-      return;
-    }
-    
-    createYouTubePlayerInstance(iframeId, card);
-  }
-
-  /**
-   * YouTube Player 인스턴스 생성
-   */
-  function createYouTubePlayerInstance(iframeId, card) {
-    try {
-      var player = new YT.Player(iframeId, {
-        events: {
-          'onStateChange': function(event) {
-            // 비디오 종료 시 (0 = YT.PlayerState.ENDED)
-            if (event.data === 0) {
-              console.log('ATELIER SHORTS: YouTube 비디오 종료, 다음 슬라이드로 전환');
-              if (isActiveSlide(card)) {
-                goToNextSlide();
-              }
-            }
-          }
-        }
-      });
-    } catch (e) {
-      console.warn('ATELIER SHORTS: YouTube Player 생성 실패', e);
-    }
-  }
-
-  /**
-   * YouTube iframe 닫기
-   */
-  function closeYouTubeIframe(card) {
     var container = card.querySelector('.atelier-shorts__youtube-iframe-container');
     var poster = card.querySelector('.atelier-shorts__youtube-poster');
     var playBtn = card.querySelector('.atelier-shorts__youtube-play');
-
     if (container) {
       container.innerHTML = '';
       container.style.display = 'none';
     }
     if (poster) poster.style.display = 'block';
     if (playBtn) playBtn.style.display = 'flex';
-    card.classList.remove('atelier-shorts__card--playing');
+    card.classList.remove('atelier-shorts__card--playing', 'is-playing');
   }
 
-  /**
-   * 모든 YouTube iframe 닫기
-   */
-  function closeAllYouTubeIframes() {
-    var containers = document.querySelectorAll('.atelier-shorts__youtube-iframe-container');
-    containers.forEach(function(container) {
-      var card = container.closest('.atelier-shorts__card');
-      if (card) {
-        closeYouTubeIframe(card);
-      }
+  function logState(index, source) {
+    if (!swiper) return;
+    console.log('[SHORTS STATE]', {
+      source: source || 'event',
+      activeIndex: swiper.activeIndex,
+      requestedIndex: index,
+      playingIndex: window.__atelierShortsCurrentIndex,
+      activeCard: document.querySelector('.atelier-shorts__card.is-active')?.dataset.shortIndex,
+      playingVideo: document.querySelector('.atelier-shorts__card.is-playing')?.dataset.shortIndex
     });
   }
-
-  /**
-   * 영상 재생
-   */
-  function playVideo(video, card) {
-    console.log('ATELIER SHORTS: playVideo 호출 - src:', video.src);
-    
-    // 모든 다른 비디오 강제 정지
-    var allVideos = document.querySelectorAll('.atelier-shorts__video');
-    allVideos.forEach(function(v) {
-      if (v !== video && !v.paused) {
-        console.log('ATELIER SHORTS: 다른 비디오 정지:', v.src);
-        v.pause();
-        v.currentTime = 0;
-      }
-    });
-
-    // 비디오 재생 중에는 자동 슬라이드 타이머 중지
-    clearAutoSlide();
-    pauseProgressFill();
-
-    // 비디오를 처음부터 재생
-    video.currentTime = 0;
-    var playPromise = video.play();
-
-    if (playPromise !== undefined) {
-      playPromise
-        .then(function() {
-          console.log('ATELIER SHORTS: 비디오 재생 성공 - src:', video.src);
-          currentPlayingVideo = video;
-          card.classList.add('atelier-shorts__card--playing');
-          
-          var playBtn = card.querySelector('.atelier-shorts__play-btn');
-          if (playBtn) {
-            playBtn.setAttribute('aria-label', '영상 정지');
-          }
-        })
-        .catch(function(error) {
-          console.warn('ATELIER SHORTS: 영상 재생 실패', error);
-          // 재생 실패 시 타이머 재시작
-          startAutoSlide();
-        });
-    }
-  }
-
-  /**
-   * 영상 정지
-   */
-  function pauseVideo(video) {
-    if (!video) return;
-
-    video.pause();
-    video.currentTime = 0;
-
-    var card = video.closest('.atelier-shorts__card');
-    if (card) {
-      card.classList.remove('atelier-shorts__card--playing');
-      
-      var playBtn = card.querySelector('.atelier-shorts__play-btn');
-      if (playBtn) {
-        playBtn.setAttribute('aria-label', '영상 재생');
-      }
-    }
-
-    if (currentPlayingVideo === video) {
-      currentPlayingVideo = null;
-    }
-  }
-
-  /**
-   * 모든 영상 정지 (강제)
-   */
-  function pauseAllVideos() {
-    console.log('ATELIER SHORTS: pauseAllVideos 호출');
-    
-    var videos = document.querySelectorAll('.atelier-shorts__video');
-    console.log('ATELIER SHORTS: 정지할 비디오 수:', videos.length);
-    
-    videos.forEach(function(video) {
-      if (!video.paused) {
-        console.log('ATELIER SHORTS: 비디오 정지:', video.src);
-        video.pause();
-        video.currentTime = 0;
-        
-        var card = video.closest('.atelier-shorts__card');
-        if (card) {
-          card.classList.remove('atelier-shorts__card--playing');
-          card.classList.remove('atelier-shorts__card--active');
-        }
-      }
-    });
-    
-    // currentPlayingVideo 초기화
-    currentPlayingVideo = null;
-  }
-
-  // 페이지 이탈 시 모든 영상 정지
-  window.addEventListener('beforeunload', function() {
-    clearAutoSlide();
-    pauseAllVideos();
-    closeAllYouTubeIframes();
-  });
-
-  // Visibility API: 탭 전환 시 영상 정지
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      clearAutoSlide();
-      pauseProgressFill();
-      pauseAllVideos();
-      closeAllYouTubeIframes();
-      return;
-    }
-
-    playActiveSlide();
-    startAutoSlide();
-  });
 })();

@@ -24,7 +24,7 @@
     <!--@css(/layout/basic/css/ec-base-layer.css)-->
     <!--@css(/css/module/order/basketPackage.css)-->
 
-    <p class="orderStep"><img src="//img.echosting.cafe24.com/skin/base_ko_KR/order/img_order_step1.gif" alt="01 장바구니" /></p>
+    <p class="orderStep" style="display:none;"><img src="//img.echosting.cafe24.com/skin/base_ko_KR/order/img_order_step1.gif" alt="01 장바구니" /></p>
 
     <div module="Order_DcInfo" class="ec-base-box typeMember {$dc_info_display|display}">
         <!--@css(/css/module/order/dcInfo.css)-->
@@ -567,6 +567,7 @@
     <div module="Order_Weight" class="{$total_weight_display|display}">
         <div class="totalWeight">전체 상품중량 : <span>{$total_weight}kg</span></div>
     </div>
+    
     <div module="Order_SelectOrder" class="ec-base-button">
         <span class="gLeft">
             <strong class="text">선택상품을</strong>
@@ -773,10 +774,10 @@
     </div>
 
     <div module="Order_TotalOrder" class="ec-base-button justify">
-        <a href="#none" onclick="{$action_order_all}" class="btnSubmitFix sizeM {$buy_display|display}" link-order="/order/orderform.html{$param}" link-login="/member/login.html">전체상품주문</a>
-        <a href="#none" onclick="{$action_order_select}" class="btnEmFix sizeM" link-order="/order/orderform.html{$param}" link-login="/member/login.html">선택상품주문</a>
+        <a href="#none" onclick="{$action_order_all}" class="btnSubmitFix btn btn-primary sizeM {$buy_display|display}" link-order="/order/orderform.html{$param}" link-login="/member/login.html">전체상품주문</a>
+        <a href="#none" onclick="{$action_order_select}" class="btnEmFix btn btn-outline sizeM" link-order="/order/orderform.html{$param}" link-login="/member/login.html">선택상품주문</a>
         <span class="gRight">
-            <a href="/" class="btnNormalFix sizeM">쇼핑계속하기</a>
+            <a href="/" class="btnNormalFix btn btn-secondary sizeM">쇼핑계속하기</a>
         </span>
         <!-- 네이버 체크아웃 구매 버튼  -->
         <div id="{$naver_checkout_button_id}"></div>

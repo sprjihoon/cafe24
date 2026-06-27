@@ -1,5 +1,6 @@
 
 <!--@layout(/layout/basic/layout.html)-->
+<!--@js(/product/product-detail.js)-->
 <!--@js(/layout/basic/js/atelier-products.js)-->
 <!--@js(/layout/basic/js/product-copy.js)-->
 <!--
@@ -20,24 +21,10 @@
 
 <div module="product_detail">
     <!--@css(/css/module/product/detail.css)-->
+    <!--@css(/product/product-detail.css)-->
     <!--
 		$coupon_download_page = /coupon/coupon_productdetail.html
     -->
-    <div class="headingArea">
-        <span id="lb-product-badge" class="lb-product-badge" hidden></span>
-        <h2><span class="blind">상품코드</span>[{$product_code}] {$name}</h2>
-        <p id="lb-product-summary" class="lb-product-summary" hidden></p>
-        <div id="lb-product-meta" class="lb-product-meta" hidden></div>
-        <span class="delivery {$delvtype_display|display}">(해외배송 가능상품)</span>
-        <span class="icon">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} <img src="//img.echosting.cafe24.com/design/skin/admin/ko_KR/ico_rental.png" alt="" class="{$rental_information_display|display}"> {$regular_delivery_icon} {$cultural_tax_icon}</span>
-        <!-- 공급사 바로가기버튼 영역 -->
-        <div class="supply {$supply_link_display|display}">
-            <span>{$supply_top_logo}</span>
-            <a href="#none" onclick="{$supply_go_action}"><img src="{$supply_go_img}" alt="공급사 바로가기" /></a>
-        </div>
-        <!-- //공급사 바로가기버튼 영역 -->
-    </div>
-
     <div class="detailArea">
         <div class="imgArea lb-product-gallery" module="product_image">
             <!--@js(/js/module/product/product_image.js)-->
@@ -111,6 +98,20 @@
         </div>
 
         <div class="infoArea">
+            <div class="headingArea">
+                <span id="lb-product-badge" class="lb-product-badge" hidden></span>
+                <h2 class="lb-product-title"><span class="blind">상품코드</span>[{$product_code}] {$name}</h2>
+                <p id="lb-product-summary" class="lb-product-summary" hidden></p>
+                <div id="lb-product-meta" class="lb-product-meta" hidden></div>
+                <span class="delivery {$delvtype_display|display}">(해외배송 가능상품)</span>
+                <span class="icon">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} <img src="//img.echosting.cafe24.com/design/skin/admin/ko_KR/ico_rental.png" alt="" class="{$rental_information_display|display}"> {$regular_delivery_icon} {$cultural_tax_icon}</span>
+                <!-- 공급사 바로가기버튼 영역 -->
+                <div class="supply {$supply_link_display|display}">
+                    <span>{$supply_top_logo}</span>
+                    <a href="#none" onclick="{$supply_go_action}"><img src="{$supply_go_img}" alt="공급사 바로가기" /></a>
+                </div>
+                <!-- //공급사 바로가기버튼 영역 -->
+            </div>
             <div module="product_detaildesign">
                 <!--
                     출력 갯수 지정 변수, 없으면 설정된 전체가 나옵니다.
@@ -613,15 +614,22 @@
 
 
             <div module="product_action">
-                <div class="ec-base-button gColumn">
-                    <a href="#none" class="btnSubmit sizeL {$buy_display|display}" onclick="{$action_buy}">
+                <div class="ec-base-button gColumn lb-product-buy">
+                    <a href="#none" class="btnSubmit btn lb-buy-primary {$buy_display|display}" onclick="{$action_buy}">
                         <span id="{$btn_buy_id}">바로 구매하기</span>
                         <span id="{$btn_reserve_id}" class="{$btn_reserve_class|display}">예약주문</span>
                         <span id="{$btn_regular_delivery_id}" class="{$btn_regular_delivery|display}">정기배송 신청하기</span>
                     </a>
-                    <a href="#none" class="btnNormal sizeL {$basket_display|display}" onclick="{$action_basket}">장바구니 담기</a>
-                    <span class="btnEm sizeL gFlex2 {$soldout_display|display}">SOLD OUT</span>
-                    <a href="#none" onclick="{$action_wishlist}" class="btnNormal sizeL {$wishlist_display|display}">관심상품등록</a>
+                    <span class="btnEm lb-buy-soldout gFlex2 {$soldout_display|display}">SOLD OUT</span>
+                    <div class="lb-buy-secondary">
+                        <a href="#none" class="btnNormal btn lb-buy-basket {$basket_display|display}" onclick="{$action_basket}">장바구니 담기</a>
+                        <a href="#none" onclick="{$action_wishlist}" class="btnNormal btn lb-buy-wish {$wishlist_display|display}" aria-label="관심상품등록">
+                            <span class="lb-buy-wish-label">관심상품등록</span>
+                            <svg class="lb-buy-wish-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+                                <path d="M12 20.25l-.72-.65C5.4 14.63 2 11.85 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.35-3.4 6.13-9.28 11.1L12 20.25z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 네이버 체크아웃 구매 버튼 -->

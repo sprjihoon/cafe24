@@ -62,6 +62,30 @@ npm run watch
 
 ---
 
+## 개발/배포 현황 (2026-06-26)
+
+- 숏츠(`atelier-shorts.js`) 초기 진입 3번 자동재생 기준(`START_INDEX = 2`) 반영
+- 숏츠 카드 상품 링크 배너 노출 조건 보완(hover/focus/active/playing)
+- FTP 업로드 정상 동작 확인
+- 운영 페이지는 카페24 최적화 번들(`optimizer_user.php`) 경유 로드 가능성이 있으므로, **업로드 직후 즉시 반영되지 않을 수 있음**
+
+### 운영 반영 체크리스트
+
+1. 수정 파일 업로드 (`ftp_upload`)
+2. 운영 경로 다중 반영 필요 시 아래 경로 모두 업로드
+   - `/sde_design/base/layout/basic/js/atelier-shorts.js`
+   - `/sde_design/base/layout/basic/css/layout.css`
+   - `/www/skin/layout/basic/js/atelier-shorts.js`
+   - `/www/skin/layout/basic/css/layout.css`
+   - `/ecudemo394315/www/skin/layout/basic/js/atelier-shorts.js`
+   - `/ecudemo394315/www/skin/layout/basic/css/layout.css`
+   - `/ecudemo394315/layout/basic/js/atelier-shorts.js`
+   - `/ecudemo394315/layout/basic/css/layout.css`
+3. 브라우저 강력 새로고침(`Ctrl+F5`)으로 캐시 제거
+4. 여전히 미반영이면 카페24 디자인 관리자에서 사용 스킨/캐시 상태 확인
+
+---
+
 ## AI가 사용할 수 있는 도구 목록
 
 | 도구 | 설명 |

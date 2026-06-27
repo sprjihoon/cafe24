@@ -1,70 +1,87 @@
 /**
- * ATELIER SHORTS 영상 데이터
- * 이 파일에서 영상과 상품 정보를 관리합니다.
- * 
- * 데이터 형식:
- * - id: 고유 식별자
- * - video: 영상 파일 경로 (MP4)
- * - poster: 썸네일 이미지 경로
- * - productUrl: 상품상세 페이지 URL
- * - productThumb: 상품 썸네일 이미지
- * - productName: 상품명
- * - price: 가격 (한글 포함 가능)
+ * ============================================================
+ * ATELIER SHORTS 영상 카드 데이터 (URL 입력형)
+ * ============================================================
+ *
+ * id             : 고유 식별자 (영문+숫자, 중복 불가)
+ * type           : "mp4" 또는 "youtube"
+ * videoUrl       : 영상 URL (HTTPS만 허용)
+ * posterUrl      : 썸네일 이미지 URL (YouTube: img.youtube.com/vi/VIDEO_ID/hqdefault.jpg)
+ * productUrl     : 상품 링크 URL (선택)
+ * productThumbUrl: 상품 썸네일 이미지 URL
+ * productName    : 상품명
+ * price          : 가격
  */
 
 window.ATELIER_SHORTS_DATA = [
   {
     id: "shorts-01",
-    video: "/web/upload/atelier-shorts/shorts-01.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-01.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/1sZ7SjKHNrU",
+    posterUrl: "https://img.youtube.com/vi/1sZ7SjKHNrU/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=1",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
     productName: "Marlow Wool Jacket",
     price: "159,000원"
   },
   {
     id: "shorts-02",
-    video: "/web/upload/atelier-shorts/shorts-02.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-02.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/7YYfrBBWIRA",
+    posterUrl: "https://img.youtube.com/vi/7YYfrBBWIRA/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=2",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
-    productName: "Essential Turtleneck Knit",
-    price: "89,000원"
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productName: "Lena Fine Knit",
+    price: "69,000원"
   },
   {
     id: "shorts-03",
-    video: "/web/upload/atelier-shorts/shorts-03.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-03.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/Ipy9mpmJiPo",
+    posterUrl: "https://img.youtube.com/vi/Ipy9mpmJiPo/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=3",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
     productName: "Cashmere Blend Coat",
     price: "298,000원"
   },
   {
     id: "shorts-04",
-    video: "/web/upload/atelier-shorts/shorts-04.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-04.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/Y6F9TrQk2kM",
+    posterUrl: "https://img.youtube.com/vi/Y6F9TrQk2kM/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=4",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
     productName: "Wool Blend Midi Skirt",
     price: "128,000원"
   },
   {
     id: "shorts-05",
-    video: "/web/upload/atelier-shorts/shorts-05.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-05.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/yYAMhXMoKSU",
+    posterUrl: "https://img.youtube.com/vi/yYAMhXMoKSU/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=5",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
     productName: "Minimal Leather Bag",
     price: "189,000원"
   },
   {
     id: "shorts-06",
-    video: "/web/upload/atelier-shorts/shorts-06.mp4",
-    poster: "/web/upload/atelier-shorts/shorts-06.jpg",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/UoncG2HI6m4",
+    posterUrl: "https://img.youtube.com/vi/UoncG2HI6m4/hqdefault.jpg",
     productUrl: "/product/detail.html?product_no=6",
-    productThumb: "/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
     productName: "Classic Trench Coat",
     price: "268,000원"
+  },
+  {
+    id: "shorts-07",
+    type: "youtube",
+    videoUrl: "https://www.youtube.com/shorts/qsZ_OoGjhBs",
+    posterUrl: "https://img.youtube.com/vi/qsZ_OoGjhBs/hqdefault.jpg",
+    productUrl: "/product/detail.html?product_no=7",
+    productThumbUrl: "https://ecudemo394315.cafe24.com/web/product/medium/202606/62e597cbcef3838a51c935b7dc07a096.png",
+    productName: "Essential Silk Blouse",
+    price: "98,000원"
   }
 ];

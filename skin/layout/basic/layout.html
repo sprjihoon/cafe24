@@ -14,7 +14,7 @@
     <title>기본 레이아웃</title>
     <!--@css(/layout/basic/css/common.css)--><!-- 해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요. -->
     <!--@css(/layout/basic/css/layout.css)-->
-    <!--@css(/layout/basic/css/atelier-nav.css)--><!-- ATELIER 단순 네비게이션 스타일 -->
+    <!--@css(/layout/basic/css/_new-navigation.css)--><!-- ATELIER 새 네비게이션 스타일 (v2) -->
     <!--@css(/layout/basic/css/ec-base-ui.css)-->
     <!--@css(/layout/basic/css/ec-base-tooltip.css)-->
     <!--@css(/layout/basic/css/ec-base-help.css)-->
@@ -32,74 +32,229 @@
     <!-- Swiper.js CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     
-    <!-- ATELIER 네비게이션 초기화 (최우선) -->
+    <!-- ATELIER 네비게이션 초기화 -->
     <script>
       (function(){
-        var oldNavSelectors = '#lb-nav,nav#lb-nav,#lb-fullmenu,.lb-fullmenu,.lb-fullmenu-backdrop,.lb-fullmenu-panel,.lb-hamburger,.lb-dropdown-menu';
+        // 구 드롭다운 메뉴만 제거 (nav 자체는 유지)
+        var dropdownSelectors = '.lb-dropdown-menu,.lb-dropdown-inner,.lb-dropdown-links,.xans-layout-category';
         
-        // 강제 제거 함수
-        function forceRemove(){
-          document.querySelectorAll(oldNavSelectors).forEach(function(el){
+        function removeDropdowns(){
+          document.querySelectorAll(dropdownSelectors).forEach(function(el){
             if(el&&el.parentNode){
               el.parentNode.removeChild(el);
-              console.log('Removed old nav element:', el.id || el.className);
             }
           });
         }
         
-        // 즉시 실행
-        forceRemove();
-        
-        // DOM 로드 후
+        // 페이지 로드 시 실행
         if(document.readyState==='loading'){
-          document.addEventListener('DOMContentLoaded',forceRemove);
-        }
-        
-        // 500ms 후
-        setTimeout(forceRemove,500);
-        
-        // 1초 후
-        setTimeout(forceRemove,1000);
-        
-        // 2초 후
-        setTimeout(forceRemove,2000);
-        
-        // MutationObserver로 동적 추가 감시
-        if(typeof MutationObserver!=='undefined'){
-          var observer=new MutationObserver(function(mutations){
-            mutations.forEach(function(mutation){
-              mutation.addedNodes.forEach(function(node){
-                if(node.nodeType===1){
-                  // 추가된 노드가 구 nav인지 확인
-                  if(node.id==='lb-nav'||node.id==='lb-fullmenu'||node.classList.contains('lb-hamburger')){
-                    console.log('Detected dynamic injection, removing:',node.id||node.className);
-                    if(node.parentNode){node.parentNode.removeChild(node);}
-                  }
-                  // 자식 중에 구 nav가 있는지 확인
-                  node.querySelectorAll&&node.querySelectorAll(oldNavSelectors).forEach(function(el){
-                    if(el.parentNode){el.parentNode.removeChild(el);}
-                  });
-                }
-              });
-            });
-          });
-          
-          // body 감시 시작
-          var startObserver=function(){
-            if(document.body){
-              observer.observe(document.body,{childList:true,subtree:true});
-              console.log('MutationObserver started for old nav removal');
-            }else{
-              setTimeout(startObserver,100);
-            }
-          };
-          startObserver();
+          document.addEventListener('DOMContentLoaded',removeDropdowns);
+        } else {
+          removeDropdowns();
         }
       })();
     </script>
     
     <!--@js(/layout/basic/js/basic.js)-->
-    <!--@js(/layout/basic/js/atelier-nav.js)-->
+    
+    <!-- ATELIER 새 네비게이션 (인라인) -->
+    <script>
+    /**
+     * ATELIER N - 네비게이션 (수정됨 - 동작 보장)
+     */
+    (function() {
+      'use strict';
+
+      console.log('🚀 Navigation script loading...');
+
+      /**
+       * 전체메뉴 초기화 (nav 외부 fixed 위치)
+       */
+      function initFullMenu() {
+        const allmenuBtn = document.querySelector('.atelier-allmenu-btn');
+        const mobileBtn = document.querySelector('.atelier-mobile-btn');
+        const fullmenu = document.getElementById('lb-fullmenu');
+        const panel = fullmenu ? fullmenu.querySelector('.lb-fullmenu-panel') : null;
+        const nav = document.getElementById('lb-nav');
+
+        console.log('전체메뉴 버튼:', allmenuBtn);
+        console.log('모바일 버튼:', mobileBtn);
+        console.log('전체메뉴:', fullmenu);
+        console.log('네비게이션:', nav);
+
+        if (!fullmenu) {
+          console.error('❌ 전체메뉴 요소를 찾을 수 없습니다!');
+          return;
+        }
+
+        // 🔹 동적 위치 계산 (nav 바로 아래에 붙도록)
+        function updateMenuPosition() {
+          if (nav) {
+            const navRect = nav.getBoundingClientRect();
+            const headerRect = document.getElementById('header').getBoundingClientRect();
+            // nav의 bottom 위치를 페이지 기준으로 계산
+            const topPosition = navRect.bottom - headerRect.top;
+            fullmenu.style.top = topPosition + 'px';
+            fullmenu.style.position = 'absolute';
+            console.log('메뉴 위치 업데이트 - navBottom:', navRect.bottom, 'headerTop:', headerRect.top, 'topPosition:', topPosition);
+          }
+        }
+        
+        updateMenuPosition();
+
+        // 🔹 Cafe24 CSS 캐시 우회: 강제로 height auto 설정
+        if (panel) {
+          panel.style.height = 'auto';
+          panel.style.minHeight = '300px';
+        }
+        fullmenu.style.height = 'auto';
+
+        // 전체메뉴 토글
+        function toggleFullMenu(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          
+          updateMenuPosition(); // 열 때마다 위치 재계산
+          
+          const isOpen = fullmenu.classList.contains('is-open');
+          
+          if (isOpen) {
+            fullmenu.classList.remove('is-open');
+            if (allmenuBtn) allmenuBtn.classList.remove('is-active');
+            if (mobileBtn) mobileBtn.classList.remove('is-active');
+            console.log('✓ 전체메뉴 닫힘');
+          } else {
+            fullmenu.classList.add('is-open');
+            if (allmenuBtn) allmenuBtn.classList.add('is-active');
+            if (mobileBtn) mobileBtn.classList.add('is-active');
+            console.log('✓ 전체메뉴 열림');
+          }
+        }
+
+        // PC 전체메뉴 버튼
+        if (allmenuBtn) {
+          allmenuBtn.addEventListener('click', toggleFullMenu);
+          console.log('✅ PC 전체메뉴 버튼 이벤트 등록');
+        }
+
+        // 모바일 햄버거 버튼
+        if (mobileBtn) {
+          mobileBtn.addEventListener('click', toggleFullMenu);
+          console.log('✅ 모바일 햄버거 버튼 이벤트 등록');
+        }
+
+        // ESC 키로 닫기
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && fullmenu.classList.contains('is-open')) {
+            fullmenu.classList.remove('is-open');
+            if (allmenuBtn) allmenuBtn.classList.remove('is-active');
+            if (mobileBtn) mobileBtn.classList.remove('is-active');
+            console.log('✓ ESC로 전체메뉴 닫힘');
+          }
+        });
+
+        // 외부 클릭으로 닫기
+        document.addEventListener('click', function(e) {
+          const isFullmenu = e.target.closest('#lb-fullmenu');
+          const isMenuBtn = e.target.closest('.atelier-allmenu-btn, .atelier-mobile-btn');
+          
+          if (!isFullmenu && !isMenuBtn && fullmenu.classList.contains('is-open')) {
+            fullmenu.classList.remove('is-open');
+            if (allmenuBtn) allmenuBtn.classList.remove('is-active');
+            if (mobileBtn) mobileBtn.classList.remove('is-active');
+            console.log('✓ 외부 클릭으로 전체메뉴 닫힘');
+          }
+        });
+
+        // 링크 클릭 시 메뉴 닫기
+        const links = fullmenu.querySelectorAll('.atelier-fullmenu-link');
+        links.forEach(function(link) {
+          link.addEventListener('click', function() {
+            fullmenu.classList.remove('is-open');
+            if (allmenuBtn) allmenuBtn.classList.remove('is-active');
+            if (mobileBtn) mobileBtn.classList.remove('is-active');
+            console.log('✓ 링크 클릭으로 전체메뉴 닫힘');
+          });
+        });
+
+        console.log('✅ 전체메뉴 초기화 완료');
+      }
+
+      /**
+       * 드롭다운 메뉴 디버깅
+       */
+      function initDropdownDebug() {
+        const navItems = document.querySelectorAll('.atelier-nav-item');
+        
+        console.log('드롭다운 메뉴 개수:', navItems.length);
+
+        navItems.forEach(function(item, index) {
+          const dropdown = item.querySelector('.atelier-dropdown');
+          
+          if (dropdown) {
+            console.log('✓ 드롭다운 ' + (index + 1) + ' 발견');
+            
+            item.addEventListener('mouseenter', function() {
+              console.log('드롭다운 ' + (index + 1) + ' 호버');
+            });
+          } else {
+            console.warn('⚠️ 드롭다운 ' + (index + 1) + ' 없음');
+          }
+        });
+
+        console.log('✅ 드롭다운 디버깅 완료');
+      }
+
+      /**
+       * 현재 페이지 활성화
+       */
+      function initActiveLink() {
+        const currentUrl = window.location.pathname + window.location.search;
+        
+        const pcLinks = document.querySelectorAll('.atelier-nav-link');
+        pcLinks.forEach(function(link) {
+          const href = link.getAttribute('href');
+          if (href && currentUrl.indexOf(href) === 0) {
+            link.classList.add('is-active');
+          }
+        });
+
+        console.log('✅ 활성 링크 설정 완료');
+      }
+
+      /**
+       * 초기화
+       */
+      function init() {
+        console.log('=== ATELIER Navigation 초기화 시작 ===');
+        
+        initFullMenu();
+        initDropdownDebug();
+        initActiveLink();
+        
+        console.log('=== ATELIER Navigation 초기화 완료 ===');
+      }
+
+      // DOMContentLoaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      // 페이지 로드 완료 후에도 한 번 더 확인
+      window.addEventListener('load', function() {
+        console.log('🔍 페이지 로드 완료 - 네비게이션 상태 확인');
+        console.log('- #lb-nav:', document.querySelector('#lb-nav'));
+        console.log('- #lb-fullmenu:', document.getElementById('lb-fullmenu'));
+        console.log('- .atelier-dropdown:', document.querySelectorAll('.atelier-dropdown').length + '개');
+      });
+
+    })();
+    </script>
+    
     <!--@js(/js/common.js)-->
     <!--@js(/js/module/layout/quick_view.js)-->
     <!--@js(/js/login_redirect.js)-->
@@ -237,34 +392,171 @@
     </div>
   </div>
 
-  <!-- ATELIER 네비게이션 메뉴 (드롭다운 제거) -->
-  <nav id="atelier-main-nav" class="atelier-main-nav" aria-label="상품 메뉴">
-    <a href="/product/list.html?cate_no=23" class="atelier-nav-link">SHOP ALL</a>
-    <a href="/product/list.html?cate_no=25" class="atelier-nav-link">TOPS</a>
-    <a href="/product/list.html?cate_no=26" class="atelier-nav-link">DRESSES</a>
-    <a href="/product/list.html?cate_no=24" class="atelier-nav-link">OUTERWEAR</a>
+  <!-- ============================================
+       ATELIER N - 네비게이션 (드롭다운 + 전체메뉴)
+       ============================================ -->
+
+  <!-- 🔹 Cafe24 필수 구조: #lb-nav 유지 -->
+  <nav id="lb-nav" class="atelier-nav-wrapper">
+    <div class="lb-nav-inner atelier-nav-container">
+      
+      <!-- 전체메뉴 버튼 (좌측) -->
+      <button type="button" 
+              class="atelier-allmenu-btn" 
+              aria-label="전체메뉴 열기" 
+              aria-expanded="false">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
+
+      <!-- PC 메뉴 (드롭다운 포함) -->
+      <div class="atelier-nav-links">
+        
+        <!-- SHOP ALL -->
+        <div class="atelier-nav-item">
+          <a href="/product/list.html?cate_no=23" class="atelier-nav-link">
+            <span>SHOP ALL</span>
+          </a>
+          <div class="atelier-dropdown">
+            <div class="atelier-dropdown-inner">
+              <a href="/product/list.html?cate_no=23">전체보기</a>
+              <a href="/product/list.html?cate_no=25">Tops</a>
+              <a href="/product/list.html?cate_no=26">Dresses</a>
+              <a href="/product/list.html?cate_no=24">Outerwear</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOPS -->
+        <div class="atelier-nav-item">
+          <a href="/product/list.html?cate_no=25" class="atelier-nav-link">
+            <span>TOPS</span>
+          </a>
+          <div class="atelier-dropdown">
+            <div class="atelier-dropdown-inner">
+              <a href="/product/list.html?cate_no=25">전체 Tops</a>
+              <a href="/product/list.html?cate_no=32">Knit</a>
+              <a href="/product/list.html?cate_no=33">Blouse</a>
+              <a href="/product/list.html?cate_no=34">T-Shirt</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DRESSES -->
+        <div class="atelier-nav-item">
+          <a href="/product/list.html?cate_no=26" class="atelier-nav-link">
+            <span>DRESSES</span>
+          </a>
+          <div class="atelier-dropdown">
+            <div class="atelier-dropdown-inner">
+              <a href="/product/list.html?cate_no=26">전체 Dresses</a>
+              <a href="/product/list.html?cate_no=35">Midi Dress</a>
+              <a href="/product/list.html?cate_no=36">Long Dress</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTERWEAR -->
+        <div class="atelier-nav-item">
+          <a href="/product/list.html?cate_no=24" class="atelier-nav-link">
+            <span>OUTERWEAR</span>
+          </a>
+          <div class="atelier-dropdown">
+            <div class="atelier-dropdown-inner">
+              <a href="/product/list.html?cate_no=24">전체 Outerwear</a>
+              <a href="/product/list.html?cate_no=37">Coat</a>
+              <a href="/product/list.html?cate_no=38">Jacket</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 모바일 햄버거 버튼 -->
+      <button type="button" class="lb-hamburger atelier-mobile-btn" aria-label="모바일 메뉴 열기" aria-expanded="false">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
+    </div>
+
   </nav>
 
-  <!-- 모바일 메뉴 버튼 -->
-  <button type="button" class="atelier-mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+  <!-- 전체메뉴 드롭다운 (nav 외부) -->
+  <div id="lb-fullmenu" class="atelier-fullmenu-dropdown">
+    <div class="lb-fullmenu-panel atelier-fullmenu-panel">
+      <div class="atelier-fullmenu-inner">
+        <!-- 왼쪽: 카테고리 섹션 -->
+        <div class="atelier-fullmenu-left">
+          <nav class="atelier-fullmenu-section">
+            <h2 class="atelier-fullmenu-title">SHOP</h2>
+            <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-link">전체보기</a>
+            <a href="/product/list.html?cate_no=25" class="atelier-fullmenu-link">Tops</a>
+            <a href="/product/list.html?cate_no=26" class="atelier-fullmenu-link">Dresses</a>
+            <a href="/product/list.html?cate_no=24" class="atelier-fullmenu-link">Outerwear</a>
+          </nav>
+          
+          <div class="atelier-fullmenu-section">
+            <h2 class="atelier-fullmenu-title">ACCOUNT</h2>
+            <a href="/member/login.html" class="atelier-fullmenu-link" module="Layout_statelogoff">로그인</a>
+            <a href="/member/join.html" class="atelier-fullmenu-link" module="Layout_statelogoff">회원가입</a>
+            <a href="/myshop/index.html" class="atelier-fullmenu-link">마이쇼핑</a>
+            <a href="/order/basket.html" class="atelier-fullmenu-link">장바구니</a>
+          </div>
 
-  <!-- 모바일 메뉴 패널 (backdrop 제거 - 회색 비활성화 없음) -->
-  <div class="atelier-mobile-menu" aria-hidden="true">
-    <div class="atelier-mobile-menu-panel">
-      <button type="button" class="atelier-mobile-menu-close" aria-label="메뉴 닫기">×</button>
-      <nav class="atelier-mobile-menu-nav">
-        <a href="/product/list.html?cate_no=23">SHOP ALL</a>
-        <a href="/product/list.html?cate_no=25">TOPS</a>
-        <a href="/product/list.html?cate_no=26">DRESSES</a>
-        <a href="/product/list.html?cate_no=24">OUTERWEAR</a>
-      </nav>
-      <div class="atelier-mobile-menu-account">
-        <a href="/member/login.html" module="Layout_statelogoff">로그인</a>
-        <a href="/member/join.html" module="Layout_statelogoff">회원가입</a>
-        <a href="/myshop/index.html">마이쇼핑</a>
-        <a href="/order/basket.html">장바구니</a>
+          <div class="atelier-fullmenu-section">
+            <h2 class="atelier-fullmenu-title">COMMUNITY</h2>
+            <a href="/board/index.html" class="atelier-fullmenu-link">커뮤니티</a>
+            <a href="/board/product/list.html" class="atelier-fullmenu-link">상품 Q&A</a>
+            <a href="/board/notice/list.html" class="atelier-fullmenu-link">공지사항</a>
+          </div>
+        </div>
+
+        <!-- 중앙: 프로모션 이미지 -->
+        <div class="atelier-fullmenu-center">
+          <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-promo">
+            <img src="//img.echosting.cafe24.com/design/skin/admin/ko_KR/btn_square_white.gif" 
+                 alt="New Collection" 
+                 class="atelier-fullmenu-promo-img">
+            <div class="atelier-fullmenu-promo-text">
+              <h3>2026 FALL COLLECTION</h3>
+              <p>계절을 오래 입는 방식</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- 오른쪽: 특별 버튼들 -->
+        <div class="atelier-fullmenu-right">
+          <a href="/product/list.html?cate_no=23&sort_method=5" class="atelier-fullmenu-cta-btn primary">
+            <span class="cta-icon">🎁</span>
+            <div class="cta-text">
+              <strong>SPECIAL SALE</strong>
+              <small>최대 50% 할인</small>
+            </div>
+          </a>
+          
+          <a href="/product/list.html?cate_no=23&sort_method=7" class="atelier-fullmenu-cta-btn secondary">
+            <span class="cta-icon">✨</span>
+            <div class="cta-text">
+              <strong>NEW ARRIVALS</strong>
+              <small>신상품 먼저 만나기</small>
+            </div>
+          </a>
+          
+          <a href="/product/list.html?cate_no=23&sort_method=3" class="atelier-fullmenu-cta-btn tertiary">
+            <span class="cta-icon">⭐</span>
+            <div class="cta-text">
+              <strong>BEST SELLERS</strong>
+              <small>인기 상품 보기</small>
+            </div>
+          </a>
+
+          <div class="atelier-fullmenu-info">
+            <p class="info-text">무료 배송</p>
+            <p class="info-detail">5만원 이상 구매 시</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
