@@ -243,6 +243,113 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 - ✅ **모바일 네비게이션 backdrop 제거**: 터치 UX 개선
 - 🔧 레이아웃 내 불필요한 스크립트 정리 (`atelier-nav-cleanup.js`)
 
+---
+
+## 모바일 스킨 개발 로드맵 (v2.0)
+
+> PC 스킨 완성 후 다음 단계. `mobile/` 폴더 기준.
+
+### 현재 모바일 상태
+
+| 파일 | 상태 | 비고 |
+|------|------|------|
+| `mobile/index.html` | ✅ 콘텐츠 완성 | 히어로·카테고리·상품섹션·브랜드스토리 |
+| `mobile/layout/basic/css/lb-mobile.css` | 🔧 진행중 | LE BLANC 모바일 스타일 레이어 |
+| `mobile/layout/basic/layout.html` | ⚠️ 카페24 기본 | 헤더 LE BLANC 리디자인 필요 |
+| `mobile/layout/basic/main.html` | ⚠️ 카페24 기본 | 메인 전용 레이아웃, 동일 개선 필요 |
+| `mobile/layout/basic/navigation.html` | ⚠️ 카페24 기본 | 상단 텍스트 링크 → 하단 탭 전환 |
+| `mobile/layout/basic/sidebar.html` | ⚠️ 카페24 기본 | 사이드 드로어 LE BLANC 스타일 필요 |
+| `mobile/layout/basic/footer.html` | ✅ LE BLANC 브랜딩 적용 | 뉴스레터 배너 포함 |
+| `mobile/product/detail.html` | ⚠️ 스타일링 필요 | 54KB — 상세 페이지 모바일 최적화 |
+| `mobile/product/list.html` | ⚠️ 스타일링 필요 | 2열 그리드, 필터 UI |
+
+---
+
+### Phase M1 — 모바일 헤더 재설계 🔴 최우선
+**작업 파일**: `layout.html`, `main.html`, `lb-mobile.css`
+
+```
+[햄버거 ≡]  [LE BLANC 로고]  [검색🔍] [장바구니🛒(N)]
+```
+
+- 좌측: 사이드 드로어 트리거 (`≡`)
+- 중앙: LE BLANC + ATELIER N. 브랜드 로고 텍스트
+- 우측: 검색 아이콘 + 장바구니(카운트 뱃지)
+- 배경: `#ffffff` / sticky top
+
+---
+
+### Phase M2 — 하단 탭 네비게이션 🔴 최우선
+**작업 파일**: `layout.html`, `main.html`, `lb-mobile.css`
+
+```
+[🏠 홈] [◻ 카테고리] [🔍 검색] [👤 마이] [🛒 장바구니]
+```
+
+- 5탭 고정 하단 배치 (`position: fixed; bottom: 0`)
+- 현재 페이지 탭 활성 표시
+- iOS safe area 대응 (`padding-bottom: env(safe-area-inset-bottom)`)
+- 콘텐츠 영역 `padding-bottom` 추가로 탭바에 가리지 않게
+
+---
+
+### Phase M3 — 사이드 드로어 리디자인
+**작업 파일**: `sidebar.html`, `lb-mobile.css`
+
+- 좌측 슬라이드 드로어 (width: 280px)
+- 상단: 로그인 상태/회원명
+- 중간: 카테고리 목록 (아코디언)
+- 하단: 이용안내, 고객센터, SNS 링크
+- 오버레이 배경 + 스와이프로 닫기
+
+---
+
+### Phase M4 — 메인 페이지 스타일 완성
+**작업 파일**: `lb-mobile.css`, `mobile/index.html`
+
+- 히어로 슬라이더: `100vw × 80vh` 전체 화면
+- 카테고리 아이콘: 수평 스크롤 (7개)
+- 상품 섹션: 2열 그리드, 카드 스타일 통일
+- 섹션 헤더: eyebrow 텍스트 + 제목 + "전체 보기" 링크
+- 브랜드 스토리: 컴팩트 1열 레이아웃
+
+---
+
+### Phase M5 — 상품 리스트 페이지
+**작업 파일**: `mobile/product/list.html`, `lb-mobile.css`
+
+- 2열 그리드 상품 카드 (기본)
+- 필터/정렬 바 (상단 고정)
+- 상품명 2줄 말줄임
+- 판매가 / 할인가 표시
+- 더보기 버튼 스타일
+
+---
+
+### Phase M6 — 상품 상세 페이지 모바일 최적화
+**작업 파일**: `mobile/product/detail.html`, `lb-mobile.css`
+
+- 상단 이미지: 전체 너비 슬라이더 (`100vw`)
+- 상품명·가격·옵션 선택 → 세로 스크롤
+- **하단 고정 CTA**: `[장바구니 담기] [바로 구매]` 버튼
+- 탭 메뉴 (상품정보 / 상세정보 / 리뷰 / Q&A) sticky
+- 하단 탭바와 겹침 방지 (`padding-bottom` 대응)
+
+---
+
+### 개발 진행 현황
+
+| Phase | 작업 | 상태 |
+|-------|------|------|
+| M1 | 모바일 헤더 재설계 | 🔲 대기 |
+| M2 | 하단 탭 네비게이션 | 🔲 대기 |
+| M3 | 사이드 드로어 리디자인 | 🔲 대기 |
+| M4 | 메인 페이지 스타일 완성 | 🔲 대기 |
+| M5 | 상품 리스트 페이지 | 🔲 대기 |
+| M6 | 상품 상세 모바일 최적화 | 🔲 대기 |
+
+---
+
 ## 라이선스
 
 이 프로젝트는 Cafe24 쇼핑몰 전용 스킨으로 개발되었습니다.
@@ -254,5 +361,5 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 ---
 
 **Last Updated**: 2026.06.27  
-**Version**: 1.1.0  
-**Status**: Production Ready 🚀
+**Version**: 1.1.0 (PC 완성) → v2.0.0 (모바일 개발 중)  
+**Status**: PC Production Ready ✅ | Mobile In Development 🚧
