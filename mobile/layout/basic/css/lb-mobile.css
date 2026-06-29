@@ -42,6 +42,7 @@ html, body { width: 100%; overflow-x: hidden; }
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  white-space: nowrap;
 }
 .lb-m-header__logo a {
   display: flex;
@@ -50,12 +51,25 @@ html, body { width: 100%; overflow-x: hidden; }
   text-decoration: none;
   color: #1d1d1f;
 }
+/* 로고 이미지 */
+.lb-logo-image {
+  height: 28px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+/* 이미지 없을 때 텍스트 폴백 ({$mall_name}) */
+.lb-logo-text {
+  flex-direction: column;
+  align-items: center;
+}
 .lb-logo-brand {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   line-height: 1.1;
+  color: #1d1d1f;
 }
 .lb-logo-tagline {
   font-size: 7px;
@@ -245,12 +259,12 @@ html, body { width: 100%; overflow-x: hidden; }
   align-items: center;
   text-decoration: none;
   color: #1d1d1f;
-  width: 80px;
+  width: 88px;   /* 80 × 1.1 */
   text-align: center;
 }
 .lb-cat-circle {
-  width: 52px;
-  height: 52px;
+  width: 57px;   /* 52 × 1.1 */
+  height: 57px;
   border-radius: 50%;
   background: #f5f5f5;
   border: 1px solid #e8e8e8;
@@ -263,14 +277,14 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
 .lb-cat-item:hover .lb-cat-abbr { color: #fff; }
 .lb-cat-abbr {
-  font-size: 11px;
+  font-size: 12px;  /* 11 × 1.1 */
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
   transition: color 0.2s;
 }
 .lb-cat-label {
-  font-size: 10px;
+  font-size: 11px;  /* 10 × 1.1 */
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
