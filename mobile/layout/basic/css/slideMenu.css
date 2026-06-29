@@ -6,7 +6,8 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, .45);
-  z-index: 299;
+  /* 헤더(z-index:200)보다 위, 사이드바보다 1 아래 */
+  z-index: 9998;
 }
 .lb-aside-dimmer.visible { display: block; }
 html.lb-aside-open,
@@ -22,7 +23,8 @@ html.lb-aside-open body { overflow: hidden; }
   width: 300px !important;
   height: 100% !important;
   background: #fff !important;
-  z-index: 300 !important;
+  /* 모든 요소(헤더 포함) 위에 표시 */
+  z-index: 9999 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
@@ -54,31 +56,51 @@ html.lb-aside-open body { overflow: hidden; }
   letter-spacing: .02em;
 }
 
-/* 로그인 / 회원가입 버튼 */
+/* 로그인 / 회원가입 버튼 공통 */
 #aside .member .btnLogin,
 #aside .member .btnJoin,
 div#aside .member a.btnLogin,
 div#aside .member a.btnJoin {
-  display: inline-block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: calc(50% - 5px) !important;
-  padding: 10px 0 !important;
+  height: 42px !important;
+  padding: 0 !important;
   text-align: center !important;
-  border: 1px solid #1d1d1f !important;
   font-size: 12px !important;
   font-weight: 500 !important;
-  letter-spacing: .05em !important;
-  color: #1d1d1f !important;
+  letter-spacing: .06em !important;
   text-decoration: none !important;
   box-sizing: border-box !important;
-  background: #fff !important;
   vertical-align: top;
-  transition: background .18s, color .18s;
+  border-radius: 2px;
+  transition: opacity .18s;
 }
-#aside .member .btnLogin { margin-right: 8px !important; }
-#aside .member .btnLogin:active,
-#aside .member .btnJoin:active {
+
+/* 로그인: PC와 동일한 검정 채움 (Primary) */
+#aside .member .btnLogin,
+div#aside .member a.btnLogin {
   background: #1d1d1f !important;
   color: #fff !important;
+  border: 1px solid #1d1d1f !important;
+  margin-right: 8px !important;
+}
+#aside .member .btnLogin:active,
+div#aside .member a.btnLogin:active {
+  opacity: 0.75 !important;
+}
+
+/* 회원가입: 아웃라인 (Secondary) */
+#aside .member .btnJoin,
+div#aside .member a.btnJoin {
+  background: #fff !important;
+  color: #555 !important;
+  border: 1px solid #ccc !important;
+}
+#aside .member .btnJoin:active,
+div#aside .member a.btnJoin:active {
+  background: #f5f5f5 !important;
 }
 
 /* 로그인 상태 */

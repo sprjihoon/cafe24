@@ -21,7 +21,8 @@ html, body { width: 100%; overflow-x: hidden; }
   border-bottom: 1px solid #e8e8e8;
   position: sticky;
   top: 0;
-  z-index: 100;
+  /* 사이드바(z-index:9999)보다 낮게 유지 */
+  z-index: 200;
 }
 .lb-m-header__hamburger {
   display: flex;
