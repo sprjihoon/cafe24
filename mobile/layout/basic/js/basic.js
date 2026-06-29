@@ -168,13 +168,11 @@
     /* 이미 변환된 경우 중복 실행 방지 */
     if (section.querySelector('.lb-weekly-swiper')) return;
 
-    var items = Array.prototype.slice.call(prdList.querySelectorAll('li.xans-record-'));
+    /* Cafe24는 li.xans-record- 또는 li 만 렌더링 → 범용 선택자 사용 */
+    var items = Array.prototype.slice.call(prdList.querySelectorAll('li'));
     /* 상품이 없으면 CSS fallback(scroll-snap)으로 표시 */
     if (items.length === 0) {
       prdList.style.cssText = 'display:flex;flex-wrap:nowrap;overflow-x:auto;gap:12px;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;';
-      prdList.querySelectorAll('li').forEach(function(li) {
-        li.style.cssText = 'flex:0 0 44vw;max-width:200px;scroll-snap-align:start;';
-      });
       return;
     }
 
@@ -209,10 +207,15 @@
     prdWrap.parentNode.insertBefore(swiperEl, prdWrap);
     prdWrap.style.display = 'none';
 
+    /*
+     * slidesPerView: 'auto' → CSS width(44vw)로 슬라이드 너비를 제어.
+     * slidesPerView 숫자와 CSS width: 44vw !important 를 동시에 쓰면 충돌 발생.
+     */
     new Swiper(swiperEl, {
-      slidesPerView: 2.2,
+      slidesPerView: 'auto',
       spaceBetween: 12,
       grabCursor: true,
+      freeMode: false,
       pagination: {
         el: pagiEl,
         clickable: true,

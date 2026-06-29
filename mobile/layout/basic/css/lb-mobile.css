@@ -781,12 +781,16 @@ img.ec-admin-icon,
 }
 /* JS 초기화 후 Swiper DOM */
 .lb-weekly-swiper {
-  overflow: visible !important;
+  overflow: hidden; /* Swiper 정상 동작에 필수 */
   padding: 0 16px;
+  box-sizing: border-box;
+  width: 100%;
 }
+/* slidesPerView:'auto' 사용 → CSS로 슬라이드 너비 지정 */
 .lb-weekly-swiper .swiper-slide {
-  width: 44vw !important;
+  width: 44vw;
   max-width: 210px;
+  flex-shrink: 0;
 }
 /* 상품 카드 스타일 */
 .lb-weekly-swiper .lb-product-card,
