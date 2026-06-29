@@ -172,13 +172,27 @@ html, body { width: 100%; overflow-x: hidden; }
   background-color: #f0f0f0;
   position: relative;
   display: flex;
-  align-items: flex-end;   /* 텍스트는 하단 고정 — 전체 이미지가 보이도록 히어로 높이를 줄임 */
 }
+/*
+ * layout.css: .lb-hero-placeholder { height:100%; display:flex; justify-content:flex-end }
+ * → placeholder가 슬라이드 전체를 채우며 텍스트를 하단으로 밀어냄.
+ * 모바일에서는 히어로가 짧아 텍스트가 아래로 밀려 안 보이므로,
+ * justify-content를 flex-start로 재정의해 텍스트를 상단에 고정.
+ */
 .lb-hero-placeholder {
-  padding: 20px 20px 18px;
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 70%, transparent 100%);
+  padding: 24px 20px 20px;
+  /* 상단 그라디언트: 텍스트가 위에 있으므로 위→아래 어둡게 */
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.20) 60%,
+    transparent 100%
+  );
   width: 100%;
   color: #fff;
+  box-sizing: border-box;
+  /* layout.css의 justify-content:flex-end 재정의 */
+  justify-content: flex-start;
 }
 .lb-hero-sub {
   font-size: 10px;
@@ -236,7 +250,9 @@ html, body { width: 100%; overflow-x: hidden; }
   background: rgba(255,255,255,1);
 }
 /* PC 전용 영상 컨테이너 숨김 */
-.lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
+.lb-hero-video-container { display: none; }
+/* layout.css 장식선 숨김 */
+.lb-hero-placeholder::before { display: none; }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
 /* ── 카테고리 아이콘 존 (항상 4열 2행 flex) ── */
