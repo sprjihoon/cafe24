@@ -366,24 +366,31 @@ html, body { width: 100%; overflow-x: hidden; }
 }
 
 /* ── ATELIER SHORTS 모바일 ── */
-/* PC layout.css의 스타일을 그대로 사용, 카드 크기만 조정 */
 .atelier-shorts {
   padding: 32px 0 24px;
+  overflow: hidden;
 }
 .atelier-shorts__header {
   padding: 0 16px 16px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
 }
-.atelier-shorts__nav { display: none; } /* 모바일은 터치 스와이프 */
-.atelier-shorts__slider-wrap { padding-left: 16px; }
-/* 카드 너비: 모바일 최적 */
+.atelier-shorts__nav { display: none; }
+/* PC의 margin:-8px 보정을 모바일에서 해제 */
+.atelier-shorts__slider {
+  overflow: visible;
+  margin: 0 !important;
+}
+/* 슬라이드 패딩 → spaceBetween이 처리하도록 제거 */
+.atelier-shorts__slider .swiper-slide {
+  padding: 0 !important;
+}
+/* 슬라이더 시작 여백 */
+.atelier-shorts__slider-wrap {
+  padding-left: 16px;
+  overflow: hidden;
+}
+/* 카드: Swiper slide 100% 채우기 */
 .atelier-shorts__card {
-  width: 72vw !important;
-  max-width: 280px;
-}
-.atelier-shorts__card-media {
+  width: 100% !important;
   aspect-ratio: 9/16;
 }
 .atelier-shorts__pagination-bar { padding: 12px 16px; }
@@ -524,37 +531,91 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-fullmenu-panel { display: none !important; }
 #lb-nav { display: none !important; }
 
+/* ── Cafe24 어드민 버튼 (카트/줌 PNG) 숨김 ── */
+img.ec-admin-icon,
+.ec-admin-icon.cart,
+.ec-admin-icon.zoom,
+.icon .button .likeButton,
+.icon .button .option,
+.icon .button { display: none !important; }
+
+/* 상품 이미지 위 wish 아이콘은 유지 */
+.thumbnail .wish { display: block !important; }
+
 /* ── lb-full-bleed 모바일 해제 ── */
 .lb-full-bleed { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
 
-/* ── FEATURE BANNERS (4박스) — 가로 스크롤 ── */
-.lb-feature-banners { overflow-x: auto; }
+/* ── FEATURE BANNERS (4박스) — scroll-snap 슬라이드 ── */
+.lb-feature-banners {
+  overflow: hidden;
+  padding: 16px 0;
+}
 .lb-feature-inner {
   display: flex;
-  gap: 0;
-  width: max-content;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 12px;
+  padding: 0 16px;
 }
+.lb-feature-inner::-webkit-scrollbar { display: none; }
 .lb-feature-box {
-  width: 70vw;
-  max-width: 280px;
-  flex-shrink: 0;
+  flex: none;
+  width: calc(100% - 32px);
+  scroll-snap-align: start;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  overflow: hidden;
 }
+.lb-feature-image { aspect-ratio: 4/3; overflow: hidden; }
+.lb-feature-image img { width: 100%; height: 100%; object-fit: cover; }
+.lb-feature-content {
+  padding: 16px;
+  background: #f5f5f5;
+}
+.lb-feature-badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.lb-feature-title { font-size: 16px; font-weight: 400; margin: 0 0 6px; }
+.lb-feature-desc { font-size: 12px; color: #888; line-height: 1.5; margin: 0; }
 
-/* ── SPLIT BANNER — 왼쪽 슬라이더만 표시 ── */
-.lb-split-banner { padding: 0; }
+/* ── SPLIT BANNER — 왼쪽 슬라이더만 (모바일 전체 너비) ── */
+.lb-split-banner { padding: 0; overflow: hidden; }
 .lb-split-inner { display: block; }
-.lb-split-grid { display: none; } /* 오른쪽 4그리드 숨김 */
+.lb-split-grid { display: none; }
 .lb-split-slider { width: 100%; }
+/* Swiper 슬라이드: 이미지가 메인 */
 .lb-promo-slide {
-  display: flex;
-  flex-direction: column;
+  display: block;
+  position: relative;
+  text-decoration: none;
 }
-.lb-promo-visual { order: -1; }
-.lb-promo-visual img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
-.lb-video-container { aspect-ratio: 4/3; }
-.lb-promo-content { padding: 16px; }
-.lb-promo-eyebrow { font-size: 10px; letter-spacing: 0.14em; color: #888; }
-.lb-promo-title { font-size: 18px; font-weight: 400; margin: 6px 0 0; }
+.lb-promo-visual { position: relative; }
+.lb-promo-visual img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+.lb-video-container { aspect-ratio: 1; overflow: hidden; }
+.lb-video-container iframe { width: 100%; height: 100%; }
+.lb-promo-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+  color: #fff;
+}
+.lb-promo-eyebrow { font-size: 10px; letter-spacing: 0.14em; opacity: 0.8; margin-bottom: 4px; }
+.lb-promo-title { font-size: 20px; font-weight: 300; margin: 0; letter-spacing: -0.01em; }
 
 /* ── PROMO SECTION (2배너) — 세로 스택 ── */
 .lb-promo-section { padding: 0; }
@@ -584,21 +645,24 @@ html, body { width: 100%; overflow-x: hidden; }
   color: #fff;
 }
 
-/* ── WEEKLY BEST — Swiper → 2열 그리드 전환 ── */
-.lb-weekly-best .swiper,
-.lb-weekly-best .lb-weekly-swiper { display: none; }
-.lb-weekly-best ul.prdList {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: #e8e8e8;
+/* ── WEEKLY BEST — Swiper 유지, 모바일 최적화 ── */
+/* PC와 동일하게 Swiper 사용, 1.5장 peek */
+.lb-weekly-best { overflow: hidden; }
+.lb-weekly-swiper {
+  overflow: visible !important;
+  padding-left: 16px;
+}
+.lb-weekly-swiper .swiper-slide {
+  width: 44vw !important;
+  max-width: 210px;
 }
 .lb-weekly-best .swiper-button-prev,
-.lb-weekly-best .swiper-button-next,
-.lb-weekly-best .swiper-pagination { display: none; }
-/* WEEKLY BEST는 prdList 없음 → Swiper를 대신 표시하되 1.2 per view */
-.lb-weekly-swiper { display: block !important; overflow: visible; padding-left: 16px; }
-.lb-weekly-swiper .swiper-slide { width: 45vw !important; max-width: 200px; }
+.lb-weekly-best .swiper-button-next { display: none; }
+.lb-weekly-best .swiper-pagination {
+  position: static;
+  margin-top: 12px;
+  padding-right: 16px;
+}
 
 /* ── BAND BANNER ── */
 .lb-band-banner {
