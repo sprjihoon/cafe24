@@ -239,22 +239,28 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
-/* ── 카테고리 아이콘 존 (2줄 flex, 중앙 정렬) ── */
+/* ── 카테고리 아이콘 존 (항상 4열 2행 flex) ── */
 .lb-cat-zone {
-  padding: 14px 0 10px;     /* 상하 패딩 축소 → 뷰포트 내 수직 공간 확보 */
+  padding: 14px 0 10px;
 }
 .lb-cat-inner {
   display: flex;
-  flex-wrap: wrap;           /* 공간이 부족하면 자동으로 다음 행으로 */
+  flex-wrap: wrap;
   justify-content: flex-start;
-  row-gap: 10px;
+  align-items: flex-start;   /* 행 내 아이템을 상단 정렬 → 원 높이 일정 */
+  row-gap: 12px;
   column-gap: 4px;
   padding: 0;
   margin: 0;
 }
+/*
+ * ★ 항상 1행에 4개 배치 (4+3 레이아웃)
+ *   열 개수 고정: calc((컨테이너 100% - 열간격 3×4px) / 4)
+ *   어떤 뷰포트 너비에서도 정확히 4열 유지
+ */
 .lb-cat-item {
-  flex: 0 0 80px;            /* 고정 픽셀 — flex-wrap이 줄 수를 자동 결정 */
-  max-width: 80px;           /* 375px: 4+3행 / 520px: 6+1행 / 664px: 1행 */
+  flex: 0 0 calc((100% - 12px) / 4);
+  max-width: calc((100% - 12px) / 4);
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -264,33 +270,47 @@ html, body { width: 100%; overflow-x: hidden; }
   text-align: center;
 }
 .lb-cat-circle {
-  width: 68px;               /* 57 × 1.2 (20% 확대 유지) */
+  width: 68px;
   height: 68px;
   border-radius: 50%;
+  overflow: hidden;          /* ★ 이미지가 원 밖으로 삐져나오지 않도록 클리핑 */
   background: #f5f5f5;
   border: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 6px;        /* 8 → 6px */
+  margin-bottom: 6px;
+  flex-shrink: 0;            /* 원이 찌그러지지 않도록 */
   transition: background 0.2s, border-color 0.2s;
+}
+/* 원 내부 이미지 — 100% 채움, aspect-ratio 유지 */
+.lb-cat-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
 .lb-cat-item:hover .lb-cat-abbr { color: #fff; }
 .lb-cat-abbr {
-  font-size: 14px;           /* 12 × 1.2 */
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
   transition: color 0.2s;
 }
 .lb-cat-label {
-  font-size: 13px;           /* 11 × 1.2 */
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: #1d1d1f;
   text-transform: uppercase;
   display: block;
+  word-break: break-word;
+  line-height: 1.3;
+  text-align: center;
+  /* 2줄 기준 최소 높이 → 행 내 원 높이 통일 */
+  min-height: 2.6em;
 }
 .lb-cat-desc { display: none; }
 
