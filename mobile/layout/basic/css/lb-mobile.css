@@ -904,8 +904,8 @@ img.ec-admin-icon,
   min-height: 180px;
 }
 .lb-brand-story-image {
-  flex: 0 0 42% !important;
-  width: 42% !important;
+  flex: 0 0 25% !important;
+  width: 25% !important;
   overflow: hidden;
 }
 .lb-brand-story-image img {
