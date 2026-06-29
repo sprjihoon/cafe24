@@ -133,10 +133,11 @@
     var container = document.querySelector('.lb-feature-banners');
     if (!container) return;
     if (container.classList.contains('swiper-initialized')) return;
+    /* slidesPerView:'auto' + CSS 너비 고정 → 페이지네이션이 슬라이드 위치와 정확히 일치 */
     new Swiper(container, {
       wrapperClass: 'lb-feature-inner',
       slideClass: 'lb-feature-box',
-      slidesPerView: 1.15,
+      slidesPerView: 'auto',
       spaceBetween: 12,
       grabCursor: true,
       centeredSlides: false,

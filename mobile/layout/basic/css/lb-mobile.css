@@ -576,11 +576,11 @@ img.ec-admin-icon,
   display: flex;
   align-items: stretch;
 }
-/* Swiper slide */
+/* Swiper slide — slidesPerView:'auto' 사용 시 반드시 width 명시 */
 .lb-feature-box {
   flex: none;
-  width: 72vw;          /* 다음 카드 일부 노출 */
-  max-width: 280px;
+  width: 76vw !important;   /* 한 화면에 1장 + 다음 카드 살짝 노출 */
+  max-width: 290px;
   text-decoration: none;
   color: inherit;
   display: block;
