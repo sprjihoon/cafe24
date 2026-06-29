@@ -624,29 +624,90 @@ img.ec-admin-icon,
 .lb-promo-eyebrow { font-size: 10px; letter-spacing: 0.14em; opacity: 0.8; margin-bottom: 4px; }
 .lb-promo-title { font-size: 20px; font-weight: 300; margin: 0; letter-spacing: -0.01em; }
 
-/* ── PROMO SECTION (2배너) — 세로 스택 ── */
+/* ── PROMO SECTION (2배너) — 나란히, 텍스트 항상 표시 ── */
 .lb-promo-section { padding: 0; }
-.lb-promo-inner, .lb-promo-grid {
+.lb-promo-inner {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
-.lb-promo-banner, .lb-promo-item {
+/* 2열 그리드 — PC와 동일한 레이아웃 */
+.lb-promo-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 4px !important;
+}
+/* 5:6 세로 비율 (padding-top trick) */
+.lb-promo-item {
+  position: relative !important;
+  overflow: hidden;
+  padding-top: 130% !important; /* 세로 비율 */
+  width: 100% !important;
+}
+.lb-promo-item > a {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.lb-promo-item img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+  transition: transform 0.4s ease;
+}
+/* 오버레이 텍스트 — 항상 표시 */
+.lb-promo-overlay {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 14px 10px !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%) !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+/* 오버레이 내부 텍스트 — 작은 카드 최적화 */
+.lb-promo-item .lb-promo-eyebrow {
+  font-size: 9px !important;
+  letter-spacing: 0.12em;
+  margin-bottom: 3px;
+  opacity: 0.85;
+}
+.lb-promo-item .lb-promo-title {
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+.lb-promo-item .lb-promo-desc {
+  font-size: 10px !important;
+  opacity: 0.8;
+  margin: 0 0 6px;
+}
+.lb-promo-item .lb-promo-cta {
+  font-size: 10px !important;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+/* PC .lb-promo-banner (feature banners와 다른 컴포넌트) */
+.lb-promo-banner {
   width: 100%;
   position: relative;
   overflow: hidden;
 }
-.lb-promo-banner img, .lb-promo-item img {
+.lb-promo-banner img {
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
   display: block;
 }
-.lb-promo-banner-content, .lb-promo-overlay {
+.lb-promo-banner-content {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   padding: 16px;
   background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
   color: #fff;
