@@ -239,17 +239,20 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
-/* ── 카테고리 아이콘 존 (2줄 그리드) ── */
+/* ── 카테고리 아이콘 존 (2줄 flex, 중앙 정렬) ── */
 .lb-cat-zone {
   padding: 20px 0;
 }
 .lb-cat-inner {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);  /* 4열 → 7개면 4+3으로 자동 배치 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 나머지 행(3개)도 자연스럽게 가운데 */
   row-gap: 16px;
   padding: 0 8px;
 }
 .lb-cat-item {
+  flex: 0 0 25%;             /* 4개씩 → 행 초과분은 다음 줄로 */
+  max-width: 25%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -258,8 +261,8 @@ html, body { width: 100%; overflow-x: hidden; }
   text-align: center;
 }
 .lb-cat-circle {
-  width: 57px;   /* 52 × 1.1 */
-  height: 57px;
+  width: 68px;               /* 57 × 1.2 (20% 확대) */
+  height: 68px;
   border-radius: 50%;
   background: #f5f5f5;
   border: 1px solid #e8e8e8;
@@ -272,21 +275,21 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
 .lb-cat-item:hover .lb-cat-abbr { color: #fff; }
 .lb-cat-abbr {
-  font-size: 12px;  /* 11 × 1.1 */
+  font-size: 14px;           /* 12 × 1.2 */
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
   transition: color 0.2s;
 }
 .lb-cat-label {
-  font-size: 11px;  /* 10 × 1.1 */
+  font-size: 13px;           /* 11 × 1.2 */
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
   text-transform: uppercase;
   display: block;
 }
-.lb-cat-desc { display: none; } /* 모바일에서 설명 숨김 */
+.lb-cat-desc { display: none; }
 
 /* ── 섹션 공통 헤더 ── */
 .lb-section-header {
