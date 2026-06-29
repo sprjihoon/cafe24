@@ -239,19 +239,29 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
 /* ── 카테고리 아이콘 존 ── */
+/*
+ * 스와이프 핵심: .lb-cat-zone 자체가 scroll container.
+ * 부모에 overflow:hidden 이 있으면 자식 overflow-x:auto 터치 스와이프가 차단됨.
+ * → 스크롤 속성을 최상위 컨테이너에 직접 부여.
+ */
 .lb-cat-zone {
   padding: 20px 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
 }
+.lb-cat-zone::-webkit-scrollbar { display: none; }
+
 .lb-cat-inner {
   display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  flex-wrap: nowrap;           /* 한 줄 강제 */
   gap: 0;
   padding: 0 16px;
+  width: max-content;          /* 내부 너비가 부모보다 넓어야 스크롤 발생 */
+  min-width: 100%;
 }
-.lb-cat-inner::-webkit-scrollbar { display: none; }
 .lb-cat-item {
   flex: none;
   display: flex;
@@ -259,7 +269,7 @@ html, body { width: 100%; overflow-x: hidden; }
   align-items: center;
   text-decoration: none;
   color: #1d1d1f;
-  width: 88px;   /* 80 × 1.1 */
+  width: 88px;
   text-align: center;
 }
 .lb-cat-circle {
