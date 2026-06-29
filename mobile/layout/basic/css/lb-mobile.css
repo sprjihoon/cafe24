@@ -769,22 +769,9 @@ img.ec-admin-icon,
 .lb-countdown-value { font-size: 28px; font-weight: 600; }
 .lb-countdown-label, .lb-countdown-suffix { font-size: 11px; }
 .lb-timesale-btn { font-size: 12px; }
-.lb-timesale-visual {
-  flex-shrink: 0;
-  width: 36%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: -10px; /* 시계 이미지가 오른쪽으로 살짝 돌출 */
-}
-.lb-timesale-visual img {
-  width: 100%;
-  max-width: 160px;
-  height: auto;
-  object-fit: contain;
-  transform: rotate(-8deg); /* PC처럼 살짝 기울임 */
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
-}
+/* 시계 이미지 — 모바일에서 숨김, 텍스트만 표시 */
+.lb-timesale-visual { display: none !important; }
+.lb-timesale-left { width: 100%; }
 
 /* ── VIDEO BANNER ── */
 .lb-video-banner { padding: 32px 20px; }
