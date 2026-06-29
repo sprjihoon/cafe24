@@ -243,6 +243,26 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 - ✅ **모바일 네비게이션 backdrop 제거**: 터치 UX 개선
 - 🔧 레이아웃 내 불필요한 스크립트 정리 (`atelier-nav-cleanup.js`)
 
+### Updates (2026.06.29) — 모바일 스킨 대규모 개선
+- ✅ **모바일 헤더 (Phase M1 완료)**: 햄버거 버튼, ATELIER N. 로고, 검색·장바구니 아이콘 — sticky + z-index 정리
+- ✅ **사이드 드로어 (Phase M3 완료)**: PC 스타일 버튼 반영, 로그인/회원가입 버튼 노출, 즐겨찾기 제거, 헤더 오버랩 해결
+- ✅ **히어로 배너 텍스트 가시성 수정**: `layout.css` `justify-content:flex-end` 오버라이드 → 텍스트 상단 정렬, 그라디언트 배경 처리
+- ✅ **카테고리 아이콘 존 (lb-cat-zone) 4열 2행 완성**:
+  - `layout.css` `@media (max-width:768px)` 의 `width:max-content` / `max-width:100px` 충돌 해결
+  - `width:100% !important` + `overflow-x:hidden` 으로 flex `%` 확정 크기 확보
+  - 원형 이미지 `min(75px, 18.7vw)` 반응형 완벽 정원
+- ✅ **WEEKLY BEST 스와이프 네비게이션 완성**:
+  - PC 방식 `anchorBoxId` 패턴 적용 — `xans-record-` 제거로 상품 중복 오류 해결
+  - 8슬롯 `li` 템플릿으로 Cafe24 서버사이드 렌더링 정상 작동
+  - 커스텀 prev/next 버튼 + `scrollBy()` 기반 부드러운 스와이프
+- ✅ **피처 배너 Swiper 슬라이더**: 4개 배너 모바일 스와이프 지원, 하단 pagination 버튼 추가
+- ✅ **타임세일 모바일**: 텍스트 컨텐츠만 표시, 이미지 영역 숨김
+- ✅ **프로모 배너 2열 나란히 표시**: 호버 없이 텍스트 상시 표시
+- ✅ **브랜드 스토리 가로 레이아웃 유지**: 이미지(40% 축소) + 텍스트 좌우 배치
+- ✅ **ATELIER SHORTS 실제 상품 데이터 반영**: 7개 쇼츠 카드 — PC/모바일 공통
+- ✅ **로그인/회원가입 페이지**: PC + 모바일 Cafe24 매뉴얼 기반 리디자인
+- ✅ **`LE BLANC` 하드코딩 완전 제거**: `{$mall_name}` 템플릿 변수로 전환 (판매용 스킨 규격)
+
 ---
 
 ## 모바일 스킨 개발 로드맵 (v2.0)
@@ -253,15 +273,17 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 
 | 파일 | 상태 | 비고 |
 |------|------|------|
-| `mobile/index.html` | ✅ 콘텐츠 완성 | 히어로·카테고리·상품섹션·브랜드스토리 |
-| `mobile/layout/basic/css/lb-mobile.css` | 🔧 진행중 | ATELIER N 모바일 스타일 레이어 |
-| `mobile/layout/basic/layout.html` | ⚠️ 카페24 기본 | 헤더 ATELIER N 리디자인 필요 |
-| `mobile/layout/basic/main.html` | ⚠️ 카페24 기본 | 메인 전용 레이아웃, 동일 개선 필요 |
-| `mobile/layout/basic/navigation.html` | ⚠️ 카페24 기본 | 상단 텍스트 링크 → 하단 탭 전환 |
-| `mobile/layout/basic/sidebar.html` | ⚠️ 카페24 기본 | 사이드 드로어 ATELIER N 스타일 필요 |
+| `mobile/index.html` | ✅ 완성 | 히어로·카테고리·상품섹션·피처배너·브랜드스토리 |
+| `mobile/layout/basic/css/lb-mobile.css` | ✅ 완성 | ATELIER N 모바일 스타일 전체 적용 |
+| `mobile/layout/basic/layout.html` | ✅ ATELIER N 리디자인 | 헤더·사이드드로어 완성 |
+| `mobile/layout/basic/main.html` | ✅ 완성 | CSS 로딩 순서 정립 |
+| `mobile/layout/basic/navigation.html` | ⚠️ 카페24 기본 | 하단 탭 전환 — Phase M2 대기 |
+| `mobile/layout/basic/sidebar.html` | ✅ ATELIER N 스타일 적용 | PC 스타일 버튼, 즐겨찾기 제거 |
 | `mobile/layout/basic/footer.html` | ✅ ATELIER N 브랜딩 적용 | 뉴스레터 배너 포함 |
-| `mobile/product/detail.html` | ⚠️ 스타일링 필요 | 54KB — 상세 페이지 모바일 최적화 |
-| `mobile/product/list.html` | ⚠️ 스타일링 필요 | 2열 그리드, 필터 UI |
+| `mobile/member/login.html` | ✅ 리디자인 완료 | Cafe24 매뉴얼 기반 |
+| `mobile/member/join.html` | ✅ 리디자인 완료 | Cafe24 매뉴얼 기반 |
+| `mobile/product/detail.html` | ⚠️ 스타일링 필요 | 상세 페이지 모바일 최적화 — Phase M6 대기 |
+| `mobile/product/list.html` | ⚠️ 스타일링 필요 | 2열 그리드, 필터 UI — Phase M5 대기 |
 
 ---
 
@@ -341,10 +363,10 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 
 | Phase | 작업 | 상태 |
 |-------|------|------|
-| M1 | 모바일 헤더 재설계 | 🔲 대기 |
+| M1 | 모바일 헤더 재설계 | ✅ 완료 |
 | M2 | 하단 탭 네비게이션 | 🔲 대기 |
-| M3 | 사이드 드로어 리디자인 | 🔲 대기 |
-| M4 | 메인 페이지 스타일 완성 | 🔲 대기 |
+| M3 | 사이드 드로어 리디자인 | ✅ 완료 |
+| M4 | 메인 페이지 스타일 완성 | ✅ 완료 |
 | M5 | 상품 리스트 페이지 | 🔲 대기 |
 | M6 | 상품 상세 모바일 최적화 | 🔲 대기 |
 
@@ -360,7 +382,7 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 
 ---
 
-**Last Updated**: 2026.06.27  
+**Last Updated**: 2026.06.29  
 **Version**: 1.1.0 (PC 완성) → v2.0.0 (모바일 개발 중)  
-**Status**: PC Production Ready ✅ | Mobile In Development 🚧
+**Status**: PC Production Ready ✅ | Mobile Main Page Complete ✅ | Mobile Sub Pages 🚧
 
