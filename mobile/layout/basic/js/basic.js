@@ -168,8 +168,11 @@
     /* 이미 변환된 경우 중복 실행 방지 */
     if (section.querySelector('.lb-weekly-swiper')) return;
 
-    /* Cafe24는 li.xans-record- 또는 li 만 렌더링 → 범용 선택자 사용 */
-    var items = Array.prototype.slice.call(prdList.querySelectorAll('li'));
+    /*
+     * prdList.children: ul.prdList 의 직계 자식(li.xans-record-)만 선택.
+     * querySelectorAll('li')를 쓰면 spec ul 내부 li 까지 포함되어 슬라이드가 파편화됨.
+     */
+    var items = Array.prototype.slice.call(prdList.children);
     /* 상품이 없으면 CSS fallback(scroll-snap)으로 표시 */
     if (items.length === 0) {
       prdList.style.cssText = 'display:flex;flex-wrap:nowrap;overflow-x:auto;gap:12px;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;';
