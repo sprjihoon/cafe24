@@ -9,12 +9,12 @@
   z-index: 299;
 }
 .lb-aside-dimmer.visible { display: block; }
-
-/* ── 스크롤 잠금 ── */
 html.lb-aside-open,
 html.lb-aside-open body { overflow: hidden; }
 
-/* ── aside 드로어 ── */
+/* ══════════════════════════════════
+   드로어 본체
+══════════════════════════════════ */
 #aside {
   position: fixed !important;
   top: 0 !important;
@@ -24,232 +24,275 @@ html.lb-aside-open body { overflow: hidden; }
   background: #fff !important;
   z-index: 300 !important;
   overflow-y: auto !important;
+  overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch;
   transition: left .3s ease !important;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, .08);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, .1);
   display: block !important;
 }
 #aside.open { left: 0 !important; }
 
-/* ── 회원 상태 영역 ── */
+/* ══════════════════════════════════
+   회원 상태 영역
+══════════════════════════════════ */
+#aside p.member,
 #aside .member {
-  display: block;
-  padding: 20px 20px 16px;
-  margin: 0;
-  border-bottom: 1px solid #ebebeb;
-  font-size: 13px;
-  color: #1d1d1f;
-}
-/* 비로그인: "로그인이 필요합니다." 안내 문구 */
-#aside .lb-aside-greeting {
-  display: block;
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 12px;
-}
-#aside .member .btnLogin,
-#aside .member .btnJoin {
-  display: inline-block;
-  width: calc(50% - 4px);
-  padding: 10px 0;
-  text-align: center;
-  border: 1px solid #1d1d1f;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .05em;
-  color: #1d1d1f;
-  text-decoration: none;
-  transition: background .18s, color .18s;
-  box-sizing: border-box;
-}
-#aside .member .btnLogin { margin-right: 6px; }
-#aside .member .btnLogin:hover,
-#aside .member .btnJoin:hover {
-  background: #1d1d1f;
-  color: #fff;
-}
-/* 로그인 상태 */
-#aside .member strong a {
-  color: #1d1d1f;
-  text-decoration: none;
-  font-weight: 600;
+  display: block !important;
+  padding: 24px 20px 18px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+  background: #fff !important;
 }
 
-/* ── 멤버십 (마일리지/쿠폰) ── */
-#aside .membership {
-  display: flex;
-  gap: 0;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  border-bottom: 1px solid #ebebeb;
+/* "로그인이 필요합니다." 안내 문구 */
+#aside .member .lb-aside-greeting {
+  display: block !important;
+  font-size: 12px !important;
+  color: #999 !important;
+  margin-bottom: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: .02em;
+}
+
+/* 로그인 / 회원가입 버튼 */
+#aside .member .btnLogin,
+#aside .member .btnJoin,
+div#aside .member a.btnLogin,
+div#aside .member a.btnJoin {
+  display: inline-block !important;
+  width: calc(50% - 5px) !important;
+  padding: 10px 0 !important;
+  text-align: center !important;
+  border: 1px solid #1d1d1f !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: .05em !important;
+  color: #1d1d1f !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+  background: #fff !important;
+  vertical-align: top;
+  transition: background .18s, color .18s;
+}
+#aside .member .btnLogin { margin-right: 8px !important; }
+#aside .member .btnLogin:active,
+#aside .member .btnJoin:active {
+  background: #1d1d1f !important;
+  color: #fff !important;
+}
+
+/* 로그인 상태 */
+#aside .member strong { font-weight: 600; }
+#aside .member strong a { color: #1d1d1f; text-decoration: none; }
+
+/* ══════════════════════════════════
+   멤버십 (마일리지/쿠폰)
+══════════════════════════════════ */
+#aside ul.membership {
+  display: flex !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  border-bottom: 1px solid #e8e8e8 !important;
 }
 #aside .membership li {
-  flex: 1;
-  text-align: center;
-  padding: 11px 0;
-  font-size: 12px;
-  color: #555;
-  border-right: 1px solid #ebebeb;
+  flex: 1 !important;
+  text-align: center !important;
+  padding: 11px 0 !important;
+  font-size: 12px !important;
+  color: #555 !important;
+  border-right: 1px solid #e8e8e8 !important;
 }
-#aside .membership li:last-child { border-right: none; }
-#aside .membership li a {
-  color: inherit;
-  text-decoration: none;
-}
-#aside .membership li.displaynone { display: none; }
+#aside .membership li:last-child { border-right: none !important; }
+#aside .membership li a { color: inherit !important; text-decoration: none !important; }
+#aside .membership li.displaynone { display: none !important; }
 
-/* ── 마이쇼핑 링크 ── */
-#aside .lb-aside-myshop {
-  display: flex;
-  border-bottom: 1px solid #ebebeb;
+/* ══════════════════════════════════
+   마이쇼핑 링크
+══════════════════════════════════ */
+#aside .lb-aside-myshop,
+#aside div.xans-myshop-main {
+  display: flex !important;
+  border-bottom: 1px solid #e8e8e8 !important;
 }
-#aside .lb-aside-myshop a {
-  flex: 1;
-  text-align: center;
-  padding: 11px 4px;
-  font-size: 11px;
-  color: #666;
-  text-decoration: none;
-  border-right: 1px solid #ebebeb;
+#aside .lb-aside-myshop a,
+#aside div.xans-myshop-main a {
+  flex: 1 !important;
+  text-align: center !important;
+  padding: 12px 4px !important;
+  font-size: 11px !important;
+  color: #666 !important;
+  text-decoration: none !important;
+  border-right: 1px solid #e8e8e8 !important;
 }
-#aside .lb-aside-myshop a:last-child { border-right: none; }
+#aside .lb-aside-myshop a:last-child,
+#aside div.xans-myshop-main a:last-child { border-right: none !important; }
 
-/* ── 카테고리 컨테이너 ── */
-#aside .categoryCont {
-  padding-bottom: 16px;
-}
+/* ══════════════════════════════════
+   카테고리 컨테이너
+══════════════════════════════════ */
+#aside .categoryCont { padding-bottom: 0; }
 
-/* ── 카테고리 헤더 (아코디언) ── */
+/* 카테고리 헤더 h2 */
 #aside .categoryCont h2,
 #aside #slideProjectList h2,
-#aside .bookmarkCategory h2,
+#aside .bookmarkCategory > h2,
 #aside .multishop h2 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: .04em;
-  color: #1d1d1f;
-  border-bottom: 1px solid #f0f0f0;
-  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 14px 20px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: .04em !important;
+  color: #1d1d1f !important;
+  border-bottom: 1px solid #efefef !important;
+  cursor: pointer !important;
   user-select: none;
-  margin: 0;
-}
-#aside .categoryCont h2.countryTitle,
-#aside .categoryCont h2.languageTitle {
-  font-size: 11px;
-  font-weight: 600;
-  color: #999;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  margin: 0 !important;
+  background: #fff !important;
 }
 
-/* 아코디언 화살표 */
+/* 아코디언 화살표 버튼 */
 #aside .icoCategory {
-  appearance: none;
-  -webkit-appearance: none;
-  background: none;
-  border: none;
-  padding: 0;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  position: relative;
-  font-size: 0;
-  flex-shrink: 0;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  font-size: 0 !important;   /* 텍스트 "펼침" 숨기기 */
+  flex-shrink: 0 !important;
+  color: transparent !important;
 }
 #aside .icoCategory::after {
-  content: '';
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid #777;
-  border-bottom: 1.5px solid #777;
-  transform: rotate(45deg);
-  position: absolute;
-  top: 3px;
-  left: 5px;
-  transition: transform .2s;
+  content: '' !important;
+  display: block !important;
+  width: 7px !important;
+  height: 7px !important;
+  border-right: 1.5px solid #888 !important;
+  border-bottom: 1.5px solid #888 !important;
+  transform: rotate(45deg) !important;
+  position: absolute !important;
+  top: 4px !important;
+  left: 6px !important;
+  transition: transform .2s !important;
 }
 #aside h2.open .icoCategory::after {
-  transform: rotate(-135deg);
-  top: 6px;
+  transform: rotate(-135deg) !important;
+  top: 7px !important;
 }
 
-/* ── 카테고리 목록 ── */
+/* ══════════════════════════════════
+   카테고리 목록 항목
+══════════════════════════════════ */
 #aside .categoryList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  background: #fafafa;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fafafa !important;
 }
-#aside .categoryList li {
-  border-bottom: 1px solid #f0f0f0;
+#aside .categoryList > li {
+  border-bottom: 1px solid #f0f0f0 !important;
 }
-#aside .categoryList li:last-child { border-bottom: none; }
+#aside .categoryList > li:last-child { border-bottom: none !important; }
+
+/* 카테고리 링크 — .cate (이름) */
 #aside .categoryList li a.cate {
-  display: block;
-  padding: 12px 20px 12px 28px;
-  font-size: 13px;
-  color: #333;
-  text-decoration: none;
-  letter-spacing: .03em;
+  display: block !important;
+  padding: 12px 20px 12px 24px !important;
+  font-size: 13px !important;
+  color: #222 !important;
+  text-decoration: none !important;
+  letter-spacing: .03em !important;
 }
-#aside .categoryList li a.cate:hover { color: #1d1d1f; }
+/* 서브 카테고리 (접혀있다가 클릭 시 표시되는 ul) */
+#aside .categoryList li ul a {
+  display: block !important;
+  padding: 10px 20px 10px 36px !important;
+  font-size: 12px !important;
+  color: #555 !important;
+  text-decoration: none !important;
+}
+/* 상품보기, 즐겨찾기 아이콘 숨김 */
 #aside .categoryList li a.view { display: none !important; }
 #aside .categoryList .icoBookmark { display: none !important; }
 
-/* ── 기획전 ── */
-#aside #slideProjectList { border-top: none; }
+/* ══════════════════════════════════
+   기획전
+══════════════════════════════════ */
+#aside #slideProjectList { border-top: 1px solid #efefef; }
 
-/* ── 즐겨찾기 ── */
-#aside .bookmarkCategory { border-top: 1px solid #ebebeb; }
+/* ══════════════════════════════════
+   즐겨찾기
+══════════════════════════════════ */
+#aside .bookmarkCategory { border-top: 1px solid #efefef; }
 #aside .bookmarkEmpty {
-  padding: 12px 20px;
-  font-size: 12px;
-  color: #aaa;
+  padding: 12px 20px !important;
+  font-size: 12px !important;
+  color: #bbb !important;
   line-height: 1.6;
 }
 #aside .bookmarkEmpty img { vertical-align: middle; }
 
-/* ── 다국어/국가 ── */
+/* ══════════════════════════════════
+   다국어/국가
+══════════════════════════════════ */
 #aside .multishop {
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid #e8e8e8;
   padding-bottom: 8px;
 }
+#aside .multishop h2.countryTitle,
+#aside .multishop h2.languageTitle {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #aaa !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  padding: 10px 20px !important;
+}
 #aside .multishop ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px 20px 12px;
-  list-style: none;
-  margin: 0;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  padding: 6px 20px 14px !important;
+  list-style: none !important;
+  margin: 0 !important;
 }
 #aside .multishop ul li a {
-  font-size: 12px;
-  color: #555;
-  text-decoration: none;
+  font-size: 12px !important;
+  color: #555 !important;
+  text-decoration: none !important;
 }
 #aside .multishop ul li a img {
-  width: 22px;
-  height: auto;
-  vertical-align: middle;
+  width: 22px !important;
+  height: auto !important;
+  vertical-align: middle !important;
 }
 
-/* ── 로그아웃 ── */
+/* ══════════════════════════════════
+   로그아웃
+══════════════════════════════════ */
 #aside .loginState {
-  padding: 12px 20px;
-  border-top: 1px solid #ebebeb;
+  padding: 14px 20px !important;
+  border-top: 1px solid #e8e8e8 !important;
 }
 #aside .loginState a {
-  font-size: 12px;
-  color: #aaa;
-  text-decoration: none;
-  letter-spacing: .04em;
+  font-size: 12px !important;
+  color: #aaa !important;
+  text-decoration: none !important;
+  letter-spacing: .04em !important;
 }
 
-/* ── 닫기 버튼 (Cafe24 기본) ── */
-#aside .btnClose { display: none; }
+/* 닫기 버튼 숨김 */
+#aside .btnClose { display: none !important; }
+
+/* ══════════════════════════════════
+   Cafe24 xans 클래스 정리
+══════════════════════════════════ */
+/* xans-layout-statelogon/logoff 기본 마진 제거 */
+#aside .xans-layout-statelogon,
+#aside .xans-layout-statelogoff { margin: 0 !important; }
