@@ -8,7 +8,7 @@
 /* ── 기본 레이아웃 ── */
 html, body { width: 100%; overflow-x: hidden; }
 #wrap { overflow-x: hidden; }
-#contents { padding-bottom: 80px; } /* 하단 탭바 여백 */
+#contents { padding-bottom: 0; }
 
 /* ── LE BLANC 모바일 헤더 ── */
 .lb-m-header {
@@ -467,8 +467,9 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hidden-section { display: none !important; }
 .lb-band-banner { display: none; } /* 모바일에서 띠배너 숨김 */
 
-/* ── 하단 탭 네비게이션 ── */
-.lb-m-tabnav {
+/* ── 하단 탭 네비게이션 (비활성) ── */
+.lb-m-tabnav { display: none !important; }
+.lb-m-tabnav--hidden {
   position: fixed;
   bottom: 0;
   left: 0;
