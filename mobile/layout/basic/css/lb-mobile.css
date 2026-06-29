@@ -239,29 +239,39 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
-/* ── 카테고리 아이콘 존 ── */
+/* ── 카테고리 아이콘 존 (Swiper) ── */
 /*
- * 스와이프 핵심: .lb-cat-zone 자체가 scroll container.
- * 부모에 overflow:hidden 이 있으면 자식 overflow-x:auto 터치 스와이프가 차단됨.
- * → 스크롤 속성을 최상위 컨테이너에 직접 부여.
+ * CSS overflow-x:auto 는 부모 overflow:hidden / 세로 스크롤 컨텍스트에서 신뢰성 낮음.
+ * basic.js > initCatZoneSwiper() 가 .lb-cat-inner 를 Swiper 컨테이너로 변환함.
  */
 .lb-cat-zone {
   padding: 20px 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* IE/Edge */
+  overflow: hidden;             /* Swiper 컨테이너가 내부에서 처리 */
 }
-.lb-cat-zone::-webkit-scrollbar { display: none; }
 
+/* Swiper 초기화 전 fallback — JS 없을 때도 보이게 */
 .lb-cat-inner {
   display: flex;
-  flex-wrap: nowrap;           /* 한 줄 강제 */
+  flex-wrap: nowrap;
   gap: 0;
   padding: 0 16px;
-  width: max-content;          /* 내부 너비가 부모보다 넓어야 스크롤 발생 */
-  min-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.lb-cat-inner::-webkit-scrollbar { display: none; }
+
+/* Swiper 초기화 후 */
+.lb-cat-swiper {
+  overflow: hidden !important;
+  padding: 0 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.lb-cat-swiper .swiper-slide {
+  width: 80px !important;       /* 각 카테고리 아이콘 칸 너비 */
+  flex-shrink: 0;
 }
 .lb-cat-item {
   flex: none;

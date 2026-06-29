@@ -128,6 +128,50 @@
     intro.hidden = false;
   }
 
+  /*
+   * 카테고리 아이콘 존 Swiper
+   * CSS overflow-x:auto 는 부모 overflow:hidden 혹은 세로 스크롤 컨텍스트에서 신뢰성이 낮음.
+   * Swiper.js 로 변환하면 터치 이벤트를 직접 처리하므로 안정적으로 좌우 스와이프됨.
+   */
+  function initCatZoneSwiper() {
+    if (typeof Swiper === 'undefined') return;
+
+    var zone = document.getElementById('lb-cat-zone');
+    if (!zone) return;
+
+    var inner = zone.querySelector('.lb-cat-inner');
+    if (!inner) return;
+    if (inner.classList.contains('swiper-initialized')) return;
+
+    var items = Array.prototype.slice.call(inner.querySelectorAll('.lb-cat-item'));
+    if (!items.length) return;
+
+    /* 각 .lb-cat-item 을 swiper-slide 로 변환 */
+    var wrapper = document.createElement('div');
+    wrapper.className = 'swiper-wrapper';
+
+    items.forEach(function(item) {
+      item.parentNode.removeChild(item);
+      var slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.appendChild(item);
+      wrapper.appendChild(slide);
+    });
+
+    inner.appendChild(wrapper);
+
+    /* .lb-cat-inner 를 Swiper 컨테이너로 변환 */
+    inner.className = 'swiper lb-cat-swiper';
+
+    new Swiper(inner, {
+      slidesPerView: 'auto',   /* CSS width로 슬라이드 폭 제어 */
+      spaceBetween: 0,
+      freeMode: true,          /* 자유 스크롤 (snap 없음) */
+      grabCursor: true,
+      resistanceRatio: 0.6,
+    });
+  }
+
   function initFeatureSwiper() {
     if (typeof Swiper === 'undefined') return;
     var container = document.querySelector('.lb-feature-banners');
@@ -233,10 +277,12 @@
     initCategoryCopy();
     /* Swiper가 로드된 뒤 실행 (CDN async) */
     if (typeof Swiper !== 'undefined') {
+      initCatZoneSwiper();
       initFeatureSwiper();
       initWeeklyBestSwiper();
     } else {
       window.addEventListener('load', function() {
+        initCatZoneSwiper();
         initFeatureSwiper();
         initWeeklyBestSwiper();
       });
