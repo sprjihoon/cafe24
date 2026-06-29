@@ -243,16 +243,17 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 - ✅ **모바일 네비게이션 backdrop 제거**: 터치 UX 개선
 - 🔧 레이아웃 내 불필요한 스크립트 정리 (`atelier-nav-cleanup.js`)
 
-### Updates (2026.06.30) — 모바일 카테고리 탭바 완성
+### Updates (2026.06.30) — 모바일 헤더/탭바 고정 및 카테고리 완성
 - ✅ **메인 히어로 배너 정사각형**: `aspect-ratio: 1/1` 적용, 기존 대비 약 2배 크기
 - ✅ **카테고리 탭바 + ▼ 전체메뉴 완성**:
   - 헤더 하단 가로 스와이프 텍스트 메뉴 (SHOP ALL / TOPS / KNIT / BLOUSE / T-SHIRT / DRESSES / OUTERWEAR / BOTTOMS / BAG & SHOES)
-  - 우측 고정 `▼` 버튼 클릭 시 3열 바둑판 드롭다운 패널
+  - 우측 고정 `▼` 버튼 클릭 시 3열 바둑판 드롭다운 패널 (배경 클릭/ESC 닫기)
   - 드롭다운 위치를 `getBoundingClientRect()`로 동적 계산 → 항상 탭바 바로 아래
-  - 현재 카테고리 페이지 활성 탭 자동 표시
-- ✅ **헤더 + 탭바 sticky 상단 고정 수정**:
-  - `overflow-x: hidden` → `overflow-x: clip` 변경
-  - `hidden`은 부모 스크롤 컨테이너 생성 → sticky 무력화 버그 해결
+  - 현재 카테고리 페이지 활성 탭 자동 표시 + 스크롤 중앙 정렬
+- ✅ **헤더 + 탭바 상단 고정 완성**:
+  - `position: fixed !important` 적용 — Cafe24 `layout.css` `position:relative` 오버라이드
+  - `layout.css`의 `#container { padding: 0 !important }` 충돌 → `<div class="lb-fixed-spacer">` spacer 방식으로 해결
+  - 스크롤해도 헤더(로고·햄버거·아이콘)와 카테고리 탭바 항상 상단 고정
 
 ### Updates (2026.06.29) — 모바일 스킨 대규모 개선
 - ✅ **모바일 헤더 (Phase M1 완료)**: 햄버거 버튼, ATELIER N. 로고, 검색·장바구니 아이콘 — sticky + z-index 정리

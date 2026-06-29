@@ -6,14 +6,29 @@
    ============================================================ */
 
 /* ── 기본 레이아웃 ── */
-html, body { width: 100%; overflow-x: clip; }
-/* overflow-x:clip → 가로 넘침 차단, 단 새 스크롤 컨테이너 생성 안 함
-   → position:sticky 동작 유지 (hidden은 sticky를 깸) */
-#wrap { overflow-x: clip; }
-#container { overflow-x: clip; }
+html, body { width: 100%; overflow-x: hidden; }
+#wrap { overflow-x: hidden; }
+/* fixed header + catbar 높이 보정 spacer */
+.lb-fixed-spacer {
+  display: block;
+  height: 94px;   /* header 52px + catbar ~42px */
+  width: 100%;
+  flex-shrink: 0;
+}
 #contents { padding-bottom: 0; }
 
-/* ── ATELIER N 모바일 헤더 ── */
+/* ── ATELIER N 모바일 헤더 (fixed) ── */
+/* layout.css: #header { position:relative } → fixed로 완전 재정의
+   sticky는 Cafe24 부모 구조에서 불안정 → fixed 사용 */
+#header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
 .lb-m-header {
   display: flex;
   align-items: center;
@@ -21,12 +36,6 @@ html, body { width: 100%; overflow-x: clip; }
   height: 52px;
   padding: 0 12px;
   background: #fff;
-  border-bottom: 1px solid #e8e8e8;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  /* sticky 동작 보장: 부모 overflow:clip 필수 */
-  will-change: transform;
 }
 .lb-m-header__hamburger {
   display: flex;
@@ -118,11 +127,13 @@ html, body { width: 100%; overflow-x: clip; }
   padding: 0 3px;
 }
 
-/* ── 헤더 하단 카테고리 탭바 래퍼 ── */
+/* ── 헤더 하단 카테고리 탭바 래퍼 (fixed) ── */
 .lb-m-catbar-wrap {
-  position: sticky;
-  top: 52px;
-  z-index: 90;
+  position: fixed !important;
+  top: 52px;   /* #header(52px) 바로 아래 */
+  left: 0;
+  right: 0;
+  z-index: 190;
   background: #fff;
   border-bottom: 1px solid #e8e8e8;
   display: flex;
