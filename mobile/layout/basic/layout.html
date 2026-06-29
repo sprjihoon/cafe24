@@ -60,16 +60,12 @@
                     </p>
                 </div>
 
-                <!-- Cafe24 필수: 검색 패널 -->
+                <!-- Cafe24 필수: 검색 패널 (숨김 — JS로 트리거) -->
                 <section id="topArea" style="display:none;">
                     <div class="searchWrap">
                         <p class="category"><a href="#none" class="fold">카테고리</a></p>
-                        <p class="search"><button type="button">검색</button></p>
-                        <p module="Layout_orderBasketcount">
-                            <a href="/order/basket.html" class="btnBasket">장바구니<span class="count {$basket_count_display|display} {$basket_count_display_class}"><span class="{$basket_count_class}">{$basket_count}</span></span></a>
-                        </p>
+                        <p class="search"><button type="button" id="lb-search-open">검색</button></p>
                     </div>
-                    <!--@import(/layout/basic/navigation.html)-->
                 </section>
                 <!--@import(/layout/basic/search.html)-->
             </div>
@@ -103,29 +99,40 @@
         <span>마이</span>
     </a>
     <a href="/order/basket.html" class="lb-m-tabnav__item lb-m-tabnav__basket" data-tab="basket">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="lb-m-tabnav__badge {$basket_count_display|display}"><span class="{$basket_count_class}">{$basket_count}</span></span>
+        <span class="lb-m-tabnav__badge-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <span class="lb-m-tabnav__badge" id="lb-tab-basket-count" style="display:none;"></span>
+        </span>
         <span>장바구니</span>
     </a>
 </nav>
 
 <script>
 (function(){
-    /* 검색 트리거: 헤더 검색 버튼과 동일 동작 */
+    /* 검색 트리거 */
     document.querySelectorAll('.lb-m-search-trigger').forEach(function(btn){
         btn.addEventListener('click', function(){
-            var searchBtn = document.querySelector('#topArea .search button');
+            var searchBtn = document.getElementById('lb-search-open');
             if(searchBtn) searchBtn.click();
         });
     });
 
+    /* 장바구니 뱃지: 헤더 모듈에서 카운트 복사 */
+    var headerBadge = document.querySelector('.lb-m-basket-count');
+    var tabBadge = document.getElementById('lb-tab-basket-count');
+    if(headerBadge && tabBadge) {
+        var count = headerBadge.innerText.trim();
+        if(count && count !== '0') {
+            tabBadge.textContent = count;
+            tabBadge.style.display = '';
+        }
+    }
+
     /* 탭 활성 표시 */
     var path = location.pathname;
-    var map = { '/': 'home', '/myshop': 'mypage', '/order/basket.html': 'basket' };
     var active = 'home';
     if(path.indexOf('/myshop') === 0) active = 'mypage';
     else if(path.indexOf('/order/basket') >= 0) active = 'basket';
-    else if(path === '/') active = 'home';
     var el = document.querySelector('.lb-m-tabnav__item[data-tab="' + active + '"]');
     if(el) el.classList.add('is-active');
 })();

@@ -86,11 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p module="Layout_orderBasketcount">
-                                <a href="/order/basket.html" class="btnBasket">장바구니<span class="count {$basket_count_display|display} {$basket_count_display_class}"><span class="{$basket_count_class}">{$basket_count}</span></span></a>
-                            </p>
                         </div>
-                        <!--@import(/layout/basic/navigation.html)-->
                         <nav id="mainMenu" module="Layout_MobileMaincategory">
                             <!--
                                 $swipe = yes
@@ -150,7 +146,7 @@
         <a href="/order/basket.html" class="lb-m-tabnav__item lb-m-tabnav__basket" data-tab="basket">
             <span class="lb-m-tabnav__badge-wrap">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-                <span class="lb-m-tabnav__badge {$basket_count_display|display}"><span class="{$basket_count_class}">{$basket_count}</span></span>
+                <span class="lb-m-tabnav__badge" id="lb-tab-basket-count" style="display:none;"></span>
             </span>
             <span>장바구니</span>
         </a>
@@ -158,17 +154,30 @@
 
     <script>
     (function(){
+        /* 검색 트리거: topArea 내 검색창 열기 */
         document.querySelectorAll('.lb-m-search-trigger').forEach(function(btn){
             btn.addEventListener('click', function(){
-                var searchBtn = document.querySelector('#topArea .search button, #topArea .searchForm button.btnDelete');
-                var searchWrap = document.querySelector('#topArea');
-                if(searchWrap) searchWrap.style.display = '';
-                if(searchBtn) {
-                    var input = document.querySelector('#topArea .searchForm input[type="text"], #topArea .searchForm input[type="search"]');
-                    if(input) input.focus();
-                }
+                var topArea = document.getElementById('topArea');
+                if(topArea) topArea.style.display = '';
+                var input = document.querySelector('#topArea .searchForm input');
+                if(input) input.focus();
             });
         });
+
+        /* 장바구니 뱃지: 헤더 모듈에서 카운트 복사 */
+        var headerBadge = document.querySelector('.lb-m-basket-count');
+        var tabBadge = document.getElementById('lb-tab-basket-count');
+        if(headerBadge && tabBadge) {
+            var count = headerBadge.innerText.trim();
+            if(count && count !== '0') {
+                tabBadge.textContent = count;
+                tabBadge.style.display = '';
+            }
+        }
+
+        /* 탭 활성: 메인은 홈 고정 */
+        var homeTab = document.querySelector('.lb-m-tabnav__item[data-tab="home"]');
+        if(homeTab) homeTab.classList.add('is-active');
     })();
     </script>
 </body>

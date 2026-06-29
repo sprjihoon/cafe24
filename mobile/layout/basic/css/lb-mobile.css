@@ -421,6 +421,10 @@ p[module="Layout_attendBanner"] { display: none !important; }
 #header .header { padding: 0 !important; margin: 0 !important; }
 #header #topArea { display: none !important; } /* JS로 검색 패널만 필요시 노출 */
 
+/* 구 네비게이션 링크 완전 숨김 (로그인/주문조회/마이쇼핑 등) */
+.xans-layout-mobilenavigation { display: none !important; }
+#header nav[module="Layout_MobileNavigation"] { display: none !important; }
+
 /* 헤더 컨테이너 */
 .lb-m-header {
   position: sticky;
