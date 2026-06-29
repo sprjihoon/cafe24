@@ -246,13 +246,14 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-cat-inner {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;   /* 나머지 행(3개)도 자연스럽게 가운데 */
-  row-gap: 10px;             /* 행간 축소 */
-  padding: 0 8px;
+  justify-content: center;   /* 2행(3개)도 자동 가운데 정렬 */
+  row-gap: 10px;
+  column-gap: 8px;
+  padding: 0 16px;
 }
 .lb-cat-item {
-  flex: 0 0 25%;             /* 4개씩 → 행 초과분은 다음 줄로 */
-  max-width: 25%;
+  flex: 0 0 80px;            /* 고정 너비 — 어떤 뷰포트에서도 4개씩 */
+  max-width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
