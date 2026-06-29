@@ -128,11 +128,33 @@
     intro.hidden = false;
   }
 
+  function initFeatureSwiper() {
+    if (typeof Swiper === 'undefined') return;
+    var container = document.querySelector('.lb-feature-banners');
+    if (!container) return;
+    /* Swiper가 이미 적용된 경우 스킵 */
+    if (container.classList.contains('swiper-initialized')) return;
+    new Swiper(container, {
+      wrapperClass: 'lb-feature-inner',
+      slideClass: 'lb-feature-box',
+      slidesPerView: 1.15,
+      spaceBetween: 12,
+      grabCursor: true,
+      centeredSlides: false,
+    });
+  }
+
   function init() {
     ensureMarquee();
     fixMobileLogo();
     initHeroSlider();
     initCategoryCopy();
+    /* Swiper가 로드된 뒤 실행 (CDN async) */
+    if (typeof Swiper !== 'undefined') {
+      initFeatureSwiper();
+    } else {
+      window.addEventListener('load', initFeatureSwiper);
+    }
   }
 
   if (document.readyState === 'loading') {
