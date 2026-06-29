@@ -820,10 +820,55 @@ img.ec-admin-icon,
 .lb-video-player { aspect-ratio: 16/9; }
 
 /* ── BRAND STORY SECTION ── */
-.lb-brand-story-section { padding: 0; }
-.lb-brand-story-container { display: block; }
-.lb-brand-story-image img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
-.lb-brand-story-content { padding: 28px 20px; }
+/* ── BRAND STORY — 이미지 + 텍스트 가로 배치 유지 ── */
+.lb-brand-story-section { padding: 0; overflow: hidden; }
+.lb-brand-story-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  min-height: 180px;
+}
+.lb-brand-story-image {
+  flex: 0 0 42% !important;
+  width: 42% !important;
+  overflow: hidden;
+}
+.lb-brand-story-image img {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: unset !important;
+  object-fit: cover !important;
+  display: block;
+}
+.lb-brand-story-content {
+  flex: 1 !important;
+  padding: 20px 16px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* 텍스트 크기 모바일 최적화 */
+.lb-brand-story-content .lb-brand-eyebrow {
+  font-size: 9px !important;
+  letter-spacing: 0.1em;
+}
+.lb-brand-story-content .lb-brand-title {
+  font-size: 14px !important;
+  line-height: 1.4;
+  margin: 6px 0 8px;
+}
+.lb-brand-story-content .lb-brand-desc,
+.lb-brand-story-content p {
+  font-size: 11px !important;
+  line-height: 1.6;
+  color: #666;
+}
+.lb-brand-story-content .lb-brand-link,
+.lb-brand-story-content a {
+  font-size: 11px !important;
+  margin-top: 10px;
+  display: inline-block;
+}
 
 /* ── CATEGORY BANNERS (2개) ── */
 .lb-category-banners { padding: 0; }
