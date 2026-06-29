@@ -239,48 +239,22 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
-/* ── 카테고리 아이콘 존 (Swiper) ── */
-/*
- * CSS overflow-x:auto 는 부모 overflow:hidden / 세로 스크롤 컨텍스트에서 신뢰성 낮음.
- * basic.js > initCatZoneSwiper() 가 .lb-cat-inner 를 Swiper 컨테이너로 변환함.
- */
+/* ── 카테고리 아이콘 존 (2줄 그리드) ── */
 .lb-cat-zone {
   padding: 20px 0;
-  overflow: hidden;             /* Swiper 컨테이너가 내부에서 처리 */
 }
-
-/* Swiper 초기화 전 fallback — JS 없을 때도 보이게 */
 .lb-cat-inner {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0;
-  padding: 0 16px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.lb-cat-inner::-webkit-scrollbar { display: none; }
-
-/* Swiper 초기화 후 */
-.lb-cat-swiper {
-  overflow: hidden !important;
-  padding: 0 16px;
-  box-sizing: border-box;
-  width: 100%;
-}
-.lb-cat-swiper .swiper-slide {
-  width: 80px !important;       /* 각 카테고리 아이콘 칸 너비 */
-  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* 4열 → 7개면 4+3으로 자동 배치 */
+  row-gap: 16px;
+  padding: 0 8px;
 }
 .lb-cat-item {
-  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: #1d1d1f;
-  width: 88px;
   text-align: center;
 }
 .lb-cat-circle {

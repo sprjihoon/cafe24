@@ -277,12 +277,10 @@
     initCategoryCopy();
     /* Swiper가 로드된 뒤 실행 (CDN async) */
     if (typeof Swiper !== 'undefined') {
-      initCatZoneSwiper();
       initFeatureSwiper();
       initWeeklyBestSwiper();
     } else {
       window.addEventListener('load', function() {
-        initCatZoneSwiper();
         initFeatureSwiper();
         initWeeklyBestSwiper();
       });
