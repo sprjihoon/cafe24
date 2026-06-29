@@ -255,7 +255,7 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-placeholder::before { display: none; }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
 
-/* ── 카테고리 아이콘 존 (항상 4열 2행 flex) ── */
+/* ── 카테고리 아이콘 존 (항상 4열 2행, 비율 반응형) ── */
 .lb-cat-zone {
   padding: 14px 0 10px;
 }
@@ -263,22 +263,23 @@ html, body { width: 100%; overflow-x: hidden; }
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: flex-start;   /* 행 내 아이템을 상단 정렬 → 원 높이 일정 */
-  row-gap: 12px;
-  column-gap: 4px;
+  align-items: flex-start;
+  row-gap: 10px;
   padding: 0;
   margin: 0;
+  /* column-gap 없음 — 아이템 padding으로 간격 처리 */
 }
 /*
- * ★ 항상 4열 2행 (4+3 레이아웃), 화면 크기에 비례해 축소
- *   - 열 너비: calc((100% - 3×gap) / 4) → 어떤 뷰포트에서도 정확히 4열
- *   - 원 크기: min(68px, 80%) → 최대 68px, 열이 좁아지면 자동 축소
- *   - 폰트:   min(11px, 2.8vw) → 최대 11px, 뷰포트 좁아지면 자동 축소
+ * ★ flex: 0 0 25% → 항상 정확히 4열 (calc 없음 → 브라우저 호환성 최대)
+ *   padding: 0 3px → 인접 아이템 간 6px 시각적 간격
+ *   box-sizing: border-box → padding 포함해 25% 유지
  */
 .lb-cat-item {
-  flex: 0 0 calc((100% - 12px) / 4);  /* gap 3×4px = 12px */
-  max-width: calc((100% - 12px) / 4);
+  flex: 0 0 25%;
+  max-width: 25%;
   min-width: 0;
+  box-sizing: border-box;
+  padding: 0 3px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -286,10 +287,14 @@ html, body { width: 100%; overflow-x: hidden; }
   color: #1d1d1f;
   text-align: center;
 }
+/*
+ * 원 크기: width·height 모두 동일한 vw 값 → 항상 정원 보장
+ *   min(68px, 17vw): 320px → 54px / 375px → 64px / 400px+ → 68px
+ *   aspect-ratio 사용 X — 일부 모바일에서 height 미적용되어 타원 발생
+ */
 .lb-cat-circle {
-  /* 열 너비에 비례: 최대 68px, 화면 좁아지면 80%(열너비)로 축소 */
-  width: min(68px, 80%);
-  aspect-ratio: 1;           /* 항상 정원 유지 */
+  width: min(68px, 17vw);
+  height: min(68px, 17vw);
   border-radius: 50%;
   overflow: hidden;
   background: #f5f5f5;
@@ -317,17 +322,16 @@ html, body { width: 100%; overflow-x: hidden; }
   transition: color 0.2s;
 }
 .lb-cat-label {
-  /* 최대 11px, 뷰포트 320px → 9px, 375px → 10.5px */
   font-size: min(11px, 2.8vw);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: #1d1d1f;
   text-transform: uppercase;
   display: block;
   word-break: break-word;
   line-height: 1.3;
   text-align: center;
-  min-height: 2.6em;  /* BAG & SHOES 2줄 기준 → 행 내 원 높이 통일 */
+  min-height: 2.6em;
 }
 .lb-cat-desc { display: none; }
 
