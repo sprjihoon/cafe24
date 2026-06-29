@@ -243,6 +243,17 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 - ✅ **모바일 네비게이션 backdrop 제거**: 터치 UX 개선
 - 🔧 레이아웃 내 불필요한 스크립트 정리 (`atelier-nav-cleanup.js`)
 
+### Updates (2026.06.30) — 모바일 카테고리 탭바 완성
+- ✅ **메인 히어로 배너 정사각형**: `aspect-ratio: 1/1` 적용, 기존 대비 약 2배 크기
+- ✅ **카테고리 탭바 + ▼ 전체메뉴 완성**:
+  - 헤더 하단 가로 스와이프 텍스트 메뉴 (SHOP ALL / TOPS / KNIT / BLOUSE / T-SHIRT / DRESSES / OUTERWEAR / BOTTOMS / BAG & SHOES)
+  - 우측 고정 `▼` 버튼 클릭 시 3열 바둑판 드롭다운 패널
+  - 드롭다운 위치를 `getBoundingClientRect()`로 동적 계산 → 항상 탭바 바로 아래
+  - 현재 카테고리 페이지 활성 탭 자동 표시
+- ✅ **헤더 + 탭바 sticky 상단 고정 수정**:
+  - `overflow-x: hidden` → `overflow-x: clip` 변경
+  - `hidden`은 부모 스크롤 컨테이너 생성 → sticky 무력화 버그 해결
+
 ### Updates (2026.06.29) — 모바일 스킨 대규모 개선
 - ✅ **모바일 헤더 (Phase M1 완료)**: 햄버거 버튼, ATELIER N. 로고, 검색·장바구니 아이콘 — sticky + z-index 정리
 - ✅ **사이드 드로어 (Phase M3 완료)**: PC 스타일 버튼 반영, 로그인/회원가입 버튼 노출, 즐겨찾기 제거, 헤더 오버랩 해결
@@ -382,7 +393,7 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 
 ---
 
-**Last Updated**: 2026.06.29  
+**Last Updated**: 2026.06.30  
 **Version**: 1.1.0 (PC 완성) → v2.0.0 (모바일 개발 중)  
 **Status**: PC Production Ready ✅ | Mobile Main Page Complete ✅ | Mobile Sub Pages 🚧
 

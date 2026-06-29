@@ -95,32 +95,54 @@
                 </div>
             </header>
 
-            <!-- 헤더 하단 카테고리 탭바 -->
-            <nav class="lb-m-catbar" id="lb-m-catbar" module="Layout_MobileMaincategory">
-                <!--
-                    $swipe = yes
-                    $plugin = category
-                    $generate = no
-                    $gird = 3
-                    $display = no
-                -->
-                <ul class="lb-m-catbar__list">
-                    <li>
-                        <ul>
-                            <li module="Mobile_Categoryname_1" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                            <li module="Mobile_Categoryname_2" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                            <li module="Mobile_Categoryname_3" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                        </ul>
-                    </li>
-                    <li class="afterNone">
-                        <ul>
-                            <li module="Mobile_Categoryname_4" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <p class="btnPrev"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_prev.png" width="8" height="13" alt="이전"></a></p>
-                <p class="btnNext"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_next.png" width="8" height="13" alt="다음"></a></p>
-            </nav>
+            <!-- 헤더 하단 카테고리 탭바 + ▼ 전체메뉴 래퍼 -->
+            <!--
+                ★ SKIN 설치 후 커스터마이즈:
+                  cate_no 값을 관리자 > 상품관리 > 상품분류 번호로 변경하세요.
+                  항목 추가/삭제도 동일한 <li> 형식으로 수정하면 됩니다.
+            -->
+            <div class="lb-m-catbar-wrap" id="lb-m-catbar-wrap">
+                <!-- Cafe24 필수 구조: Layout_MobileMaincategory (숨김 처리, 탭바는 아래 커스텀 목록 사용) -->
+                <nav style="display:none;" module="Layout_MobileMaincategory">
+                    <ul><li module="Mobile_Categoryname_1" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li></ul>
+                </nav>
+
+                <!-- 커스텀 카테고리 탭바 (가로 스와이프) -->
+                <nav class="lb-m-catbar" id="lb-m-catbar" aria-label="카테고리 메뉴">
+                    <ul class="lb-m-catbar__list">
+                        <li><a href="/m/product/list.html?cate_no=23">SHOP ALL</a></li>
+                        <li><a href="/m/product/list.html?cate_no=25">TOPS</a></li>
+                        <li><a href="/m/product/list.html?cate_no=32">KNIT</a></li>
+                        <li><a href="/m/product/list.html?cate_no=33">BLOUSE</a></li>
+                        <li><a href="/m/product/list.html?cate_no=34">T-SHIRT</a></li>
+                        <li><a href="/m/product/list.html?cate_no=26">DRESSES</a></li>
+                        <li><a href="/m/product/list.html?cate_no=24">OUTERWEAR</a></li>
+                        <li><a href="/m/product/list.html?cate_no=27">BOTTOMS</a></li>
+                        <li><a href="/m/product/list.html?cate_no=28">BAG &amp; SHOES</a></li>
+                    </ul>
+                </nav>
+
+                <!-- ▼ 전체메뉴 버튼 (우측 고정) -->
+                <button type="button" class="lb-m-catbar__more" id="lb-m-catbar-more" aria-label="전체메뉴" aria-expanded="false">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+            </div>
+
+            <!-- ▼ 전체메뉴 드롭다운 패널 (동일 카테고리 세로 목록) -->
+            <div class="lb-m-catdrop" id="lb-m-catdrop" aria-hidden="true">
+                <div class="lb-m-catdrop__inner">
+                    <a href="/m/product/list.html?cate_no=23" class="lb-m-catdrop__link">SHOP ALL</a>
+                    <a href="/m/product/list.html?cate_no=25" class="lb-m-catdrop__link">TOPS</a>
+                    <a href="/m/product/list.html?cate_no=32" class="lb-m-catdrop__link">KNIT</a>
+                    <a href="/m/product/list.html?cate_no=33" class="lb-m-catdrop__link">BLOUSE</a>
+                    <a href="/m/product/list.html?cate_no=34" class="lb-m-catdrop__link">T-SHIRT</a>
+                    <a href="/m/product/list.html?cate_no=26" class="lb-m-catdrop__link">DRESSES</a>
+                    <a href="/m/product/list.html?cate_no=24" class="lb-m-catdrop__link">OUTERWEAR</a>
+                    <a href="/m/product/list.html?cate_no=27" class="lb-m-catdrop__link">BOTTOMS</a>
+                    <a href="/m/product/list.html?cate_no=28" class="lb-m-catdrop__link">BAG &amp; SHOES</a>
+                </div>
+                <div class="lb-m-catdrop__backdrop" id="lb-m-catdrop-backdrop"></div>
+            </div>
 
             <hr class="layout">
             <div id="contents">

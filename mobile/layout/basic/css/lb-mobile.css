@@ -6,8 +6,11 @@
    ============================================================ */
 
 /* ── 기본 레이아웃 ── */
-html, body { width: 100%; overflow-x: hidden; }
-#wrap { overflow-x: hidden; }
+html, body { width: 100%; overflow-x: clip; }
+/* overflow-x:clip → 가로 넘침 차단, 단 새 스크롤 컨테이너 생성 안 함
+   → position:sticky 동작 유지 (hidden은 sticky를 깸) */
+#wrap { overflow-x: clip; }
+#container { overflow-x: clip; }
 #contents { padding-bottom: 0; }
 
 /* ── ATELIER N 모바일 헤더 ── */
@@ -21,8 +24,9 @@ html, body { width: 100%; overflow-x: hidden; }
   border-bottom: 1px solid #e8e8e8;
   position: sticky;
   top: 0;
-  /* 사이드바(z-index:9999)보다 낮게 유지 */
   z-index: 200;
+  /* sticky 동작 보장: 부모 overflow:clip 필수 */
+  will-change: transform;
 }
 .lb-m-header__hamburger {
   display: flex;
@@ -114,20 +118,28 @@ html, body { width: 100%; overflow-x: hidden; }
   padding: 0 3px;
 }
 
-/* ── 헤더 하단 카테고리 탭바 ── */
-.lb-m-catbar {
+/* ── 헤더 하단 카테고리 탭바 래퍼 ── */
+.lb-m-catbar-wrap {
   position: sticky;
   top: 52px;
   z-index: 90;
   background: #fff;
   border-bottom: 1px solid #e8e8e8;
-  overflow: hidden;
+  display: flex;
+  align-items: stretch;
 }
-.lb-m-catbar ul { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 8px; gap: 0; list-style: none; margin: 0; }
-.lb-m-catbar ul::-webkit-scrollbar { display: none; }
-.lb-m-catbar li { flex: none; }
-.lb-m-catbar li.afterNone { display: contents; }
-.lb-m-catbar > ul > li > ul { display: contents; }
+/* ── 카테고리 탭바 (스와이프 스크롤) ── */
+.lb-m-catbar {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+  background: transparent;
+  border-bottom: none;
+}
+.lb-m-catbar__list { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 0 0 4px; gap: 0; list-style: none; margin: 0; }
+.lb-m-catbar__list::-webkit-scrollbar { display: none; }
+.lb-m-catbar__list li { flex: none; }
 .lb-m-catbar a {
   display: block;
   padding: 10px 12px;
@@ -143,20 +155,115 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-m-catbar a:hover, .lb-m-catbar a.selected { color: #1d1d1f; border-bottom-color: #1d1d1f; }
 .lb-m-catbar .btnPrev, .lb-m-catbar .btnNext { display: none; }
 
+/* ── ▼ 전체메뉴 버튼 ── */
+.lb-m-catbar__more {
+  flex: none;
+  width: 44px;
+  border: none;
+  background: linear-gradient(to right, transparent, #fff 38%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px 0 0;
+  cursor: pointer;
+  color: #1d1d1f;
+  position: relative;
+  z-index: 1;
+}
+.lb-m-catbar__more svg {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.lb-m-catbar__more.is-open svg {
+  transform: rotate(180deg);
+}
+
+/* ── 전체메뉴 드롭다운 패널 ── */
+.lb-m-catdrop {
+  position: fixed;
+  top: 0;             /* JS(initCatDrop)가 catbar 하단 위치로 동적 설정 */
+  left: 0;
+  right: 0;
+  z-index: 89;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+}
+.lb-m-catdrop.is-open {
+  max-height: 60vh;
+  opacity: 1;
+  pointer-events: auto;
+}
+.lb-m-catdrop__inner {
+  background: #fff;
+  padding: 14px 12px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 60vh;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-top: 1px solid #f0f0f0;
+}
+.lb-m-catdrop__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #1d1d1f;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  padding: 12px 6px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #fafafa;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.lb-m-catdrop__link:hover,
+.lb-m-catdrop__link:active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+/* 백드롭 오버레이 */
+.lb-m-catdrop__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.lb-m-catdrop.is-open .lb-m-catdrop__backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* ── Cafe24 기본 헤더 숨김 ── */
 #topArea { display: none !important; }
 .xans-layout-mobilenavigation { display: none !important; }
 #header nav[module="Layout_MobileNavigation"] { display: none !important; }
 
-/* ── 히어로 슬라이더 ── */
+/* ── 히어로 슬라이더 — 모바일 정사각형 ── */
 .lb-hero {
   position: relative;
   overflow: hidden;
-  height: 52vw;
-  min-height: 260px;
-  max-height: 420px;
+  /* 100vw × 100vw = 정사각형 */
+  aspect-ratio: 1 / 1;
+  min-height: 320px;
+  max-height: 520px;
+  width: 100%;
 }
-.lb-hero-slider { width: 100%; height: 100%; }
+/* layout.css @media: aspect-ratio:640/800(세로형) → 정사각형으로 재정의 */
+.lb-hero-slider {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1 !important;
+  max-height: 520px !important;
+  min-height: 320px !important;
+}
 .lb-hero-track {
   display: flex;
   height: 100%;
@@ -253,7 +360,7 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero-video-container { display: none; }
 /* layout.css 장식선 숨김 */
 .lb-hero-placeholder::before { display: none; }
-.lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
+.lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 100% !important; }
 
 /* ── 카테고리 아이콘 존 (항상 4열 2행, 비율 반응형) ── */
 .lb-cat-zone {

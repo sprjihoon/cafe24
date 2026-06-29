@@ -299,11 +299,76 @@
     });
   }
 
+  /* ── 카테고리 탭바: 현재 URL 기준 활성 탭 표시 ── */
+  function initCatBarActive() {
+    var list = document.querySelector('.lb-m-catbar__list');
+    if (!list) return;
+    var links = list.querySelectorAll('a');
+    var cur = location.search;
+    links.forEach(function(a) {
+      if (cur && a.href.indexOf(cur.replace('?','')) !== -1) {
+        a.classList.add('selected');
+        /* 활성 탭이 보이도록 스크롤 */
+        a.parentElement.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+      }
+    });
+  }
+
+  /* ── 카테고리 탭바 ▼ 전체메뉴 드롭다운 ── */
+  function initCatDrop() {
+    var btn      = document.getElementById('lb-m-catbar-more');
+    var drop     = document.getElementById('lb-m-catdrop');
+    var wrap     = document.getElementById('lb-m-catbar-wrap');
+    var backdrop = document.getElementById('lb-m-catdrop-backdrop');
+    if (!btn || !drop) return;
+
+    /* 탭바 하단 위치를 실시간 계산해 드롭다운 top 설정 */
+    function updateDropTop() {
+      if (!wrap) return;
+      var rect = wrap.getBoundingClientRect();
+      drop.style.top = rect.bottom + 'px';
+    }
+
+    function openDrop() {
+      updateDropTop();
+      drop.classList.add('is-open');
+      drop.setAttribute('aria-hidden', 'false');
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+    function closeDrop() {
+      drop.classList.remove('is-open');
+      drop.setAttribute('aria-hidden', 'true');
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', function() {
+      drop.classList.contains('is-open') ? closeDrop() : openDrop();
+    });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', closeDrop);
+    }
+
+    /* 드롭다운 링크 클릭 시 닫기 */
+    drop.querySelectorAll('.lb-m-catdrop__link').forEach(function(a) {
+      a.addEventListener('click', closeDrop);
+    });
+
+    /* ESC 키로 닫기 */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeDrop();
+    });
+  }
+
   function init() {
     ensureMarquee();
     fixMobileLogo();
     initHeroSlider();
     initCategoryCopy();
+    initCatBarActive();
+    initCatDrop();
     if (typeof Swiper !== 'undefined') {
       initFeatureSwiper();
     } else {
