@@ -523,6 +523,125 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-floating-right { display: none !important; }
 .lb-fullmenu-panel { display: none !important; }
 #lb-nav { display: none !important; }
-.lb-promo-section { display: none; }
-.lb-weekly-best { display: none; }
-.lb-essentials-grid { display: none; }
+
+/* ── lb-full-bleed 모바일 해제 ── */
+.lb-full-bleed { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
+
+/* ── FEATURE BANNERS (4박스) — 가로 스크롤 ── */
+.lb-feature-banners { overflow-x: auto; }
+.lb-feature-inner {
+  display: flex;
+  gap: 0;
+  width: max-content;
+}
+.lb-feature-box {
+  width: 70vw;
+  max-width: 280px;
+  flex-shrink: 0;
+}
+
+/* ── SPLIT BANNER — 왼쪽 슬라이더만 표시 ── */
+.lb-split-banner { padding: 0; }
+.lb-split-inner { display: block; }
+.lb-split-grid { display: none; } /* 오른쪽 4그리드 숨김 */
+.lb-split-slider { width: 100%; }
+.lb-promo-slide {
+  display: flex;
+  flex-direction: column;
+}
+.lb-promo-visual { order: -1; }
+.lb-promo-visual img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.lb-video-container { aspect-ratio: 4/3; }
+.lb-promo-content { padding: 16px; }
+.lb-promo-eyebrow { font-size: 10px; letter-spacing: 0.14em; color: #888; }
+.lb-promo-title { font-size: 18px; font-weight: 400; margin: 6px 0 0; }
+
+/* ── PROMO SECTION (2배너) — 세로 스택 ── */
+.lb-promo-section { padding: 0; }
+.lb-promo-inner, .lb-promo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.lb-promo-banner, .lb-promo-item {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.lb-promo-banner img, .lb-promo-item img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+.lb-promo-banner-content, .lb-promo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  color: #fff;
+}
+
+/* ── WEEKLY BEST — Swiper → 2열 그리드 전환 ── */
+.lb-weekly-best .swiper,
+.lb-weekly-best .lb-weekly-swiper { display: none; }
+.lb-weekly-best ul.prdList {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #e8e8e8;
+}
+.lb-weekly-best .swiper-button-prev,
+.lb-weekly-best .swiper-button-next,
+.lb-weekly-best .swiper-pagination { display: none; }
+/* WEEKLY BEST는 prdList 없음 → Swiper를 대신 표시하되 1.2 per view */
+.lb-weekly-swiper { display: block !important; overflow: visible; padding-left: 16px; }
+.lb-weekly-swiper .swiper-slide { width: 45vw !important; max-width: 200px; }
+
+/* ── BAND BANNER ── */
+.lb-band-banner {
+  padding: 32px 20px;
+  text-align: center;
+}
+.lb-band-inner { display: block; }
+.lb-band-visual { width: 100%; margin-top: 20px; }
+.lb-band-visual img { width: 100%; max-height: 200px; object-fit: cover; }
+
+/* ── TIMESALE BANNER ── */
+.lb-timesale-banner { padding: 32px 20px; }
+.lb-timesale-content { display: block; }
+.lb-timesale-left { margin-bottom: 20px; }
+.lb-timesale-title { font-size: 22px; }
+.lb-timesale-visual { text-align: center; }
+.lb-timesale-visual img { max-width: 60%; height: auto; }
+
+/* ── VIDEO BANNER ── */
+.lb-video-banner { padding: 32px 20px; }
+.lb-video-content { display: block; }
+.lb-video-text { margin-bottom: 20px; }
+.lb-video-player { aspect-ratio: 16/9; }
+
+/* ── BRAND STORY SECTION ── */
+.lb-brand-story-section { padding: 0; }
+.lb-brand-story-container { display: block; }
+.lb-brand-story-image img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.lb-brand-story-content { padding: 28px 20px; }
+
+/* ── CATEGORY BANNERS (2개) ── */
+.lb-category-banners { padding: 0; }
+.lb-category-grid { display: flex; flex-direction: column; gap: 1px; }
+.lb-category-banner { position: relative; overflow: hidden; }
+.lb-category-banner img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.lb-category-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+  color: #fff;
+}
+
+/* ── THE DAILY UNIFORM (product_listmain_1 × 3) ── */
+.lb-daily-uniform ul.prdList { background: #e8e8e8; }
+.lb-essentials-grid ul.prdList { background: #e8e8e8; }
