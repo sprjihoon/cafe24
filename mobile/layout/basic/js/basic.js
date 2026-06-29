@@ -270,15 +270,40 @@
     });
   }
 
+  /* WEEKLY BEST 이전/다음 버튼
+   * CSS scroll-snap 스크롤에 버튼 클릭을 연결.
+   * Cafe24 AJAX 렌더링 후에 실행되어야 하므로 window.load + 200ms 지연. */
+  function initWeeklyNav() {
+    var section = document.getElementById('lb-section-best');
+    if (!section) return;
+
+    var prdList = section.querySelector('ul.prdList');
+    var prevBtn = section.querySelector('.lb-weekly-prev');
+    var nextBtn = section.querySelector('.lb-weekly-next');
+    if (!prdList || !prevBtn || !nextBtn) return;
+
+    function cardWidth() {
+      var li = prdList.querySelector('li');
+      if (!li) return 180;
+      /* li.offsetWidth + gap(12px) */
+      var style = window.getComputedStyle(prdList);
+      var gap = parseFloat(style.gap || style.columnGap) || 12;
+      return li.offsetWidth + gap;
+    }
+
+    prevBtn.addEventListener('click', function() {
+      prdList.scrollBy({ left: -cardWidth() * 2, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', function() {
+      prdList.scrollBy({ left: cardWidth() * 2, behavior: 'smooth' });
+    });
+  }
+
   function init() {
     ensureMarquee();
     fixMobileLogo();
     initHeroSlider();
     initCategoryCopy();
-    /* Swiper가 로드된 뒤 실행 (CDN async) */
-    /* WEEKLY BEST: JS Swiper 제거 → CSS 순수 가로 스크롤로 처리.
-     * initWeeklyBestSwiper()는 Cafe24 AJAX 렌더링 타이밍과 충돌해 1개 슬라이드에
-     * 전체 상품이 쌓이는 버그를 유발. CSS overflow-x: auto 방식으로 대체. */
     if (typeof Swiper !== 'undefined') {
       initFeatureSwiper();
     } else {
@@ -286,6 +311,10 @@
         initFeatureSwiper();
       });
     }
+    /* WEEKLY BEST 버튼: Cafe24 AJAX 완료 후 연결 */
+    window.addEventListener('load', function() {
+      setTimeout(initWeeklyNav, 300);
+    });
   }
 
   if (document.readyState === 'loading') {

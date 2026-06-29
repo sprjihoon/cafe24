@@ -706,11 +706,10 @@
 </div>
 
 <!-- ============================================================
-     ② WEEKLY BEST — 가로 스크롤 (스냅 스와이프)
-     ★ Cafe24 렌더링 규칙:
-       xans-record- 없이 li를 N개 미리 정의 → Cafe24가 ($count / N) 회 반복.
-       4개 li + $count=8 → 2회 반복 = 8개 상품 렌더링.
-       (ESSENTIALS·NEW IN·MOST LOVED 섹션과 동일한 방식)
+     ② WEEKLY BEST — 가로 스크롤 스와이프 + 이전/다음 버튼
+     ★ Cafe24 anchorBoxId 렌더링 규칙:
+       li N개 정의 → Cafe24가 li 1개당 상품 1개 렌더링.
+       8개 상품을 표시하려면 li 슬롯 8개 필요.
      ============================================================ -->
 <div class="lb-product-section lb-weekly-best" id="lb-section-best">
     <div class="lb-section-header">
@@ -718,76 +717,33 @@
             <p class="lb-section-eyebrow">WEEKLY BEST</p>
             <h2 class="lb-section-title">이번 주 가장 많은 선택을 받은 옷</h2>
         </div>
-        <a href="/product/list.html?cate_no=32" class="lb-section-more">전체 보기</a>
+        <div class="lb-weekly-header-right">
+            <a href="/product/list.html?cate_no=32" class="lb-section-more">전체 보기</a>
+            <div class="lb-weekly-nav">
+                <button class="lb-weekly-btn lb-weekly-prev" type="button" aria-label="이전 상품">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="#1d1d1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="lb-weekly-btn lb-weekly-next" type="button" aria-label="다음 상품">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="#1d1d1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!--
-        $count = 8
-        4개 li 슬롯 × 2회 반복 = 8개 상품
-        li에 xans-record- 없음 — Cafe24 표준 anchorBoxId 방식 사용
+        $count = 8 — li 슬롯 8개 정의 → Cafe24가 8개 상품 렌더링
+        li에 xans-record- 없음 — Cafe24 표준 anchorBoxId 방식
     -->
     <div module="product_listmain_1" class="ec-base-product lb-weekly-prd-wrap">
         <ul class="prdList">
-            <li id="anchorBoxId_{$product_no}">
-                <div class="thumbnail">
-                    <div class="prdImg">
-                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                        </a>
-                    </div>
-                </div>
-                <div class="description">
-                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
-                    <ul module="product_ListItem" class="spec">
-                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                    </ul>
-                </div>
-            </li>
-            <li id="anchorBoxId_{$product_no}">
-                <div class="thumbnail">
-                    <div class="prdImg">
-                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                        </a>
-                    </div>
-                </div>
-                <div class="description">
-                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
-                    <ul module="product_ListItem" class="spec">
-                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                    </ul>
-                </div>
-            </li>
-            <li id="anchorBoxId_{$product_no}">
-                <div class="thumbnail">
-                    <div class="prdImg">
-                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                        </a>
-                    </div>
-                </div>
-                <div class="description">
-                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
-                    <ul module="product_ListItem" class="spec">
-                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                    </ul>
-                </div>
-            </li>
-            <li id="anchorBoxId_{$product_no}">
-                <div class="thumbnail">
-                    <div class="prdImg">
-                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                        </a>
-                    </div>
-                </div>
-                <div class="description">
-                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
-                    <ul module="product_ListItem" class="spec">
-                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                    </ul>
-                </div>
-            </li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
+            <li id="anchorBoxId_{$product_no}"><div class="thumbnail"><div class="prdImg"><a href="{$link_product_detail}" name="anchorBoxName_{$product_no}"><img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" /></a></div></div><div class="description"><strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong><ul module="product_ListItem" class="spec"><li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li></ul></div></li>
         </ul>
     </div>
 </div>
