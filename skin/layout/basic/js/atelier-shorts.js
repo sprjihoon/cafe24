@@ -11,7 +11,7 @@
   var progressTextEl = null;
   var autoSlideTimer = null;
 
-  window.__ATELIER_SHORTS_BUILD__ = 'LOOP-FIX-20260627-F';
+  window.__ATELIER_SHORTS_BUILD__ = 'HOVER-FIX-20260629-B';
   console.log('[ATELIER SHORTS] loaded DEBUG-20260626-A');
   window.__atelierShortsInitCount = (window.__atelierShortsInitCount || 0) + 1;
   console.log('[ATELIER SHORTS] init count:', window.__atelierShortsInitCount);
@@ -177,12 +177,13 @@
     slider.querySelectorAll('.atelier-shorts__card').forEach(function(card) {
       card.addEventListener('mouseenter', function() {
         card.classList.add('is-hovered');
-        playCardMedia(card, false);
+        // 비활성 카드: 재생 없음 - CSS가 화살표 힌트 표시
+        // 활성 카드: 자동재생 유지, 간섭 없음
       });
 
       card.addEventListener('mouseleave', function() {
         card.classList.remove('is-hovered');
-        pauseCardMedia(card);
+        // 활성/비활성 모두 재생 상태 변경 없음
       });
 
       card.addEventListener('focusin', function(e) {

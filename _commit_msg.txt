@@ -1,0 +1,5 @@
+fix: embed YouTube HAaJ9muLCqI in video banner (PC + mobile)
+
+- Insert iframe directly into #lb-youtube-player (no button click needed)
+- Replace placeholder dQw4w9WgXcQ with brand film HAaJ9muLCqI
+- Apply to both skin/index.html and mobile/index.html

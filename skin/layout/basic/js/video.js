@@ -1,5 +1,5 @@
-/**
- * LE BLANC 영상 배너 JavaScript
+﻿/**
+ * ATELIER N 영상 배너 JavaScript
  * YouTube IFrame API 사용
  */
 
@@ -90,3 +90,4 @@
   }
 
 })();
+

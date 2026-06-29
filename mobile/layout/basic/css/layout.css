@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* ============================================================
    🔥 구 드롭다운 메뉴만 비활성화 (#lb-nav 구조는 유지)
@@ -230,7 +230,7 @@ body {
 .path li { color:var(--color-text-faint); font-size:var(--font-size-sm); }
 
 /* ============================================================
-   HEADER & NAVIGATION — LE BLANC 헤더
+   HEADER & NAVIGATION — ATELIER N 헤더
    ============================================================ */
 
 /* 마퀴 배너 */
@@ -5025,3 +5025,4 @@ body {
     transition: none;
   }
 }
+

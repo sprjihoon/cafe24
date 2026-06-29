@@ -1,8 +1,8 @@
-# LE BLANC - Cafe24 Premium Skin
+﻿# ATELIER N - Cafe24 Premium Skin
 
 ## 프로젝트 개요
 
-LE BLANC는 Cafe24 쇼핑몰을 위한 프리미엄 스킨으로, 모던하고 세련된 디자인과 고급스러운 사용자 경험을 제공합니다.
+ATELIER N는 Cafe24 쇼핑몰을 위한 프리미엄 스킨으로, 모던하고 세련된 디자인과 고급스러운 사용자 경험을 제공합니다.
 
 ## 주요 특징
 
@@ -79,7 +79,7 @@ cafe24d/
 │   │       ├── layout.html        # 전역 레이아웃
 │   │       ├── css/
 │   │       │   ├── layout.css     # 메인 CSS (4100+ lines)
-│   │       │   ├── leblanc.css    # LE BLANC 커스텀 스타일
+│   │       │   ├── leblanc.css    # ATELIER N 커스텀 스타일
 │   │       │   └── widgets.css    # 위젯 스타일
 │   │       └── js/
 │   │           ├── basic.js       # 기본 스크립트
@@ -134,7 +134,7 @@ node upload-mobile.js
 
 ### 3. Cafe24 관리자 설정
 1. Cafe24 관리자 > 디자인 관리 > 스킨 관리
-2. "LE BLANC" 스킨 선택 및 적용
+2. "ATELIER N" 스킨 선택 및 적용
 3. 카테고리 이미지 업로드 (`/web/upload/category/`)
 4. 배너 이미지 업로드 (`/web/upload/hero/`, `/web/upload/banner/`)
 
@@ -254,12 +254,12 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 | 파일 | 상태 | 비고 |
 |------|------|------|
 | `mobile/index.html` | ✅ 콘텐츠 완성 | 히어로·카테고리·상품섹션·브랜드스토리 |
-| `mobile/layout/basic/css/lb-mobile.css` | 🔧 진행중 | LE BLANC 모바일 스타일 레이어 |
-| `mobile/layout/basic/layout.html` | ⚠️ 카페24 기본 | 헤더 LE BLANC 리디자인 필요 |
+| `mobile/layout/basic/css/lb-mobile.css` | 🔧 진행중 | ATELIER N 모바일 스타일 레이어 |
+| `mobile/layout/basic/layout.html` | ⚠️ 카페24 기본 | 헤더 ATELIER N 리디자인 필요 |
 | `mobile/layout/basic/main.html` | ⚠️ 카페24 기본 | 메인 전용 레이아웃, 동일 개선 필요 |
 | `mobile/layout/basic/navigation.html` | ⚠️ 카페24 기본 | 상단 텍스트 링크 → 하단 탭 전환 |
-| `mobile/layout/basic/sidebar.html` | ⚠️ 카페24 기본 | 사이드 드로어 LE BLANC 스타일 필요 |
-| `mobile/layout/basic/footer.html` | ✅ LE BLANC 브랜딩 적용 | 뉴스레터 배너 포함 |
+| `mobile/layout/basic/sidebar.html` | ⚠️ 카페24 기본 | 사이드 드로어 ATELIER N 스타일 필요 |
+| `mobile/layout/basic/footer.html` | ✅ ATELIER N 브랜딩 적용 | 뉴스레터 배너 포함 |
 | `mobile/product/detail.html` | ⚠️ 스타일링 필요 | 54KB — 상세 페이지 모바일 최적화 |
 | `mobile/product/list.html` | ⚠️ 스타일링 필요 | 2열 그리드, 필터 UI |
 
@@ -269,11 +269,11 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 **작업 파일**: `layout.html`, `main.html`, `lb-mobile.css`
 
 ```
-[햄버거 ≡]  [LE BLANC 로고]  [검색🔍] [장바구니🛒(N)]
+[햄버거 ≡]  [ATELIER N 로고]  [검색🔍] [장바구니🛒(N)]
 ```
 
 - 좌측: 사이드 드로어 트리거 (`≡`)
-- 중앙: LE BLANC + ATELIER N. 브랜드 로고 텍스트
+- 중앙: ATELIER N + ATELIER N. 브랜드 로고 텍스트
 - 우측: 검색 아이콘 + 장바구니(카운트 뱃지)
 - 배경: `#ffffff` / sticky top
 
@@ -363,3 +363,4 @@ const heroSwiper = new Swiper('.lb-hero-swiper', {
 **Last Updated**: 2026.06.27  
 **Version**: 1.1.0 (PC 완성) → v2.0.0 (모바일 개발 중)  
 **Status**: PC Production Ready ✅ | Mobile In Development 🚧
+

@@ -1,5 +1,5 @@
-/**
- * LE BLANC — Product Detail Page (scoped under .xans-product-detail)
+﻿/**
+ * ATELIER N — Product Detail Page (scoped under .xans-product-detail)
  * 상품상세 전용. 전역 #contents / button / table 선택자 사용 금지.
  */
 
@@ -1124,3 +1124,4 @@
   display: none;
   content: none;
 }
+

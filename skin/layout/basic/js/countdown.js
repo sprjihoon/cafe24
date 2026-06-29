@@ -1,5 +1,5 @@
-/**
- * LE BLANC 타임세일 카운트다운 JavaScript
+﻿/**
+ * ATELIER N 타임세일 카운트다운 JavaScript
  * 실시간 카운터 업데이트
  */
 
@@ -124,3 +124,4 @@
   }
 
 })();
+

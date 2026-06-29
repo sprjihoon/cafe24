@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>네비게이션 테스트</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; }
+
+    /* 헤더 */
+    .test-header {
+      background: #faf8f5;
+      border-bottom: 1px solid #e5ddd5;
+      position: relative;
+    }
+
+    /* 네비게이션 컨테이너 */
+    .test-nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      min-height: 56px;
+      position: relative;
+    }
+
+    /* 전체메뉴 버튼 */
+    .test-menu-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      position: absolute;
+      left: 24px;
+    }
+
+    .test-menu-btn .line {
+      width: 18px;
+      height: 2px;
+      background: #1d1b1a;
+      border-radius: 2px;
+    }
+
+    .test-menu-btn .text {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #1d1b1a;
+      margin-top: 4px;
+    }
+
+    .test-menu-btn:hover .line,
+    .test-menu-btn:hover .text {
+      color: #6b5344;
+      background: #6b5344;
+    }
+
+    /* 메뉴 링크들 */
+    .test-nav-links {
+      display: flex;
+      gap: 64px;
+    }
+
+    .test-nav-item {
+      position: relative;
+    }
+
+    .test-nav-link {
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1d1b1a;
+      text-decoration: none;
+      padding: 18px 0;
+      position: relative;
+    }
+
+    .test-nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 16px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #6b5344;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .test-nav-link:hover,
+    .test-nav-item:hover .test-nav-link {
+      color: #6b5344;
+    }
+
+    .test-nav-link:hover::after,
+    .test-nav-item:hover .test-nav-link::after {
+      transform: scaleX(1);
+    }
+
+    /* 드롭다운 메뉴 */
+    .test-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 16px 0;
+      min-width: 180px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .test-nav-item:hover .test-dropdown {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .test-dropdown a {
+      display: block;
+      padding: 10px 24px;
+      font-size: 13px;
+      color: #1d1b1a;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .test-dropdown a:hover {
+      background: #faf8f5;
+      color: #6b5344;
+      padding-left: 28px;
+    }
+
+    /* 전체메뉴 드롭다운 */
+    .test-fullmenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid #e5ddd5;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+
+    .test-fullmenu.is-open {
+      max-height: 500px;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .test-fullmenu-inner {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .test-fullmenu-section h2 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #999;
+      margin: 0 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5ddd5;
+    }
+
+    .test-fullmenu-section a {
+      display: block;
+      font-size: 14px;
+      color: #1d1b1a;
+      text-decoration: none;
+      padding: 10px 0;
+      transition: all 0.2s ease;
+    }
+
+    .test-fullmenu-section a:hover {
+      color: #6b5344;
+      padding-left: 8px;
+    }
+
+    /* 테스트 상태 표시 */
+    .test-status {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 12px;
+    }
+
+    .test-status h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #1d1b1a;
+    }
+
+    .test-status p {
+      margin: 4px 0;
+      color: #666;
+    }
+
+    .test-status .ok { color: #28a745; }
+    .test-status .fail { color: #dc3545; }
+  </style>
+</head>
+<body>
+
+  <div class="test-header">
+    <nav class="test-nav-container">
+      
+      <!-- 전체메뉴 버튼 -->
+      <button type="button" class="test-menu-btn" id="testMenuBtn">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="text">MENU</span>
+      </button>
+
+      <!-- 메뉴 링크 -->
+      <div class="test-nav-links">
+        
+        <div class="test-nav-item">
+          <a href="#" class="test-nav-link">SHOP ALL</a>
+          <div class="test-dropdown">
+            <a href="#">전체보기</a>
+            <a href="#">Tops</a>
+            <a href="#">Dresses</a>
+            <a href="#">Outerwear</a>
+          </div>
+        </div>
+
+        <div class="test-nav-item">
+          <a href="#" class="test-nav-link">TOPS</a>
+          <div class="test-dropdown">
+            <a href="#">전체 Tops</a>
+            <a href="#">Knit</a>
+            <a href="#">Blouse</a>
+            <a href="#">T-Shirt</a>
+          </div>
+        </div>
+
+        <div class="test-nav-item">
+          <a href="#" class="test-nav-link">DRESSES</a>
+          <div class="test-dropdown">
+            <a href="#">전체 Dresses</a>
+            <a href="#">Midi Dress</a>
+            <a href="#">Long Dress</a>
+          </div>
+        </div>
+
+        <div class="test-nav-item">
+          <a href="#" class="test-nav-link">OUTERWEAR</a>
+          <div class="test-dropdown">
+            <a href="#">전체 Outerwear</a>
+            <a href="#">Coat</a>
+            <a href="#">Jacket</a>
+          </div>
+        </div>
+
+      </div>
+
+    </nav>
+
+    <!-- 전체메뉴 드롭다운 -->
+    <div id="testFullmenu" class="test-fullmenu">
+      <div class="test-fullmenu-inner">
+        <div class="test-fullmenu-section">
+          <h2>SHOP</h2>
+          <a href="#">전체보기</a>
+          <a href="#">Tops</a>
+          <a href="#">Dresses</a>
+          <a href="#">Outerwear</a>
+        </div>
+        
+        <div class="test-fullmenu-section">
+          <h2>ACCOUNT</h2>
+          <a href="#">로그인</a>
+          <a href="#">회원가입</a>
+          <a href="#">마이쇼핑</a>
+          <a href="#">장바구니</a>
+        </div>
+
+        <div class="test-fullmenu-section">
+          <h2>COMMUNITY</h2>
+          <a href="#">커뮤니티</a>
+          <a href="#">상품 Q&A</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 메인 컨텐츠 -->
+  <div style="padding: 60px 24px;">
+    <h1 style="font-size: 32px; margin-bottom: 16px;">네비게이션 테스트</h1>
+    <p style="font-size: 16px; line-height: 1.6; color: #666; margin-bottom: 24px;">
+      이 페이지는 네비게이션 메뉴가 제대로 작동하는지 테스트하는 페이지입니다.
+    </p>
+    <ul style="font-size: 14px; line-height: 1.8; color: #666;">
+      <li><strong>호버 드롭다운 테스트:</strong> SHOP ALL, TOPS, DRESSES, OUTERWEAR에 마우스를 올려보세요.</li>
+      <li><strong>전체메뉴 테스트:</strong> 좌측 "MENU" 버튼을 클릭해보세요.</li>
+      <li><strong>외부 클릭 테스트:</strong> 전체메뉴가 열린 상태에서 외부를 클릭하면 닫혀야 합니다.</li>
+      <li><strong>ESC 키 테스트:</strong> 전체메뉴가 열린 상태에서 ESC를 누르면 닫혀야 합니다.</li>
+    </ul>
+  </div>
+
+  <!-- 테스트 상태 표시 -->
+  <div class="test-status">
+    <h3>테스트 상태</h3>
+    <p>드롭다운: <span id="dropdownStatus">대기 중...</span></p>
+    <p>전체메뉴: <span id="fullmenuStatus">대기 중...</span></p>
+    <p>JavaScript: <span id="jsStatus" class="ok">✓ 로드됨</span></p>
+  </div>
+
+  <script>
+    console.log('✅ Test script loaded');
+
+    // 전체메뉴 토글
+    const menuBtn = document.getElementById('testMenuBtn');
+    const fullmenu = document.getElementById('testFullmenu');
+    const dropdownStatus = document.getElementById('dropdownStatus');
+    const fullmenuStatus = document.getElementById('fullmenuStatus');
+
+    if (menuBtn && fullmenu) {
+      menuBtn.addEventListener('click', function() {
+        const isOpen = fullmenu.classList.contains('is-open');
+        
+        if (isOpen) {
+          fullmenu.classList.remove('is-open');
+          fullmenuStatus.innerHTML = '<span class="ok">✓ 닫힘</span>';
+          console.log('✓ 전체메뉴 닫힘');
+        } else {
+          fullmenu.classList.add('is-open');
+          fullmenuStatus.innerHTML = '<span class="ok">✓ 열림</span>';
+          console.log('✓ 전체메뉴 열림');
+        }
+      });
+
+      console.log('✅ 전체메뉴 이벤트 등록 완료');
+    }
+
+    // ESC 키로 닫기
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && fullmenu.classList.contains('is-open')) {
+        fullmenu.classList.remove('is-open');
+        fullmenuStatus.innerHTML = '<span class="ok">✓ ESC로 닫힘</span>';
+        console.log('✓ ESC로 전체메뉴 닫힘');
+      }
+    });
+
+    // 외부 클릭으로 닫기
+    document.addEventListener('click', function(e) {
+      const isFullmenu = e.target.closest('#testFullmenu');
+      const isMenuBtn = e.target.closest('#testMenuBtn');
+      
+      if (!isFullmenu && !isMenuBtn && fullmenu.classList.contains('is-open')) {
+        fullmenu.classList.remove('is-open');
+        fullmenuStatus.innerHTML = '<span class="ok">✓ 외부클릭으로 닫힘</span>';
+        console.log('✓ 외부 클릭으로 전체메뉴 닫힘');
+      }
+    });
+
+    // 드롭다운 테스트 (hover는 CSS로 처리되므로 시각적 확인만)
+    const navItems = document.querySelectorAll('.test-nav-item');
+    navItems.forEach(function(item, index) {
+      item.addEventListener('mouseenter', function() {
+        dropdownStatus.innerHTML = '<span class="ok">✓ ' + (index + 1) + '번 메뉴 호버 중</span>';
+        console.log('✓ 드롭다운 ' + (index + 1) + ' 호버');
+      });
+
+      item.addEventListener('mouseleave', function() {
+        dropdownStatus.innerHTML = '대기 중...';
+      });
+    });
+
+    console.log('✅ All event listeners registered');
+  </script>
+
+</body>
+</html>

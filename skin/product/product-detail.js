@@ -1,5 +1,5 @@
-/**
- * LE BLANC - Product Detail Page JavaScript
+﻿/**
+ * ATELIER N - Product Detail Page JavaScript
  * 상품 상세 페이지 인터랙션
  */
 
@@ -393,3 +393,4 @@
   setTimeout(initStickyImage, 500);
 
 })();
+

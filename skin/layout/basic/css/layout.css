@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* ============================================================
    🔥 구 드롭다운 메뉴만 비활성화 (#lb-nav 구조는 유지)
@@ -230,7 +230,7 @@ body {
 .path li { color:var(--color-text-faint); font-size:var(--font-size-sm); }
 
 /* ============================================================
-   HEADER & NAVIGATION — LE BLANC 헤더
+   HEADER & NAVIGATION — ATELIER N 헤더
    ============================================================ */
 
 /* 마퀴 배너 */
@@ -4622,11 +4622,16 @@ body {
   opacity: 0;
 }
 
-.atelier-shorts__card:hover .atelier-shorts__video,
+/* 활성 카드만 완전히 밝아짐 */
 .atelier-shorts__card--playing .atelier-shorts__video,
 .atelier-shorts__card--focused .atelier-shorts__video,
 .atelier-shorts__card--active .atelier-shorts__video {
   filter: brightness(1);
+}
+
+/* 비활성 카드 hover → 살짝만 밝아짐 (재생 없음) */
+.atelier-shorts__card:not(.atelier-shorts__card--active):hover .atelier-shorts__video {
+  filter: brightness(0.9);
 }
 
 .swiper-slide-active .atelier-shorts__poster-img {
@@ -4665,8 +4670,10 @@ body {
   pointer-events: none;
 }
 
-.atelier-shorts__card:hover .atelier-shorts__play-btn {
-  opacity: 0.9;
+/* 비활성 카드: hover시 재생버튼 숨김 (재생 안 함) */
+.atelier-shorts__card:not(.atelier-shorts__card--active):hover .atelier-shorts__play-btn {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* 상품 링크 카드 */
@@ -4694,10 +4701,7 @@ body {
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 
-.atelier-shorts__card:hover .atelier-shorts__product-link,
-.atelier-shorts__card:hover .atelier-shorts__product-banner,
-.atelier-shorts__card.is-hovered .atelier-shorts__product-link,
-.atelier-shorts__card.is-hovered .atelier-shorts__product-banner,
+/* 상품 배너: 활성 카드 + 포커스 시에만 표시 (비활성 카드 hover는 제외) */
 .atelier-shorts__card--active .atelier-shorts__product-link,
 .atelier-shorts__card--active .atelier-shorts__product-banner,
 .atelier-shorts__card--playing .atelier-shorts__product-link,
@@ -4763,6 +4767,32 @@ body {
 .atelier-shorts__product-link:hover .atelier-shorts__product-arrow {
   transform: translateX(4px);
   color: #1d1d1f;
+}
+
+/* 비활성 카드 hover → 중앙 이동 화살표 힌트 (::before = 원형+화살표 SVG) */
+.atelier-shorts__card:not(.atelier-shorts__card--active)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background:
+    rgba(255, 255, 255, 0.2)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9 6l6 6-6 6' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 24px no-repeat;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.atelier-shorts__card:not(.atelier-shorts__card--active):hover::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 /* 에러 상태 */
@@ -4995,3 +5025,4 @@ body {
     transition: none;
   }
 }
+

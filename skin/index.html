@@ -1,4 +1,4 @@
-<!--@layout(/layout/basic/layout.html)-->
+﻿<!--@layout(/layout/basic/layout.html)-->
 
 <!-- 🔥 구 드롭다운만 제거 (#lb-nav 구조는 유지) -->
 <style>
@@ -42,7 +42,7 @@
 
 <!-- ============================================================
      ① HERO — 4슬라이드 (전체 화면 + 영상 지원)
-     LE BLANC 스타일: 전체 화면 옵션, 영상 배경 지원
+     ATELIER N 스타일: 전체 화면 옵션, 영상 배경 지원
      data-fullscreen="true" — 100vh 전체 화면
      data-video="url" — MP4 영상 URL
      data-youtube="id" — YouTube 영상 ID
@@ -60,7 +60,12 @@
         </div>
       </div>
       
-      <!-- 슬라이드 2: 전체 화면 + YouTube 영상 배경 -->
+      <!--
+        ★ SKIN 설치 후 커스터마이즈 필요 항목 ★
+        아래 href의 cate_no 값을 귀하의 쇼핑몰 카테고리 번호로 변경해 주세요.
+        카페24 관리자 > 상품관리 > 상품분류 에서 카테고리 번호를 확인할 수 있습니다.
+    -->
+    <!-- 슬라이드 2: 전체 화면 + YouTube 영상 배경 -->
       <div class="lb-hero-slide lb-hero-slide--2" data-fullscreen="true" data-youtube="HAaJ9muLCqI" style="background-image:url('/web/upload/hero/hero-2.jpg');">
         <div class="lb-hero-video-container" style="display:none;">
           <iframe
@@ -365,7 +370,8 @@
 </script>
 
 <!-- ============================================================
-     ② CATEGORY — 7카테고리 카피
+     ② CATEGORY — 카테고리 아이콘 바
+     ★ SKIN 설치 후 아래 href의 cate_no를 실제 카테고리 번호로 변경해 주세요
      ============================================================ -->
 <div class="lb-cat-zone" id="lb-cat-zone">
   <div class="lb-cat-inner">
@@ -422,7 +428,8 @@
 </div>
 
 <!-- ============================================================
-     카테고리 배너 4개 박스
+     ④ 피처 배너 — 카테고리 배너 4개 박스
+     ★ SKIN 설치 후 아래 href의 cate_no를 실제 카테고리 번호로 변경해 주세요
      ============================================================ -->
 <div class="lb-feature-banners">
   <div class="lb-feature-inner">
@@ -714,7 +721,7 @@
 </div>
 
 <!-- ============================================================
-     ② WEEKLY BEST — Swiper 슬라이더 (LE BLANC 스타일)
+     ② WEEKLY BEST — Swiper 슬라이더 (ATELIER N 스타일)
      product_listmain_1 사용
      ============================================================ -->
 <div module="product_listmain_1" class="ec-base-product lb-product-section lb-weekly-best" id="lb-section-best">
@@ -1190,7 +1197,7 @@
         <div class="lb-video-player" id="lb-youtube-player">
             <iframe
                 src="https://www.youtube.com/embed/HAaJ9muLCqI?controls=1&rel=0&playsinline=1&modestbranding=1"
-                title="LE BLANC ATELIER N — Brand Film"
+                title="ATELIER N ATELIER N — Brand Film"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen>
@@ -1205,7 +1212,7 @@
 <div class="lb-brand-story-section" id="lb-section-brand">
     <div class="lb-brand-story-container">
         <div class="lb-brand-story-image">
-            <img src="/web/upload/banner/banner-1.jpg" alt="LE BLANC Brand Story">
+            <img src="/web/upload/banner/banner-1.jpg" alt="ATELIER N Brand Story">
         </div>
         <div class="lb-brand-story-content">
             <p class="lb-brand-eyebrow">OUR PHILOSOPHY</p>
@@ -1634,3 +1641,4 @@
 
 <!--@import(/product/shoppQ/searchContent.html)-->
 <!--@define(cmc_log)-->
+

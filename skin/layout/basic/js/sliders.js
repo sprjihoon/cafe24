@@ -1,5 +1,5 @@
-/**
- * LE BLANC 슬라이더 JavaScript
+﻿/**
+ * ATELIER N 슬라이더 JavaScript
  * Swiper.js를 사용한 상품 슬라이더
  * - WEEKLY BEST
  * - SHORTS (Phase 2.3)
@@ -281,3 +281,4 @@
   }
 
 })();
+

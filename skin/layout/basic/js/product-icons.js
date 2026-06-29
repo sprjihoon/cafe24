@@ -1,5 +1,5 @@
-/**
- * LE BLANC - Product List Icons
+﻿/**
+ * ATELIER N - Product List Icons
  * 제품 목록에 좋아요, 옵션 미리보기 아이콘 추가
  */
 
@@ -152,3 +152,4 @@
   setTimeout(enhanceProductItems, 1000);
   setTimeout(enhanceProductItems, 2000);
 })();
+

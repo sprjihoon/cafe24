@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
     <meta charset="utf-8">
@@ -21,9 +21,14 @@
     <!--@css(/layout/basic/css/ec-base-prdInfo.css)-->
     <!--@css(/layout/basic/css/leblanc.css)-->
     <!--@css(/layout/basic/css/lb-mobile.css)-->
+    <!--@css(/layout/basic/css/slideMenu.css)-->
+    <!-- Swiper.js (슬라이더 라이브러리) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
 <!--@js(/layout/basic/js/common.js)-->
 <!--@js(/layout/basic/js/basic.js)-->
+<!--@js(/layout/basic/js/slide_menu.js)-->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body id="layout">
 <div id="wrap">
@@ -31,7 +36,7 @@
     <hr class="layout">
     <div id="container">
 
-        <!-- LE BLANC 모바일 헤더 -->
+        <!-- ATELIER N 모바일 헤더 -->
         <header id="header">
             <div class="header lb-m-header">
                 <!-- 좌: 햄버거 -->
@@ -39,11 +44,14 @@
                     <span></span><span></span><span></span>
                 </button>
 
-                <!-- 중: 로고 -->
+                <!-- 중: 로고 (Layout_LogoTop → {$mall_name}) -->
                 <h1 class="lb-m-header__logo" module="Layout_LogoTop">
-                    <a href="/">
-                        <span class="lb-logo-brand">LE BLANC</span>
-                        <span class="lb-logo-tagline">ATELIER N.</span>
+                    <!--@css(/css/module/layout/logotop.css)-->
+                    <a href="/index.html">
+                        <img src="/web/upload/logo/logo.png" alt="{$mall_name}" class="lb-logo-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <span class="lb-logo-text" style="display:none;">
+                            <span class="lb-logo-brand">{$mall_name}</span>
+                        </span>
                     </a>
                 </h1>
 
@@ -139,3 +147,4 @@
 </script>
 </body>
 </html>
+

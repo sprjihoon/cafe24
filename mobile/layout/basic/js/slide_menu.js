@@ -1,4 +1,4 @@
-/* LE BLANC Mobile — Slide Menu (사이드바 드로어) */
+﻿/* ATELIER N Mobile — Slide Menu (사이드바 드로어) */
 (function () {
   'use strict';
 
@@ -98,3 +98,4 @@
     init();
   }
 })();
+

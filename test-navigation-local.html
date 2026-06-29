@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>네비게이션 테스트 - 로컬</title>
+  
+  <!-- atelier-nav.css 로드 -->
+  <link rel="stylesheet" href="../../layout/basic/css/atelier-nav.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nanum Gothic', sans-serif; }
+    
+    /* 헤더 기본 스타일 */
+    #header {
+      background: #faf8f5;
+      border-bottom: 1px solid #e5ddd5;
+    }
+    
+    .inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1d1b1a;
+    }
+    
+    /* 테스트용 컨텐츠 */
+    .test-content {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .test-content h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #1d1b1a;
+    }
+    
+    .test-section {
+      background: #f5f5f5;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    code {
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+  </style>
+  
+  <!-- 제거 스크립트 (layout.html과 동일) -->
+  <script>
+    (function(){
+      var oldNavSelectors = '#lb-nav,nav#lb-nav,#lb-fullmenu,.lb-fullmenu,.lb-fullmenu-backdrop,.lb-fullmenu-panel,.lb-hamburger,.lb-dropdown-menu';
+      
+      function forceRemove(){
+        document.querySelectorAll(oldNavSelectors).forEach(function(el){
+          if(el&&el.parentNode){
+            el.parentNode.removeChild(el);
+            console.log('✅ Removed old nav element:', el.id || el.className);
+          }
+        });
+      }
+      
+      forceRemove();
+      
+      if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',forceRemove);
+      }
+      
+      setTimeout(forceRemove,500);
+      setTimeout(forceRemove,1000);
+      setTimeout(forceRemove,2000);
+      
+      if(typeof MutationObserver!=='undefined'){
+        var observer=new MutationObserver(function(mutations){
+          mutations.forEach(function(mutation){
+            mutation.addedNodes.forEach(function(node){
+              if(node.nodeType===1){
+                if(node.id==='lb-nav'||node.id==='lb-fullmenu'||node.classList.contains('lb-hamburger')){
+                  console.log('🔍 Detected dynamic injection, removing:',node.id||node.className);
+                  if(node.parentNode){node.parentNode.removeChild(node);}
+                }
+                node.querySelectorAll&&node.querySelectorAll(oldNavSelectors).forEach(function(el){
+                  if(el.parentNode){el.parentNode.removeChild(el);}
+                });
+              }
+            });
+          });
+        });
+        
+        var startObserver=function(){
+          if(document.body){
+            observer.observe(document.body,{childList:true,subtree:true});
+            console.log('🔍 MutationObserver started for old nav removal');
+          }else{
+            setTimeout(startObserver,100);
+          }
+        };
+        startObserver();
+      }
+    })();
+  </script>
+</head>
+<body>
+
+<div id="header">
+  <div class="inner">
+    <!-- 헤더 상단 -->
+    <div class="header-top">
+      <div class="logo">ATELIER N</div>
+      <div>로컬 테스트 페이지</div>
+    </div>
+    
+    <!-- ✨ 새 네비게이션 (atelier-main-nav) -->
+    <nav id="atelier-main-nav" class="atelier-main-nav" aria-label="상품 메뉴">
+      <a href="#" class="atelier-nav-link" data-menu="shop-all">SHOP ALL</a>
+      <a href="#" class="atelier-nav-link" data-menu="tops">TOPS</a>
+      <a href="#" class="atelier-nav-link" data-menu="dresses">DRESSES</a>
+      <a href="#" class="atelier-nav-link" data-menu="outerwear">OUTERWEAR</a>
+    </nav>
+
+    <!-- ✨ 드롭다운 컨테이너 (헤더 inner 기준) -->
+    <div id="atelier-dropdowns" class="atelier-dropdowns">
+      <!-- TOPS 드롭다운 -->
+      <div class="atelier-dropdown" data-dropdown="tops">
+        <div class="atelier-dropdown-inner">
+          <a href="#">Knit</a>
+          <a href="#">Blouse</a>
+          <a href="#">Shirt</a>
+          <a href="#">T-Shirt</a>
+        </div>
+      </div>
+
+      <!-- DRESSES 드롭다운 -->
+      <div class="atelier-dropdown" data-dropdown="dresses">
+        <div class="atelier-dropdown-inner">
+          <a href="#">Midi Dress</a>
+          <a href="#">Long Dress</a>
+          <a href="#">Mini Dress</a>
+        </div>
+      </div>
+
+      <!-- OUTERWEAR 드롭다운 -->
+      <div class="atelier-dropdown" data-dropdown="outerwear">
+        <div class="atelier-dropdown-inner">
+          <a href="#">Coat</a>
+          <a href="#">Jacket</a>
+          <a href="#">Cardigan</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 🚫 구 네비게이션 테스트용 (동적 제거 확인) -->
+    <nav id="lb-nav" style="background: red; color: white; padding: 20px; text-align: center;">
+      ⚠️ 이 빨간 영역(#lb-nav)은 JavaScript로 제거되어야 합니다!
+    </nav>
+    
+  </div>
+</div>
+
+<!-- 테스트 컨텐츠 -->
+<div class="test-content">
+  <h1>🧪 네비게이션 시스템 로컬 테스트</h1>
+  
+  <div class="test-section">
+    <h3>✅ 확인 사항</h3>
+    <ol style="line-height: 2; margin-top: 10px;">
+      <li>
+        <strong>새 네비게이션 표시</strong>
+        <span class="status success">보여야 함</span><br>
+        <code>SHOP ALL | TOPS | DRESSES | OUTERWEAR</code> 메뉴가 보이는지 확인
+      </li>
+      <li>
+        <strong>드롭다운 동작</strong>
+        <span class="status success">hover 시 표시</span><br>
+        TOPS, DRESSES, OUTERWEAR에 마우스를 올리면 드롭다운이 나타나는지 확인
+      </li>
+      <li>
+        <strong>구 네비게이션 제거</strong>
+        <span class="status error">빨간 박스가 안 보여야 함</span><br>
+        빨간색 경고 박스(<code>#lb-nav</code>)가 JavaScript로 제거되어 안 보이는지 확인
+      </li>
+      <li>
+        <strong>콘솔 로그 확인</strong>
+        <span class="status success">F12 → Console</span><br>
+        "✅ Removed old nav element: lb-nav" 메시지가 있는지 확인
+      </li>
+    </ol>
+  </div>
+  
+  <div class="test-section">
+    <h3>📊 테스트 결과</h3>
+    <p style="margin-top: 10px;">
+      <strong>F12 키를 눌러 개발자 도구를 열고 확인하세요:</strong>
+    </p>
+    <ul style="line-height: 2; margin-top: 10px;">
+      <li><strong>Elements 탭</strong>: <code>#atelier-main-nav</code> 존재, <code>#lb-nav</code> 없음</li>
+      <li><strong>Console 탭</strong>: 제거 로그 확인</li>
+      <li><strong>Network 탭</strong>: <code>atelier-nav.css</code> 로드 확인</li>
+    </ul>
+  </div>
+  
+  <div class="test-section">
+    <h3>🎯 기대 동작</h3>
+    <ol style="line-height: 2; margin-top: 10px;">
+      <li>페이지 로드 시 빨간 박스가 <strong>즉시 사라짐</strong></li>
+      <li>ATELIER 네비게이션만 표시됨</li>
+      <li>메뉴에 hover 시 드롭다운이 <strong>헤더 아래</strong>에서 펼쳐짐</li>
+      <li>드롭다운이 nav 내부가 아닌 <strong>전체 폭</strong>으로 표시됨</li>
+    </ol>
+  </div>
+</div>
+
+<!-- atelier-nav.js 로드 -->
+<script src="../../layout/basic/js/atelier-nav.js"></script>
+
+</body>
+</html>

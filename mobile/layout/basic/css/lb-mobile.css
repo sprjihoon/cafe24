@@ -1,7 +1,7 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* ============================================================
-   LE BLANC ATELIER N. — Mobile Overrides
+   ATELIER N ATELIER N. — Mobile Overrides
    PC layout.css + leblanc.css를 기반으로 모바일 뷰 조정
    ============================================================ */
 
@@ -10,7 +10,7 @@ html, body { width: 100%; overflow-x: hidden; }
 #wrap { overflow-x: hidden; }
 #contents { padding-bottom: 0; }
 
-/* ── LE BLANC 모바일 헤더 ── */
+/* ── ATELIER N 모바일 헤더 ── */
 .lb-m-header {
   display: flex;
   align-items: center;
@@ -800,3 +800,4 @@ img.ec-admin-icon,
 /* ── THE DAILY UNIFORM (product_listmain_1 × 3) ── */
 .lb-daily-uniform ul.prdList { background: #e8e8e8; }
 .lb-essentials-grid ul.prdList { background: #e8e8e8; }
+

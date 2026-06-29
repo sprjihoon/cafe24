@@ -1,4 +1,4 @@
-/* LE BLANC Mobile — Slide Menu / Sidebar Drawer */
+﻿/* ATELIER N Mobile — Slide Menu / Sidebar Drawer */
 
 /* ── 어둠 배경 ── */
 .lb-aside-dimmer {
@@ -296,3 +296,4 @@ div#aside .member a.btnJoin {
 /* xans-layout-statelogon/logoff 기본 마진 제거 */
 #aside .xans-layout-statelogon,
 #aside .xans-layout-statelogoff { margin: 0 !important; }
+

@@ -1,5 +1,5 @@
-/**
- * LE BLANC 헤더 JavaScript
+﻿/**
+ * ATELIER N 헤더 JavaScript
  * 햄버거 메뉴, 언어 변경, 스크롤 효과 등
  */
 
@@ -190,3 +190,4 @@
   }
 
 })();
+

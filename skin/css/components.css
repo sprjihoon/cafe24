@@ -1,0 +1,843 @@
+﻿@charset "utf-8";
+
+/* ============================================================
+   COMPONENTS — ATELIER N Design System
+   layout.html 연결 전까지 독립 파일. 기존 Cafe24 클래스와 병행 사용.
+   사용법: <a class="btnSubmit btn btn-primary sizeL"> — Cafe24 클래스 유지 + .btn 추가
+   ============================================================ */
+
+/* ── Base button ── */
+.btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-btn-height-md);
+  padding: 0 var(--ds-btn-padding-x-md);
+  border: var(--ds-btn-border-width) solid transparent;
+  border-radius: var(--ds-btn-radius);
+  font-family: var(--ds-btn-font-family);
+  font-size: var(--ds-btn-font-size-md);
+  font-weight: var(--ds-btn-font-weight);
+  letter-spacing: var(--ds-btn-letter-spacing);
+  line-height: var(--ds-line-height-tight);
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  vertical-align: middle;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    background-color var(--ds-transition-base),
+    border-color var(--ds-transition-base),
+    color var(--ds-transition-base),
+    box-shadow var(--ds-transition-base),
+    transform var(--ds-transition-fast);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+.btn:disabled,
+.btn.disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Sizes */
+.btn--sm,
+.btn.sizeS {
+  min-height: var(--ds-btn-height-sm);
+  padding: 0 var(--ds-btn-padding-x-sm);
+  font-size: var(--ds-btn-font-size-sm);
+}
+
+.btn--lg,
+.btn.sizeL {
+  min-height: var(--ds-btn-height-lg);
+  padding: 0 var(--ds-btn-padding-x-lg);
+  font-size: var(--ds-btn-font-size-lg);
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Primary — 바로구매, 주문하기, 결제, 로그인 ── */
+.btn-primary,
+.btn-primary.btn {
+  background-color: var(--ds-btn-primary-bg);
+  border-color: var(--ds-btn-primary-border);
+  color: var(--ds-btn-primary-text);
+}
+
+.btn-primary:hover:not(:disabled):not(.disabled) {
+  background-color: var(--ds-btn-primary-bg-hover);
+  border-color: var(--ds-btn-primary-bg-hover);
+  color: var(--ds-btn-primary-text);
+}
+
+.btn-primary:active:not(:disabled):not(.disabled) {
+  background-color: var(--ds-btn-primary-bg-active);
+  border-color: var(--ds-btn-primary-bg-active);
+}
+
+.btn-primary:disabled,
+.btn-primary.disabled {
+  background-color: var(--ds-btn-primary-bg-disabled);
+  border-color: var(--ds-btn-primary-bg-disabled);
+  color: var(--ds-color-text-inverse);
+}
+
+/* ── Secondary — 보조 액션, 더보기(강조 낮음) ── */
+.btn-secondary,
+.btn-secondary.btn {
+  background-color: var(--ds-btn-secondary-bg);
+  border-color: var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-text);
+}
+
+.btn-secondary:hover:not(:disabled):not(.disabled) {
+  background-color: var(--ds-btn-secondary-bg-hover);
+  border-color: var(--ds-color-border-strong);
+  color: var(--ds-btn-secondary-text);
+}
+
+.btn-secondary:active:not(:disabled):not(.disabled) {
+  background-color: var(--ds-color-border-default);
+}
+
+/* ── Outline — 장바구니, 목록, 취소, 닫기 ── */
+.btn-outline,
+.btn-outline.btn {
+  background-color: var(--ds-btn-outline-bg);
+  border-color: var(--ds-btn-outline-border);
+  color: var(--ds-btn-outline-text);
+}
+
+.btn-outline:hover:not(:disabled):not(.disabled) {
+  background-color: var(--ds-btn-outline-bg-hover);
+  border-color: var(--ds-color-brand-primary);
+  color: var(--ds-btn-outline-text);
+}
+
+.btn-outline:active:not(:disabled):not(.disabled) {
+  background-color: var(--ds-color-border-default);
+}
+
+/* ── Text — 텍스트 링크형 (btnLink 대체 visual) ── */
+.btn-text,
+.btn-text.btn {
+  min-height: var(--ds-btn-height-md);
+  padding: 0 var(--ds-space-2);
+  background: transparent;
+  border-color: transparent;
+  color: var(--ds-btn-text-color);
+  font-weight: var(--ds-font-weight-medium);
+  letter-spacing: var(--ds-letter-spacing-normal);
+}
+
+.btn-text:hover:not(:disabled):not(.disabled) {
+  color: var(--ds-btn-text-color-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Icon button ── */
+.btn-icon,
+.btn-icon.btn {
+  min-width: var(--ds-btn-height-md);
+  min-height: var(--ds-btn-height-md);
+  padding: 0;
+  background-color: var(--ds-color-bg-surface);
+  border-color: var(--ds-color-border-default);
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-btn-radius-pill);
+}
+
+.btn-icon:hover:not(:disabled):not(.disabled) {
+  background-color: var(--ds-color-bg-muted);
+  border-color: var(--ds-color-border-strong);
+}
+
+.btn-icon svg,
+.btn-icon img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Danger — 삭제, 선택삭제 ── */
+.btn-danger,
+.btn-danger.btn {
+  background-color: var(--ds-btn-danger-bg);
+  border-color: var(--ds-btn-danger-border);
+  color: var(--ds-btn-danger-text);
+}
+
+.btn-danger:hover:not(:disabled):not(.disabled) {
+  background-color: var(--ds-btn-danger-bg-hover);
+  border-color: var(--ds-btn-danger-bg-hover);
+  color: var(--ds-btn-danger-text);
+}
+
+.btn-danger:active:not(:disabled):not(.disabled) {
+  background-color: #4a382e;
+}
+
+/* ── Button group (ec-base-button gColumn 호환) ── */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+
+.btn-group--stack {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.btn-group .btn,
+.btn-group [class*="btnSubmit"],
+.btn-group [class*="btnNormal"] {
+  flex: 1 1 auto;
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+
+.form-input,
+.form-select,
+.form-textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--ds-input-height);
+  padding: 0 var(--ds-input-padding-x);
+  border: var(--ds-btn-border-width) solid var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  background-color: var(--ds-input-bg);
+  color: var(--ds-input-text);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-input-font-size);
+  line-height: var(--ds-line-height-base);
+  transition:
+    border-color var(--ds-transition-base),
+    box-shadow var(--ds-transition-base);
+}
+
+.form-textarea {
+  min-height: 120px;
+  padding-top: var(--ds-space-3);
+  padding-bottom: var(--ds-space-3);
+  resize: vertical;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--ds-input-placeholder);
+}
+
+.form-input:hover:not(:disabled):not(:read-only),
+.form-select:hover:not(:disabled),
+.form-textarea:hover:not(:disabled):not(:read-only) {
+  border-color: var(--ds-color-border-strong);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--ds-input-border-focus);
+  box-shadow: 0 0 0 3px var(--ds-focus-ring-color);
+}
+
+.form-input:disabled,
+.form-select:disabled,
+.form-textarea:disabled {
+  background-color: var(--ds-color-bg-muted);
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+}
+
+.form-select {
+  padding-right: var(--ds-space-8);
+  cursor: pointer;
+}
+
+/* Checkbox / radio wrapper */
+.form-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-btn-height-md);
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-color-text-primary);
+  line-height: var(--ds-line-height-base);
+  cursor: pointer;
+}
+
+.form-checkbox input[type="checkbox"],
+.form-checkbox input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 3px 0 0;
+  accent-color: var(--ds-color-brand-primary);
+  cursor: pointer;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  margin-bottom: var(--ds-space-4);
+}
+
+.form-label {
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-color-text-primary);
+}
+
+.form-hint {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-muted);
+}
+
+.form-error {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-danger);
+}
+
+/* ============================================================
+   BADGE
+   ============================================================ */
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-1);
+  padding: var(--ds-badge-padding-y) var(--ds-badge-padding-x);
+  border-radius: var(--ds-badge-radius);
+  background-color: var(--ds-badge-bg);
+  color: var(--ds-badge-text);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-badge-font-size);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-wide);
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ui-badge--outline {
+  background-color: transparent;
+  border: var(--ds-btn-border-width) solid var(--ds-color-brand-primary);
+  color: var(--ds-color-brand-primary);
+}
+
+.ui-badge--muted {
+  background-color: var(--ds-color-bg-muted);
+  color: var(--ds-color-text-secondary);
+}
+
+.ui-badge--danger {
+  background-color: var(--ds-color-danger-bg);
+  color: var(--ds-color-danger);
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.ui-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ds-card-bg);
+  border: var(--ds-btn-border-width) solid var(--ds-card-border);
+  border-radius: var(--ds-card-radius);
+  box-shadow: var(--ds-card-shadow);
+  overflow: hidden;
+}
+
+.ui-card__body {
+  padding: var(--ds-card-padding);
+}
+
+.ui-card__header {
+  padding: var(--ds-space-4) var(--ds-card-padding);
+  border-bottom: var(--ds-btn-border-width) solid var(--ds-card-border);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text-primary);
+}
+
+.ui-card__footer {
+  padding: var(--ds-space-4) var(--ds-card-padding);
+  border-top: var(--ds-btn-border-width) solid var(--ds-card-border);
+  background-color: var(--ds-color-bg-muted);
+}
+
+.ui-card--flat {
+  box-shadow: none;
+}
+
+.ui-card--muted {
+  background-color: var(--ds-color-bg-muted);
+}
+
+/* ============================================================
+   TAB
+   ============================================================ */
+
+.ui-tab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: var(--ds-btn-border-width) solid var(--ds-tab-border);
+}
+
+.ui-tab__item {
+  margin: 0;
+  padding: 0;
+}
+
+.ui-tab__link,
+.ui-tab__button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ds-tab-height);
+  padding: 0 var(--ds-space-5);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  color: var(--ds-tab-text);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-tab-font-size);
+  font-weight: var(--ds-font-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--ds-transition-base),
+    border-color var(--ds-transition-base);
+}
+
+.ui-tab__link:hover,
+.ui-tab__button:hover {
+  color: var(--ds-tab-text-active);
+}
+
+.ui-tab__item.is-active .ui-tab__link,
+.ui-tab__item.is-active .ui-tab__button,
+.ui-tab__link[aria-selected="true"],
+.ui-tab__button[aria-selected="true"] {
+  color: var(--ds-tab-text-active);
+  border-bottom-color: var(--ds-tab-indicator);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ui-tab__link:focus-visible,
+.ui-tab__button:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+  outline-offset: -2px;
+}
+
+/* ec-base-tab 점진 마이그레이션용 (병행 클래스 추가 시) */
+.ec-base-tab.ui-tab-sync .menu {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: var(--ds-btn-border-width) solid var(--ds-tab-border);
+}
+
+.ec-base-tab.ui-tab-sync .menu li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ds-tab-height);
+  padding: 0 var(--ds-space-5);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-tab-font-size);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-tab-text);
+  text-decoration: none;
+}
+
+.ec-base-tab.ui-tab-sync .menu li.selected a {
+  color: var(--ds-tab-text-active);
+  border-bottom-color: var(--ds-tab-indicator);
+  font-weight: var(--ds-font-weight-semibold);
+  background: var(--ds-tab-bg-active);
+}
+
+/* ============================================================
+   Cafe24 클래스 매핑 (Phase 2 — layout.html 연결 후 활성)
+   HTML에 .btn 병행 추가 시 우선 적용. 없어도 Cafe24 클래스만으로 통일.
+   ============================================================ */
+
+/* 공통 Cafe24 버튼 베이스 */
+[class*="btnSubmit"],
+[class*="btnNormal"],
+[class*="btnEm"],
+[class*="btnBasic"],
+.btnLogin,
+button[class*="btnSubmit"] {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-btn-height-md);
+  padding: 0 var(--ds-btn-padding-x-md);
+  border: var(--ds-btn-border-width) solid transparent;
+  border-radius: var(--ds-btn-radius);
+  font-family: var(--ds-btn-font-family);
+  font-size: var(--ds-btn-font-size-md);
+  font-weight: var(--ds-btn-font-weight);
+  letter-spacing: var(--ds-btn-letter-spacing);
+  line-height: var(--ds-line-height-tight);
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  vertical-align: middle;
+  transition:
+    background-color var(--ds-transition-base),
+    border-color var(--ds-transition-base),
+    color var(--ds-transition-base);
+}
+
+[class*="btnSubmit"].sizeS,
+[class*="btnNormal"].sizeS,
+[class*="btnEm"].sizeS,
+[class*="Fix"].sizeS {
+  min-height: var(--ds-btn-height-sm);
+  padding: 0 var(--ds-btn-padding-x-sm);
+  font-size: var(--ds-btn-font-size-sm);
+}
+
+[class*="btnSubmit"].sizeM,
+[class*="btnNormal"].sizeM,
+[class*="btnEm"].sizeM,
+[class*="Fix"].sizeM {
+  min-height: var(--ds-btn-height-md);
+  padding: 0 var(--ds-btn-padding-x-md);
+  font-size: var(--ds-btn-font-size-md);
+}
+
+[class*="btnSubmit"].sizeL,
+[class*="btnNormal"].sizeL,
+[class*="btnEm"].sizeL,
+[class*="Fix"].sizeL {
+  min-height: var(--ds-btn-height-lg);
+  padding: 0 var(--ds-btn-padding-x-lg);
+  font-size: var(--ds-btn-font-size-lg);
+}
+
+/* Primary — btnSubmit, btnSubmitFix */
+[class*="btnSubmit"]:not(.btn-outline):not(.btn-secondary),
+button[class*="btnSubmit"] {
+  background-color: var(--ds-btn-primary-bg);
+  border-color: var(--ds-btn-primary-border);
+  color: var(--ds-btn-primary-text);
+}
+
+[class*="btnSubmit"]:not(.btn-outline):not(.btn-secondary):hover,
+button[class*="btnSubmit"]:hover {
+  background-color: var(--ds-btn-primary-bg-hover);
+  border-color: var(--ds-btn-primary-bg-hover);
+  color: var(--ds-btn-primary-text);
+}
+
+[class*="btnSubmit"]:not(.btn-outline):not(.btn-secondary):active,
+button[class*="btnSubmit"]:active {
+  background-color: var(--ds-btn-primary-bg-active);
+  border-color: var(--ds-btn-primary-bg-active);
+}
+
+/* Outline — btnNormal, btnNormalFix */
+[class*="btnNormal"]:not(.btn-primary):not(.btn-danger),
+[class*="btnNormalFix"] {
+  background-color: var(--ds-btn-outline-bg);
+  border-color: var(--ds-btn-outline-border);
+  color: var(--ds-btn-outline-text);
+}
+
+[class*="btnNormal"]:not(.btn-primary):not(.btn-danger):hover,
+[class*="btnNormalFix"]:hover {
+  background-color: var(--ds-btn-outline-bg-hover);
+  border-color: var(--ds-color-brand-primary);
+  color: var(--ds-btn-outline-text);
+}
+
+/* Secondary outline — btnEmFix (선택상품주문 등) */
+[class*="btnEmFix"] {
+  background-color: var(--ds-btn-outline-bg);
+  border-color: var(--ds-color-brand-primary);
+  color: var(--ds-btn-outline-text);
+}
+
+[class*="btnEmFix"]:hover {
+  background-color: var(--ds-btn-outline-bg-hover);
+  border-color: var(--ds-color-brand-primary);
+}
+
+/* Danger — btnEm (품절 등, .btn-danger 병행) */
+[class*="btnEm"]:not([class*="btnEmFix"]):not(.btn-outline),
+.btn-danger[class*="btnEm"] {
+  background-color: var(--ds-btn-danger-bg);
+  border-color: var(--ds-btn-danger-border);
+  color: var(--ds-btn-danger-text);
+}
+
+[class*="btnEm"]:not([class*="btnEmFix"]):not(.btn-outline):hover,
+.btn-danger[class*="btnEm"]:hover {
+  background-color: var(--ds-btn-danger-bg-hover);
+  border-color: var(--ds-btn-danger-bg-hover);
+}
+
+/* Secondary — btnBasic */
+[class*="btnBasic"] {
+  background-color: var(--ds-btn-secondary-bg);
+  border-color: var(--ds-btn-secondary-border);
+  color: var(--ds-btn-secondary-text);
+}
+
+[class*="btnBasic"]:hover {
+  background-color: var(--ds-btn-secondary-bg-hover);
+  border-color: var(--ds-color-border-strong);
+}
+
+/* 로그인 CTA */
+.btnLogin,
+.btnLogin.btn {
+  display: flex;
+  width: 100%;
+  min-height: var(--ds-btn-height-lg);
+  padding: 0 var(--ds-btn-padding-x-lg);
+  font-size: var(--ds-btn-font-size-lg);
+  background-color: var(--ds-btn-primary-bg);
+  border-color: var(--ds-btn-primary-border);
+  color: var(--ds-btn-primary-text);
+}
+
+.btnLogin:hover {
+  background-color: var(--ds-btn-primary-bg-hover);
+  border-color: var(--ds-btn-primary-bg-hover);
+  color: var(--ds-btn-primary-text);
+}
+
+/* 장바구니 테이블 — 텍스트 링크형 액션 (btnSubmit 포함) */
+.orderListArea td.button a[class*="btnSubmit"],
+.orderListArea td.button a[class*="btnNormal"],
+.orderListArea td.button a[class*="btnEm"],
+.orderListArea .ec-base-button .gLeft a,
+.orderListArea .ec-base-button .gRight a {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  margin-right: var(--ds-space-2);
+  border: none;
+  background: none;
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-color-text-secondary);
+  text-decoration: underline;
+  white-space: normal;
+}
+
+.orderListArea td.button a[class*="btnSubmit"]:hover,
+.orderListArea td.button a[class*="btnNormal"]:hover,
+.orderListArea td.button a[class*="btnEm"]:hover,
+.orderListArea .ec-base-button .gLeft a:hover,
+.orderListArea .ec-base-button .gRight a:hover {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-primary);
+}
+
+/* ec-base-button 레이아웃 */
+.ec-base-button.gFull [class*="btnSubmit"],
+.ec-base-button.gFull button[class*="btnSubmit"] {
+  display: flex;
+  width: 100%;
+}
+
+.ec-base-button.gColumn {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+}
+
+.ec-base-button.gColumn [class*="btnSubmit"],
+.ec-base-button.gColumn [class*="btnNormal"],
+.ec-base-button.gColumn [class*="btnEm"] {
+  flex: 1 1 auto;
+}
+
+/* ec-base-tab — 전역 탭 (상품 상세 sticky는 product-detail.css) */
+.ec-base-tab {
+  margin-bottom: var(--ds-space-5);
+}
+
+.ec-base-tab .menu {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--ds-space-6);
+  border-bottom: var(--ds-btn-border-width) solid var(--ds-tab-border);
+}
+
+.ec-base-tab .menu li {
+  margin: 0;
+  padding: 0;
+}
+
+.ec-base-tab .menu li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ds-tab-height);
+  padding: var(--ds-space-3) 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-tab-font-size);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-tab-text);
+  text-decoration: none;
+  transition:
+    color var(--ds-transition-base),
+    border-color var(--ds-transition-base);
+}
+
+.ec-base-tab .menu li a:hover {
+  color: var(--ds-tab-text-active);
+}
+
+.ec-base-tab .menu li.selected a,
+.ec-base-tab .menu li.selected a:hover {
+  color: var(--ds-tab-text-active);
+  border-bottom-color: var(--ds-tab-indicator);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ec-base-tab .right {
+  float: right;
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-muted);
+  padding: var(--ds-space-3) 0;
+}
+
+/* ec-base-box / 주문·회원 폼 입력 */
+.ec-base-box input[type="text"],
+.ec-base-box input[type="password"],
+.ec-base-box input[type="email"],
+.ec-base-box input[type="tel"],
+.ec-base-box select,
+.ec-base-box textarea,
+.typeWrite input[type="text"],
+.typeWrite input[type="password"],
+.typeWrite input[type="email"],
+.typeWrite input[type="tel"],
+.typeWrite select,
+.typeWrite textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--ds-input-height);
+  padding: 0 var(--ds-input-padding-x);
+  border: var(--ds-btn-border-width) solid var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  background-color: var(--ds-input-bg);
+  color: var(--ds-input-text);
+  font-family: var(--ds-font-family-body);
+  font-size: var(--ds-input-font-size);
+  transition: border-color var(--ds-transition-base), box-shadow var(--ds-transition-base);
+}
+
+.ec-base-box input:focus,
+.ec-base-box select:focus,
+.ec-base-box textarea:focus,
+.typeWrite input:focus,
+.typeWrite select:focus,
+.typeWrite textarea:focus {
+  outline: none;
+  border-color: var(--ds-input-border-focus);
+  box-shadow: 0 0 0 3px var(--ds-focus-ring-color);
+}
+
+/* ec-base-card (HTML 사용 중, 스킨 CSS 없었음) */
+.ec-base-card {
+  box-sizing: border-box;
+  background-color: var(--ds-card-bg);
+  border: var(--ds-btn-border-width) solid var(--ds-card-border);
+  border-radius: var(--ds-card-radius);
+  box-shadow: var(--ds-card-shadow);
+  overflow: hidden;
+}
+
+.ec-base-card .card-head {
+  padding: var(--ds-space-4) var(--ds-card-padding);
+  border-bottom: var(--ds-btn-border-width) solid var(--ds-card-border);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text-primary);
+}
+
+.ec-base-card .card-body {
+  padding: var(--ds-card-padding);
+}
+
+/* ============================================================
+   Responsive — 터치 영역 44px 유지
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .btn,
+  .btn-text {
+    min-height: var(--ds-btn-height-md);
+  }
+
+  .btn-group {
+    gap: var(--ds-space-2);
+  }
+
+  .btn-group--stack .btn {
+    width: 100%;
+  }
+
+  .ui-tab__link,
+  .ui-tab__button {
+    min-height: var(--ds-btn-height-md);
+    padding: 0 var(--ds-space-4);
+    font-size: var(--ds-font-size-sm);
+  }
+}
+

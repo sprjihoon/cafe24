@@ -1,5 +1,5 @@
-/**
- * LE BLANC 플로팅 위젯 JavaScript
+﻿/**
+ * ATELIER N 플로팅 위젯 JavaScript
  * 우측: 채팅, 카카오톡, 위로 가기
  */
 
@@ -56,3 +56,4 @@
 
 
 })();
+
