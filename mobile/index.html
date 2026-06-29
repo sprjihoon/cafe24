@@ -706,9 +706,11 @@
 </div>
 
 <!-- ============================================================
-     ② WEEKLY BEST — Swiper 슬라이더
-     Cafe24 product_listmain_1: ul.prdList > li.xans-record- 구조로 렌더링
-     JS(initWeeklyBestSwiper)가 li 아이템을 Swiper 슬라이드로 변환 + 초기화
+     ② WEEKLY BEST — 가로 스크롤 (스냅 스와이프)
+     ★ Cafe24 렌더링 규칙:
+       xans-record- 없이 li를 N개 미리 정의 → Cafe24가 ($count / N) 회 반복.
+       4개 li + $count=8 → 2회 반복 = 8개 상품 렌더링.
+       (ESSENTIALS·NEW IN·MOST LOVED 섹션과 동일한 방식)
      ============================================================ -->
 <div class="lb-product-section lb-weekly-best" id="lb-section-best">
     <div class="lb-section-header">
@@ -720,37 +722,73 @@
     </div>
 
     <!--
-        product_listmain_1: 상품 8개 표시
-        Cafe24가 ul.prdList > li.xans-record- × 8 로 렌더링
-        JS가 각 li를 swiper-slide로 변환 후 Swiper 초기화
-    -->
-    <!--
-        product_listmain_1: li.xans-record- 1개가 Cafe24에 의해 상품 수만큼 반복됨.
-        ※ div.lb-product-card 같은 중간 래퍼를 두면 Cafe24가 래퍼를 컨테이너로 인식해
-           thumbnail/description 만 반복 → 1개 카드에 전체 상품 설명이 쌓이는 버그 발생.
-        ※ li.xans-record- 바로 아래 thumbnail/description 을 두어야 올바르게 반복됨.
+        $count = 8
+        4개 li 슬롯 × 2회 반복 = 8개 상품
+        li에 xans-record- 없음 — Cafe24 표준 anchorBoxId 방식 사용
     -->
     <div module="product_listmain_1" class="ec-base-product lb-weekly-prd-wrap">
         <ul class="prdList">
-            <!--
-                ★ xans-record-는 반드시 이 li 하나에만 사용.
-                  내부 요소에 xans-record-를 추가하면 Cafe24가
-                  독립 반복 단위로 처리해 '이미지 1개+이름 8개' 버그 발생.
-            -->
-            <li id="anchorBoxId_{$product_no}" class="xans-record-">
-                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}" class="lb-wk-card">
-                    <span class="lb-wk-thumb">
-                        <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                    </span>
-                    <span class="lb-wk-name">{$product_name}</span>
-                    <span class="lb-wk-price">{$price}</span>
-                </a>
+            <li id="anchorBoxId_{$product_no}">
+                <div class="thumbnail">
+                    <div class="prdImg">
+                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
+                        </a>
+                    </div>
+                </div>
+                <div class="description">
+                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
+                    <ul module="product_ListItem" class="spec">
+                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    </ul>
+                </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}">
+                <div class="thumbnail">
+                    <div class="prdImg">
+                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
+                        </a>
+                    </div>
+                </div>
+                <div class="description">
+                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
+                    <ul module="product_ListItem" class="spec">
+                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    </ul>
+                </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}">
+                <div class="thumbnail">
+                    <div class="prdImg">
+                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
+                        </a>
+                    </div>
+                </div>
+                <div class="description">
+                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
+                    <ul module="product_ListItem" class="spec">
+                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    </ul>
+                </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}">
+                <div class="thumbnail">
+                    <div class="prdImg">
+                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
+                        </a>
+                    </div>
+                </div>
+                <div class="description">
+                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
+                    <ul module="product_ListItem" class="spec">
+                        <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                    </ul>
+                </div>
             </li>
         </ul>
-    </div>
-    <!-- JS가 Swiper 초기화 후 페이지네이션을 여기에 추가 -->
-    <div class="lb-weekly-pagination-wrap">
-        <div class="swiper-pagination lb-weekly-pagination"></div>
     </div>
 </div>
 
