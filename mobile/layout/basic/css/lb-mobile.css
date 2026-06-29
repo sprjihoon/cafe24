@@ -995,3 +995,171 @@ body#layout #contents {
   background: #1d1d1f;
   color: #ffffff;
 }
+
+/* ============================================================
+   헤더 하단 카테고리 탭바 (Layout_MobileMaincategory)
+   ============================================================ */
+.lb-m-catbar {
+  position: sticky;
+  top: 52px;
+  z-index: 90;
+  background: #fff;
+  border-bottom: 1px solid var(--color-border, #e8e8e8);
+  overflow: hidden;
+}
+.lb-m-catbar ul,
+.lb-m-catbar .lb-m-catbar__list {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 12px;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+}
+.lb-m-catbar ul::-webkit-scrollbar { display: none; }
+.lb-m-catbar li { flex: none; }
+.lb-m-catbar a {
+  display: block;
+  padding: 11px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #6b6b6b;
+  white-space: nowrap;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.lb-m-catbar a:hover,
+.lb-m-catbar a.selected,
+.lb-m-catbar a.is-active {
+  color: #1d1d1f;
+  border-bottom-color: #1d1d1f;
+}
+/* 기존 이전/다음 버튼 숨김 */
+.lb-m-catbar .btnPrev,
+.lb-m-catbar .btnNext { display: none; }
+
+/* 하위 li.afterNone 인라인으로 합치기 */
+.lb-m-catbar li.afterNone { display: contents; }
+.lb-m-catbar > ul > li > ul { display: contents; }
+
+/* ============================================================
+   ATELIER SHORTS — 모바일 스타일 조정
+   ============================================================ */
+.lb-m-shorts .atelier-shorts__slider .swiper-slide,
+.atelier-shorts .swiper-slide {
+  width: 75vw !important;
+  max-width: 320px;
+}
+.lb-m-shorts .atelier-shorts__header {
+  padding: 0 16px 16px;
+}
+.lb-m-shorts .atelier-shorts__nav {
+  display: none; /* 모바일에서는 터치 스와이프 사용 */
+}
+.lb-m-shorts .atelier-shorts__pagination-bar {
+  padding: 12px 16px;
+}
+/* ATELIER SHORTS 전체 섹션 여백 */
+section.atelier-shorts {
+  padding: 40px 0 24px;
+  overflow: hidden;
+}
+section.atelier-shorts .atelier-shorts__slider-wrap {
+  padding-left: 16px;
+}
+
+/* ============================================================
+   PHOTO REVIEW — 모바일 슬라이더
+   ============================================================ */
+.lb-photo-review-section {
+  padding: 40px 0;
+  background: #fafafa;
+}
+.lb-photo-review-section .lb-section-header {
+  padding: 0 16px 20px;
+}
+.lb-board-review-wrapper {
+  padding-left: 16px;
+  overflow: hidden;
+}
+.lb-review-swiper {
+  overflow: visible;
+}
+.lb-review-item {
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e8e8e8);
+}
+.lb-review-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.lb-review-image-wrapper {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+.lb-review-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lb-review-content {
+  padding: 12px;
+}
+.lb-review-stars {
+  font-size: 12px;
+  color: #f5a623;
+  margin-bottom: 4px;
+}
+.lb-review-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-review-text {
+  font-size: 12px;
+  color: #6b6b6b;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 8px;
+}
+.lb-review-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aaa;
+}
+.lb-review-empty-state {
+  padding: 48px 16px;
+  text-align: center;
+  color: #aaa;
+}
+.lb-review-empty-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.lb-review-empty-desc {
+  font-size: 12px;
+}
+/* Swiper 페이지네이션 (리뷰) */
+.lb-review-pagination.swiper-pagination {
+  position: static;
+  margin-top: 16px;
+  padding-right: 16px;
+}
+/* 숨겨진 섹션 */
+.lb-hidden-section { display: none !important; }

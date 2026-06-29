@@ -19,9 +19,13 @@
     <!--@css(/layout/basic/css/ec-base-prdInfo.css)-->
     <!--@css(/layout/basic/css/leblanc.css)-->
     <!--@css(/layout/basic/css/lb-mobile.css)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
     <!--@js(/layout/basic/js/common.js)-->
     <!--@js(/layout/basic/js/basic.js)-->
+    <!--@js(/layout/basic/js/atelier-shorts-data.js)-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="/layout/basic/js/atelier-shorts.js"></script>
 </head>
 <body id="main">
     <div module="Popup_MultiPopup">
@@ -72,7 +76,7 @@
                         </p>
                     </div>
 
-                    <!-- Cafe24 필수 요소 (숨김 처리) -->
+                    <!-- Cafe24 필수 요소: 검색 (숨김 — JS로 트리거) -->
                     <section id="topArea" style="display:none;">
                         <div class="searchWrap">
                             <p class="category"><a href="#none" class="fold">카테고리</a></p>
@@ -87,34 +91,36 @@
                                 </div>
                             </div>
                         </div>
-                        <nav id="mainMenu" module="Layout_MobileMaincategory">
-                            <!--
-                                $swipe = yes
-                                $plugin = category
-                                $generate = no
-                                $gird = 3
-                                $display = no
-                            -->
-                            <ul>
-                                <li>
-                                    <ul>
-                                        <li module="Mobile_Categoryname_1" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                                        <li module="Mobile_Categoryname_2" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                                        <li module="Mobile_Categoryname_3" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                                    </ul>
-                                </li>
-                                <li class="afterNone">
-                                    <ul>
-                                        <li module="Mobile_Categoryname_4" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
-                                    </ul>
-                                </li>
-                             </ul>
-                            <p class="btnPrev"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_prev.png" width="8" height="13" alt="이전"></a></p>
-                            <p class="btnNext"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_next.png" width="8" height="13" alt="다음"></a></p>
-                        </nav>
                     </section>
                 </div>
             </header>
+
+            <!-- 헤더 하단 카테고리 탭바 -->
+            <nav class="lb-m-catbar" id="lb-m-catbar" module="Layout_MobileMaincategory">
+                <!--
+                    $swipe = yes
+                    $plugin = category
+                    $generate = no
+                    $gird = 3
+                    $display = no
+                -->
+                <ul class="lb-m-catbar__list">
+                    <li>
+                        <ul>
+                            <li module="Mobile_Categoryname_1" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
+                            <li module="Mobile_Categoryname_2" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
+                            <li module="Mobile_Categoryname_3" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
+                        </ul>
+                    </li>
+                    <li class="afterNone">
+                        <ul>
+                            <li module="Mobile_Categoryname_4" data-seq="{$display_group}"><a href="#none">{$category_name}</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="btnPrev"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_prev.png" width="8" height="13" alt="이전"></a></p>
+                <p class="btnNext"><a href="#none"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/btn_next.png" width="8" height="13" alt="다음"></a></p>
+            </nav>
 
             <hr class="layout">
             <div id="contents">

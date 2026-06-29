@@ -98,7 +98,41 @@
 </div>
 
 <!-- ============================================================
-     ③ NEW IN — product_listmain_2
+     ③ ATELIER SHORTS — 세로형 영상 카드 슬라이더 (모바일)
+     ============================================================ -->
+<section class="atelier-shorts lb-m-shorts" id="atelier-shorts-container">
+    <div class="atelier-shorts__header">
+        <div class="atelier-shorts__title-group">
+            <p class="atelier-shorts__eyebrow">ATELIER SHORTS</p>
+            <h2 class="atelier-shorts__title">새로운 컬렉션의 움직임을 만나보세요.</h2>
+            <p class="atelier-shorts__desc">짧은 영상으로 경험하는 일상의 스타일</p>
+        </div>
+        <div class="atelier-shorts__nav">
+            <button class="atelier-shorts__nav-btn atelier-shorts__nav-prev" type="button" aria-label="이전 영상">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="atelier-shorts__nav-btn atelier-shorts__nav-next" type="button" aria-label="다음 영상">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+    </div>
+    <div class="atelier-shorts__slider-wrap">
+        <div class="swiper atelier-shorts__slider">
+            <div class="swiper-wrapper atelier-shorts__slider-wrapper">
+                <!-- JavaScript로 동적 생성됨 -->
+            </div>
+        </div>
+        <div class="atelier-shorts__pagination-bar">
+            <div class="atelier-shorts__pagination" role="status" aria-live="polite">
+                <span class="atelier-shorts__pagination-fill"></span>
+                <span class="atelier-shorts__pagination-text">1 / 7</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     ④ NEW IN — product_listmain_2
      ============================================================ -->
 <div class="ec-base-product typeThumb lb-product-section" module="product_listmain_2">
     <!--
@@ -265,6 +299,110 @@
 </div>
 
 <!-- ============================================================
+     PHOTO REVIEW — 고객 착용 후기 슬라이더
+     ============================================================ -->
+<div class="lb-photo-review-section" id="lb-section-review">
+    <div class="lb-section-header">
+        <div class="lb-section-copy">
+            <p class="lb-section-eyebrow">REAL CUSTOMER REVIEWS</p>
+            <h2 class="lb-section-title">고객이 직접 남긴 착용 후기</h2>
+        </div>
+        <a href="/board/review/list.html?board_no=4" class="lb-section-more">모두보기</a>
+    </div>
+    <div class="lb-review-empty-state" id="lb-review-empty-state" style="display:none;">
+        <div class="lb-review-empty-content">
+            <p class="lb-review-empty-title">아직 첫 번째 착용 후기를 기다리고 있습니다.</p>
+            <p class="lb-review-empty-desc">상품을 경험하신 뒤, 당신의 일상을 들려주세요.</p>
+        </div>
+    </div>
+    <div module="board_listpackage_4" class="lb-board-review-wrapper" id="lb-review-wrapper">
+        <div class="swiper lb-review-swiper" id="lb-review-swiper">
+            <ul module="board_list_4" class="xans-board-list swiper-wrapper" id="lb-review-list">
+                <!--
+                    $count = 6
+                    $main_list = yes
+                    $main_list_reply_view = no
+                -->
+                <li class="xans-record- swiper-slide">
+                    <div class="lb-review-item">
+                        <a href="{$link_board_detail}" class="lb-review-link">
+                            <div class="lb-review-image-wrapper">
+                                <img src="{$thumbnail_file}" alt="{$subject}" class="lb-review-image" onerror="this.src='//img.echosting.cafe24.com/thumb/img_product_small.gif'">
+                                {$display_board_attachment}
+                            </div>
+                            <div class="lb-review-content">
+                                <div class="lb-review-stars">{$display_product_review}</div>
+                                <h3 class="lb-review-title">{$subject}</h3>
+                                <p class="lb-review-text">{$content_cut}</p>
+                                <div class="lb-review-meta">
+                                    <span class="lb-review-author">{$writer}</span>
+                                    <span class="lb-review-date">{$write_date}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <div class="swiper-pagination lb-review-pagination" id="lb-review-pagination"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/layout/basic/js/atelier-review-demo-data.js"></script>
+<script>
+(function() {
+  'use strict';
+  if (typeof Swiper === 'undefined') return;
+  var reviewSwiper = null;
+  function getReviewCount() {
+    var list = document.getElementById('lb-review-list');
+    if (!list) return 0;
+    return list.querySelectorAll('.xans-record-:not(.atelier-demo-review)').length;
+  }
+  function insertDemoReviews() {
+    if (!window.ATELIER_DEMO_MODE || !window.ATELIER_DEMO_REVIEWS) return;
+    var list = document.getElementById('lb-review-list');
+    if (!list) return;
+    var html = '';
+    window.ATELIER_DEMO_REVIEWS.forEach(function(r) { html += window.generateDemoReviewCard(r); });
+    list.insertAdjacentHTML('beforeend', html);
+  }
+  function initReviewSlider() {
+    var count = getReviewCount();
+    var emptyState = document.getElementById('lb-review-empty-state');
+    var wrapper = document.getElementById('lb-review-wrapper');
+    if (count === 0) {
+      if (window.ATELIER_DEMO_MODE) {
+        insertDemoReviews();
+        if (emptyState) emptyState.style.display = 'none';
+        if (wrapper) wrapper.style.display = 'block';
+      } else {
+        if (emptyState) emptyState.style.display = 'block';
+        if (wrapper) wrapper.style.display = 'none';
+        return;
+      }
+    } else {
+      if (emptyState) emptyState.style.display = 'none';
+      if (wrapper) wrapper.style.display = 'block';
+    }
+    if (reviewSwiper) reviewSwiper.destroy(true, true);
+    reviewSwiper = new Swiper('#lb-review-swiper', {
+      slidesPerView: 1.15,
+      spaceBetween: 12,
+      loop: false,
+      grabCursor: true,
+      pagination: { el: '#lb-review-pagination', clickable: true }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(initReviewSlider, 500); });
+  } else {
+    setTimeout(initReviewSlider, 500);
+  }
+})();
+</script>
+
+<!-- ============================================================
      ⑥ 브랜드 소개
      ============================================================ -->
 <section class="lb-brand-story">
@@ -299,3 +437,64 @@
     <!-- $stamp_type_url = /attend/stamp.html $comment_type_url = /attend/comment.html -->
     <a href="{$attend_url}"><img src="//img.echosting.cafe24.com/skin/mobile_ko_KR/layout/bnr_attend.png" alt="출석체크"></a>
 </p>
+
+<script>
+/* Hero 터치 스와이프 */
+(function() {
+  var slider = document.getElementById('lb-hero-slider');
+  if (!slider) return;
+  var track = slider.querySelector('.lb-hero-track');
+  var slides = slider.querySelectorAll('.lb-hero-slide');
+  var dots = slider.querySelectorAll('.lb-hero-dot');
+  if (!track || !slides.length) return;
+
+  var total = slides.length;
+  var current = 0;
+  var autoTimer = null;
+  var startX = 0;
+  var isDragging = false;
+
+  function goTo(idx) {
+    current = (idx + total) % total;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function(d, i) {
+      d.classList.toggle('is-active', i === current);
+    });
+  }
+
+  function startAuto() {
+    autoTimer = setInterval(function() { goTo(current + 1); }, 4000);
+  }
+  function stopAuto() { clearInterval(autoTimer); }
+
+  /* 터치 스와이프 */
+  track.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+    stopAuto();
+  }, { passive: true });
+  track.addEventListener('touchend', function(e) {
+    if (!isDragging) return;
+    var diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+    isDragging = false;
+    startAuto();
+  }, { passive: true });
+
+  /* 닷 클릭 */
+  dots.forEach(function(d, i) {
+    d.addEventListener('click', function() { stopAuto(); goTo(i); startAuto(); });
+  });
+
+  /* CSS 설정 */
+  track.style.display = 'flex';
+  track.style.transition = 'transform 0.5s ease';
+  slides.forEach(function(s) {
+    s.style.minWidth = '100%';
+    s.style.flexShrink = '0';
+  });
+
+  goTo(0);
+  startAuto();
+})();
+</script>
