@@ -731,29 +731,16 @@
         ※ li.xans-record- 바로 아래 thumbnail/description 을 두어야 올바르게 반복됨.
     -->
     <div module="product_listmain_1" class="ec-base-product lb-weekly-prd-wrap">
-        <!--
-            $count = 8
-        -->
         <ul class="prdList">
             <li id="anchorBoxId_{$product_no}" class="xans-record-">
-                <div class="thumbnail">
-                    <div class="prdImg">
-                        <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                            <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
-                        </a>
-                        <span class="wish">{$list_wish_icon}</span>
-                    </div>
-                    <div class="icon">
-                        <div class="promotion">{$soldout_icon} {$new_icon}</div>
-                    </div>
+                <div class="prdImg">
+                    <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                        <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
+                    </a>
                 </div>
                 <div class="description">
-                    <strong class="name">
-                        <a href="{$link_product_detail}">{$product_name}</a>
-                    </strong>
-                    <ul class="spec">
-                        <li class="price"><span>{$price}</span></li>
-                    </ul>
+                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
+                    <span class="price">{$price}</span>
                 </div>
             </li>
         </ul>

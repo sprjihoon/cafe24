@@ -245,15 +245,15 @@ html, body { width: 100%; overflow-x: hidden; }
 }
 .lb-cat-inner {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;   /* 2행(3개)도 자동 가운데 정렬 */
+  flex-wrap: wrap;           /* 넘치면 자동으로 다음 행 */
+  justify-content: flex-start; /* 왼쪽 정렬 — 여백 최소화 */
   row-gap: 10px;
-  column-gap: 8px;
+  column-gap: 0;
   padding: 0 16px;
 }
 .lb-cat-item {
-  flex: 0 0 80px;            /* 고정 너비 — 어떤 뷰포트에서도 4개씩 */
-  max-width: 80px;
+  flex: 0 0 25%;             /* 4열 고정: 어떤 뷰포트에서도 25%×4=100% */
+  max-width: 25%;
   display: flex;
   flex-direction: column;
   align-items: center;
