@@ -732,18 +732,19 @@
     -->
     <div module="product_listmain_1" class="ec-base-product lb-weekly-prd-wrap">
         <ul class="prdList">
+            <!--
+                ★ xans-record-는 반드시 이 li 하나에만 사용.
+                  내부 요소에 xans-record-를 추가하면 Cafe24가
+                  독립 반복 단위로 처리해 '이미지 1개+이름 8개' 버그 발생.
+            -->
             <li id="anchorBoxId_{$product_no}" class="xans-record-">
-                <div class="prdImg">
-                    <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
+                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}" class="lb-wk-card">
+                    <span class="lb-wk-thumb">
                         <img src="{$image_medium}" id="{$image_medium_id}" alt="{$product_name}" />
-                    </a>
-                </div>
-                <div class="description">
-                    <strong class="name"><a href="{$link_product_detail}">{$product_name}</a></strong>
-                    <ul class="xans-record- spec">
-                        <li class="price"><span>{$price}</span></li>
-                    </ul>
-                </div>
+                    </span>
+                    <span class="lb-wk-name">{$product_name}</span>
+                    <span class="lb-wk-price">{$price}</span>
+                </a>
             </li>
         </ul>
     </div>
