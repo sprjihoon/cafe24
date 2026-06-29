@@ -276,13 +276,14 @@
     initHeroSlider();
     initCategoryCopy();
     /* Swiper가 로드된 뒤 실행 (CDN async) */
+    /* WEEKLY BEST: JS Swiper 제거 → CSS 순수 가로 스크롤로 처리.
+     * initWeeklyBestSwiper()는 Cafe24 AJAX 렌더링 타이밍과 충돌해 1개 슬라이드에
+     * 전체 상품이 쌓이는 버그를 유발. CSS overflow-x: auto 방식으로 대체. */
     if (typeof Swiper !== 'undefined') {
       initFeatureSwiper();
-      initWeeklyBestSwiper();
     } else {
       window.addEventListener('load', function() {
         initFeatureSwiper();
-        initWeeklyBestSwiper();
       });
     }
   }

@@ -748,89 +748,73 @@ img.ec-admin-icon,
   color: #fff;
 }
 
-/* ── WEEKLY BEST — Swiper (JS 변환 방식) ── */
-/*
- * JS(initWeeklyBestSwiper)가 ul.prdList li를 swiper-slide로 변환 후 Swiper 초기화.
- * .lb-weekly-prd-wrap은 JS 실행 후 숨겨진다.
+/* ── WEEKLY BEST (CSS 순수 가로 스크롤)
+ * JS Swiper 제거 — Cafe24 AJAX 렌더링 타이밍 충돌 방지.
+ * Cafe24가 ul.prdList > li × N 구조를 서버에서 렌더링한 후
+ * CSS overflow-x:auto 로 가로 스크롤 처리.
  */
 .lb-weekly-best {
-  overflow: hidden;
   padding-bottom: 8px;
+  /* overflow:hidden 제거 — 자식 스크롤이 막히지 않도록 */
 }
 .lb-weekly-prd-wrap {
-  /* JS 초기화 전 CSS fallback: 가로 스크롤 */
   overflow-x: auto;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.lb-weekly-prd-wrap::-webkit-scrollbar { display: none; }
+
 .lb-weekly-prd-wrap ul.prdList {
   display: flex;
   flex-wrap: nowrap;
   gap: 12px;
-  padding: 0 16px 8px;
+  padding: 0 16px 12px;
   margin: 0;
   list-style: none;
+  width: max-content;
+  min-width: 100%;
 }
-.lb-weekly-prd-wrap ul.prdList li {
+.lb-weekly-prd-wrap ul.prdList > li {
   flex: 0 0 44vw;
   max-width: 210px;
+  scroll-snap-align: start;
 }
-/* JS 초기화 후 Swiper DOM */
-.lb-weekly-swiper {
-  overflow: hidden; /* Swiper 정상 동작에 필수 */
-  padding: 0 16px;
-  box-sizing: border-box;
-  width: 100%;
-}
-/* slidesPerView:'auto' 사용 → CSS로 슬라이드 너비 지정 */
-.lb-weekly-swiper .swiper-slide {
-  width: 44vw;
-  max-width: 210px;
-  flex-shrink: 0;
-}
-/* 상품 카드 스타일 */
-.lb-weekly-swiper .lb-product-card,
-.lb-weekly-prd-wrap .lb-product-card {
-  display: block;
-}
-.lb-weekly-swiper .lb-product-card .prdImg img,
-.lb-weekly-prd-wrap .lb-product-card .prdImg img {
+
+/* Cafe24가 렌더하는 상품 카드 구조 */
+.lb-weekly-prd-wrap .prdImg img {
   width: 100%;
   aspect-ratio: 3/4;
   object-fit: cover;
+  display: block;
 }
-.lb-weekly-swiper .lb-product-card .description,
-.lb-weekly-prd-wrap .lb-product-card .description {
-  padding: 10px 2px 0;
+.lb-weekly-prd-wrap .description {
+  padding: 8px 2px 0;
 }
-.lb-weekly-swiper .lb-product-card .name,
-.lb-weekly-prd-wrap .lb-product-card .name {
+.lb-weekly-prd-wrap strong.name a,
+.lb-weekly-prd-wrap .name a {
   font-size: 13px;
   font-weight: 400;
   line-height: 1.4;
-  overflow: hidden;
+  color: #1d1d1f;
+  text-decoration: none;
   display: -webkit-box;
+  overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.lb-weekly-swiper .lb-product-card .price,
-.lb-weekly-prd-wrap .lb-product-card .price {
+.lb-weekly-prd-wrap .spec { list-style: none; padding: 0; margin: 4px 0 0; }
+.lb-weekly-prd-wrap .spec .price span {
   font-size: 13px;
   font-weight: 600;
-  margin-top: 4px;
-  display: block;
+  color: #1d1d1f;
 }
-/* 페이지네이션 */
-.lb-weekly-best .swiper-button-prev,
-.lb-weekly-best .swiper-button-next { display: none; }
-.lb-weekly-pagination-wrap {
-  text-align: center;
-  padding: 12px 0 4px;
-}
-.lb-weekly-pagination {
-  position: static !important;
-  display: inline-flex;
-  gap: 5px;
-}
+
+/* JS Swiper 잔재 완전 숨김 */
+.lb-weekly-swiper,
+.lb-weekly-pagination-wrap { display: none !important; }
 
 /* ── BAND BANNER ── */
 .lb-band-banner {
