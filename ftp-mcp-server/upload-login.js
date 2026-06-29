@@ -6,7 +6,9 @@ const config = JSON.parse(fs.readFileSync('./watcher.config.json', 'utf8'));
 
 const files = [
   { local: 'skin/member/login.html',   remote: '/member/login.html' },
+  { local: 'skin/member/join.html',    remote: '/member/join.html' },
   { local: 'mobile/member/login.html', remote: '/sde_design/mobile/member/login.html' },
+  { local: 'mobile/member/join.html',  remote: '/sde_design/mobile/member/join.html' },
 ];
 
 async function main() {
@@ -23,6 +25,6 @@ async function main() {
     console.log('✅', f.remote);
   }
   client.close();
-  console.log('로그인 페이지 배포 완료!');
+  console.log('로그인+회원가입 페이지 배포 완료!');
 }
 main().catch(e => { console.error('❌', e.message); process.exit(1); });
