@@ -196,24 +196,30 @@ html, body { width: 100%; overflow-x: hidden; }
   text-transform: uppercase;
   transition: background 0.2s;
 }
+/* Hero dots — PC와 동일한 pill 스타일 */
 .lb-hero-dots {
   position: absolute;
-  bottom: 14px;
-  right: 16px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 6px;
+  z-index: 2;
 }
 .lb-hero-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  border: none;
-  cursor: pointer;
+  width: 8px;
+  height: 8px;
   padding: 0;
-  transition: background 0.2s;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.lb-hero-dot.is-active { background: #fff; }
+.lb-hero-dot.is-active {
+  width: 32px;
+  background: rgba(255,255,255,1);
+}
 /* PC 전용 영상 컨테이너 숨김 */
 .lb-hero-video-container, .lb-full-bleed { /* 모바일에서 full-bleed 해제 */ }
 .lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 55vw !important; min-height: 300px !important; }
