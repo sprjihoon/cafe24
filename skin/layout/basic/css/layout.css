@@ -4234,101 +4234,189 @@ img[src*="btn_prd_zoom.gif"] {
 /* ============================================================
    푸터
    ============================================================ */
+/* ============================================================
+   FOOTER - 간결 스타일 (샘플사이트 참조)
+   ============================================================ */
 .lb-footer {
-  background: #f5f5f5;
+  background: #f8f8f8;
+  border-top: 1px solid #e8e8e8;
   margin-top: 80px;
 }
 
-.lb-footer-main {
-  padding: 60px 0 40px;
-}
-
-.lb-footer-container {
-  max-width: 1400px;
+.lb-footer-inner {
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 40px;
-}
-
-/* 3컬럼 레이아웃 */
-.lb-footer-main .lb-footer-container {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 60px;
-}
-
-/* 로고 및 사업자 정보 */
-.lb-footer-logo {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 24px;
-  letter-spacing: 0.05em;
-}
-
-.lb-footer-logo a {
-  color: #1d1d1f;
-  text-decoration: none;
-}
-
-.lb-footer-company {
-  font-size: 13px;
-  line-height: 1.8;
-  color: #8d8d8f;
-}
-
-.lb-footer-company p {
-  margin: 0 0 8px;
-}
-
-.lb-footer-company a {
-  color: #8d8d8f;
-  text-decoration: underline;
-}
-
-/* 컬럼 타이틀 */
-.lb-footer-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #1d1d1f;
-  margin: 0 0 20px;
+  padding: 48px 40px 40px;
+  text-align: center;
 }
 
 /* 고객센터 */
-.lb-footer-tel {
+.lb-footer-cs {
+  margin-bottom: 32px;
+}
+
+.lb-footer-cs-label {
   display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #1d1d1f;
-  text-decoration: none;
-  margin-bottom: 12px;
-}
-
-.lb-footer-time {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #8d8d8f;
-  margin: 0 0 16px;
-}
-
-.lb-footer-account-info {
-  margin-top: 16px;
-}
-
-.lb-footer-account-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1d1d1f;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #aaa;
   margin-bottom: 8px;
 }
 
-.lb-footer-account-details {
-  font-size: 14px;
-  color: #8d8d8f;
+.lb-footer-tel {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1d1d1f;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.lb-footer-hours {
+  font-size: 13px;
+  color: #999;
+  margin: 0 0 12px;
   line-height: 1.6;
 }
 
+.lb-footer-bank-wrap {
+  display: inline-block;
+}
+
+.lb-footer-bank-toggle {
+  background: none;
+  border: 1px solid #ddd;
+  font-size: 12px;
+  color: #888;
+  padding: 5px 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+  transition: all 0.2s;
+}
+
+.lb-footer-bank-toggle:hover {
+  border-color: #aaa;
+  color: #555;
+}
+
+.lb-footer-bank-detail {
+  display: none;
+  font-size: 13px;
+  color: #888;
+  line-height: 1.8;
+  margin-top: 10px;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.lb-footer-bank-detail p {
+  margin: 0;
+}
+
+/* 정책 링크 */
+.lb-footer-policy {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.lb-footer-policy li {
+  display: flex;
+  align-items: center;
+}
+
+.lb-footer-policy li + li::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 11px;
+  background: #ddd;
+  margin: 0 12px;
+}
+
+.lb-footer-policy a {
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.lb-footer-policy a:hover {
+  color: #1d1d1f;
+}
+
+.lb-footer-policy a strong {
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+/* 사업자 정보 아코디언 */
+.lb-footer-biz {
+  margin-bottom: 28px;
+}
+
+.lb-footer-biz-toggle {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  transition: color 0.2s;
+}
+
+.lb-footer-biz-toggle:hover {
+  color: #555;
+}
+
+.lb-footer-biz-arrow {
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.lb-footer-biz-toggle.open .lb-footer-biz-arrow {
+  transform: rotate(180deg);
+}
+
+.lb-footer-biz-detail {
+  display: none;
+  font-size: 12px;
+  color: #aaa;
+  line-height: 2;
+  margin-top: 12px;
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.lb-footer-biz-detail p {
+  margin: 0;
+}
+
+.lb-footer-biz-detail a {
+  color: #aaa;
+  text-decoration: underline;
+}
+
+/* SNS */
 .lb-footer-sns {
   display: flex;
-  gap: 12px;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
 .lb-footer-sns a {
@@ -4337,7 +4425,7 @@ img[src*="btn_prd_zoom.gif"] {
   justify-content: center;
   width: 36px;
   height: 36px;
-  color: #8d8d8f;
+  color: #bbb;
   transition: color 0.2s;
 }
 
@@ -4345,80 +4433,104 @@ img[src*="btn_prd_zoom.gif"] {
   color: #1d1d1f;
 }
 
-/* 서비스 정보 */
-.lb-footer-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.lb-footer-links li {
-  margin: 0 0 12px;
-}
-
-.lb-footer-links a {
-  font-size: 14px;
-  color: #8d8d8f;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.lb-footer-links a:hover {
-  color: #1d1d1f;
-}
-
-.lb-footer-links a strong {
-  font-weight: 600;
-  color: #1d1d1f;
-}
-
-/* 푸터 하단 */
+/* 하단 카피라이트 */
 .lb-footer-bottom {
-  padding: 24px 0 0 0;
-  border-top: 1px solid #e5e5e5;
-  background: #f5f5f5;
-}
-
-.lb-footer-bottom .lb-footer-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  flex-wrap: wrap;
 }
 
 .lb-footer-copyright {
-  font-size: 13px;
-  color: #8d8d8f;
+  font-size: 12px;
+  color: #bbb;
   margin: 0;
 }
 
-.lb-footer-copyright strong {
-  color: #1d1d1f;
-}
-
-.lb-footer-badges {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 13px;
-  color: #8d8d8f;
-}
-
 .lb-footer-badges img {
-  height: 24px;
-  opacity: 0.6;
+  height: 20px;
+  opacity: 0.5;
 }
 
-/* footer 하단 공백 완전 제거 */
+/* footer 공백 제거 */
 #footer,
-.lb-footer,
-.lb-footer-bottom {
+.lb-footer {
   margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
 }
 
 body {
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
+}
+
+/* ============================================================
+   플로팅 채팅 버튼 (PC + 모바일 공통)
+   ============================================================ */
+.lb-float-buttons {
+  position: fixed;
+  right: 24px;
+  bottom: 40px;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.lb-float-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.lb-float-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* 카카오톡: 노란 배경 */
+.lb-float-kakao {
+  background: #FEE500;
+  color: #3C1E1E;
+}
+
+/* 네이버 톡톡: 초록 배경 */
+.lb-float-naver {
+  background: #03C75A;
+  color: #fff;
+}
+
+/* 맨위로 버튼 */
+.lb-float-top {
+  background: #fff;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.lb-float-top:hover {
+  color: #1d1d1f;
+}
+
+@media (max-width: 960px) {
+  .lb-float-buttons {
+    right: 16px;
+    bottom: 72px;
+  }
+
+  .lb-float-btn {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 /* ============================================================
