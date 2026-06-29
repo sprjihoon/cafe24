@@ -152,9 +152,9 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-hero {
   position: relative;
   overflow: hidden;
-  height: 55vw;
-  min-height: 300px;
-  max-height: 480px;
+  height: 52vw;
+  min-height: 260px;
+  max-height: 420px;
 }
 .lb-hero-slider { width: 100%; height: 100%; }
 .lb-hero-track {
@@ -172,11 +172,11 @@ html, body { width: 100%; overflow-x: hidden; }
   background-color: #f0f0f0;
   position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end;   /* 텍스트는 하단 고정 — 전체 이미지가 보이도록 히어로 높이를 줄임 */
 }
 .lb-hero-placeholder {
-  padding: 24px 20px;
-  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+  padding: 20px 20px 18px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 70%, transparent 100%);
   width: 100%;
   color: #fff;
 }
@@ -241,13 +241,13 @@ html, body { width: 100%; overflow-x: hidden; }
 
 /* ── 카테고리 아이콘 존 (2줄 flex, 중앙 정렬) ── */
 .lb-cat-zone {
-  padding: 20px 0;
+  padding: 14px 0 10px;     /* 상하 패딩 축소 → 뷰포트 내 수직 공간 확보 */
 }
 .lb-cat-inner {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;   /* 나머지 행(3개)도 자연스럽게 가운데 */
-  row-gap: 16px;
+  row-gap: 10px;             /* 행간 축소 */
   padding: 0 8px;
 }
 .lb-cat-item {
@@ -261,7 +261,7 @@ html, body { width: 100%; overflow-x: hidden; }
   text-align: center;
 }
 .lb-cat-circle {
-  width: 68px;               /* 57 × 1.2 (20% 확대) */
+  width: 68px;               /* 57 × 1.2 (20% 확대 유지) */
   height: 68px;
   border-radius: 50%;
   background: #f5f5f5;
@@ -269,7 +269,7 @@ html, body { width: 100%; overflow-x: hidden; }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;        /* 8 → 6px */
   transition: background 0.2s, border-color 0.2s;
 }
 .lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
