@@ -132,7 +132,6 @@
     if (typeof Swiper === 'undefined') return;
     var container = document.querySelector('.lb-feature-banners');
     if (!container) return;
-    /* Swiper가 이미 적용된 경우 스킵 */
     if (container.classList.contains('swiper-initialized')) return;
     new Swiper(container, {
       wrapperClass: 'lb-feature-inner',
@@ -141,6 +140,10 @@
       spaceBetween: 12,
       grabCursor: true,
       centeredSlides: false,
+      pagination: {
+        el: '.lb-feature-pagination',
+        clickable: true,
+      },
     });
   }
 

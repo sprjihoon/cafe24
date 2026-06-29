@@ -593,6 +593,33 @@ img.ec-admin-icon,
 .lb-feature-title { font-size: 14px; font-weight: 400; margin: 0 0 4px; }
 .lb-feature-desc { font-size: 11px; color: #888; line-height: 1.4; margin: 0; }
 
+/* ── FEATURE BANNERS — Swiper 페이지네이션 (하단 점 버튼) ── */
+.lb-feature-banners { position: relative; padding-bottom: 28px !important; }
+.lb-feature-pagination {
+  position: absolute;
+  bottom: 4px !important;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+}
+.lb-feature-pagination .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: #ccc;
+  opacity: 1;
+  margin: 0 3px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+.lb-feature-pagination .swiper-pagination-bullet-active {
+  background: #1d1d1f;
+  width: 18px;
+  border-radius: 3px;
+}
+
 /* ── SPLIT BANNER — 왼쪽 슬라이더만 (모바일 전체 너비) ── */
 .lb-split-banner { padding: 0; overflow: hidden; }
 .lb-split-inner { display: block; }
