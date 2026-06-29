@@ -270,12 +270,13 @@ html, body { width: 100%; overflow-x: hidden; }
   margin: 0;
 }
 /*
- * ★ 항상 1행에 4개 배치 (4+3 레이아웃)
- *   열 개수 고정: calc((컨테이너 100% - 열간격 3×4px) / 4)
- *   어떤 뷰포트 너비에서도 정확히 4열 유지
+ * ★ 항상 4열 2행 (4+3 레이아웃), 화면 크기에 비례해 축소
+ *   - 열 너비: calc((100% - 3×gap) / 4) → 어떤 뷰포트에서도 정확히 4열
+ *   - 원 크기: min(68px, 80%) → 최대 68px, 열이 좁아지면 자동 축소
+ *   - 폰트:   min(11px, 2.8vw) → 최대 11px, 뷰포트 좁아지면 자동 축소
  */
 .lb-cat-item {
-  flex: 0 0 calc((100% - 12px) / 4);
+  flex: 0 0 calc((100% - 12px) / 4);  /* gap 3×4px = 12px */
   max-width: calc((100% - 12px) / 4);
   min-width: 0;
   display: flex;
@@ -286,20 +287,20 @@ html, body { width: 100%; overflow-x: hidden; }
   text-align: center;
 }
 .lb-cat-circle {
-  width: 68px;
-  height: 68px;
+  /* 열 너비에 비례: 최대 68px, 화면 좁아지면 80%(열너비)로 축소 */
+  width: min(68px, 80%);
+  aspect-ratio: 1;           /* 항상 정원 유지 */
   border-radius: 50%;
-  overflow: hidden;          /* ★ 이미지가 원 밖으로 삐져나오지 않도록 클리핑 */
+  overflow: hidden;
   background: #f5f5f5;
   border: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 6px;
-  flex-shrink: 0;            /* 원이 찌그러지지 않도록 */
+  margin-bottom: 5px;
+  flex-shrink: 0;
   transition: background 0.2s, border-color 0.2s;
 }
-/* 원 내부 이미지 — 100% 채움, aspect-ratio 유지 */
 .lb-cat-circle img {
   width: 100%;
   height: 100%;
@@ -309,14 +310,15 @@ html, body { width: 100%; overflow-x: hidden; }
 .lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
 .lb-cat-item:hover .lb-cat-abbr { color: #fff; }
 .lb-cat-abbr {
-  font-size: 14px;
+  font-size: min(14px, 3.5vw);
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #1d1d1f;
   transition: color 0.2s;
 }
 .lb-cat-label {
-  font-size: 11px;
+  /* 최대 11px, 뷰포트 320px → 9px, 375px → 10.5px */
+  font-size: min(11px, 2.8vw);
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #1d1d1f;
@@ -325,8 +327,7 @@ html, body { width: 100%; overflow-x: hidden; }
   word-break: break-word;
   line-height: 1.3;
   text-align: center;
-  /* 2줄 기준 최소 높이 → 행 내 원 높이 통일 */
-  min-height: 2.6em;
+  min-height: 2.6em;  /* BAG & SHOES 2줄 기준 → 행 내 원 높이 통일 */
 }
 .lb-cat-desc { display: none; }
 
