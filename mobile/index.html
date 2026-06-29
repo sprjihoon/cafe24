@@ -706,85 +706,30 @@
 </div>
 
 <!-- ============================================================
-     ② WEEKLY BEST — Swiper 슬라이더 (ATELIER N 스타일)
-     product_listmain_1 사용
+     ② WEEKLY BEST — Swiper 슬라이더
+     Cafe24 product_listmain_1: ul.prdList > li.xans-record- 구조로 렌더링
+     JS(initWeeklyBestSwiper)가 li 아이템을 Swiper 슬라이드로 변환 + 초기화
      ============================================================ -->
-<div module="product_listmain_1" class="ec-base-product lb-product-section lb-weekly-best" id="lb-section-best">
-    <!--
-        $count = 12
-        ※ 12개 상품을 4개씩 슬라이드로 보여줍니다.
-    -->
+<div class="lb-product-section lb-weekly-best" id="lb-section-best">
     <div class="lb-section-header">
         <div class="lb-section-copy">
             <p class="lb-section-eyebrow">WEEKLY BEST</p>
             <h2 class="lb-section-title">이번 주 가장 많은 선택을 받은 옷</h2>
-            <span class="lb-section-cafe24" style="display: {$category_title_text_display};">{$category_title_text}</span>
-            <span style="display: {$category_title_img_display};"><img src="{$category_title_img}" alt="{$category_title_text}" /></span>
         </div>
         <a href="/product/list.html?cate_no=32" class="lb-section-more">전체 보기</a>
     </div>
 
-    <!-- Swiper 슬라이더 컨테이너 -->
-    <div class="swiper lb-weekly-swiper">
-        <div class="swiper-wrapper">
-            <!-- 각 제품이 개별 슬라이드 -->
-            <div class="swiper-slide">
-                <div id="anchorBoxId_{$product_no}" class="lb-product-card">
-                        <div class="thumbnail">
-                            <div class="prdImg">
-                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
-                                    <span module="product_Imagestyle">
-                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
-                                    </span>
-                                </a>
-                                <span class="wish">{$list_wish_icon}</span>
-                            </div>
-                            <div class="icon">
-                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
-                                <div class="button">
-                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
-                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="description">
-                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
-                            <ul module="product_ListItem" class="spec">
-                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                            </ul>
-                        </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div id="anchorBoxId_{$product_no}" class="lb-product-card">
-                        <div class="thumbnail">
-                            <div class="prdImg">
-                                <a href="{$link_product_detail}" name="anchorBoxName_{$product_no}">
-                                    <img src="{$image_medium}" id="{$image_medium_id}" alt="{$seo_alt_tag}" />
-                                    <span module="product_Imagestyle">
-                                        <span class="prdIcon {$icon_class_name}" style="background-image:url('{$icon_url}');"></span>
-                                    </span>
-                                </a>
-                                <span class="wish">{$list_wish_icon}</span>
-                            </div>
-                            <div class="icon">
-                                <div class="promotion">{$soldout_icon} {$stock_icon} {$recommend_icon} {$new_icon} {$product_icons} {$today_arrival_icon} {$pickup_icon} {$benefit_icons} {$rental_icon} {$regular_delivery_icon}</div>
-                                <div class="button">
-                                    <div class="likeButton {$disp_likeprd_class}"><button type="button">{$disp_likeprd_icon}<strong>{$disp_likeprd_count}</strong></button></div>
-                                    <div class="option">{$option_preview_icon}</div> {$basket_icon} {$zoom_icon}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="description">
-                            <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
-                            <ul module="product_ListItem" class="spec">
-                                <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
-                            </ul>
-                        </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
+    <!--
+        product_listmain_1: 상품 8개 표시
+        Cafe24가 ul.prdList > li.xans-record- × 8 로 렌더링
+        JS가 각 li를 swiper-slide로 변환 후 Swiper 초기화
+    -->
+    <div module="product_listmain_1" class="ec-base-product lb-weekly-prd-wrap">
+        <!--
+            $count = 8
+        -->
+        <ul class="prdList">
+            <li class="xans-record-">
                 <div id="anchorBoxId_{$product_no}" class="lb-product-card">
                     <div class="thumbnail">
                         <div class="prdImg">
@@ -805,20 +750,26 @@
                         </div>
                     </div>
                     <div class="description">
-                        <strong class="name"><a href="{$link_product_detail}" class="{$product_name_display|display}"><span class="title {$product_name_title_display|display}">{$product_name_title} :</span> {$product_name}</a></strong>
+                        <strong class="name">
+                            <a href="{$link_product_detail}" class="{$product_name_display|display}">
+                                <span class="title {$product_name_title_display|display}">{$product_name_title} :</span>
+                                {$product_name}
+                            </a>
+                        </strong>
+                        <span class="price">{$product_price}</span>
                         <ul module="product_ListItem" class="spec">
-                            <li class="{$item_display|display}"><strong class="title {$item_title_display|display}">{$item_title} :</strong> {$item_content}</li>
+                            <li class="{$item_display|display}">
+                                <strong class="title {$item_title_display|display}">{$item_title} :</strong>
+                                {$item_content}
+                            </li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 네비게이션 버튼 -->
-        <div class="swiper-button-prev lb-weekly-prev"></div>
-        <div class="swiper-button-next lb-weekly-next"></div>
-
-        <!-- 페이지네이션 -->
+            </li>
+        </ul>
+    </div>
+    <!-- JS가 Swiper 초기화 후 페이지네이션을 여기에 추가 -->
+    <div class="lb-weekly-pagination-wrap">
         <div class="swiper-pagination lb-weekly-pagination"></div>
     </div>
 </div>

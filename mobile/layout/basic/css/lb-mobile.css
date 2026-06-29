@@ -753,23 +753,84 @@ img.ec-admin-icon,
   color: #fff;
 }
 
-/* ── WEEKLY BEST — Swiper 유지, 모바일 최적화 ── */
-/* PC와 동일하게 Swiper 사용, 1.5장 peek */
-.lb-weekly-best { overflow: hidden; }
+/* ── WEEKLY BEST — Swiper (JS 변환 방식) ── */
+/*
+ * JS(initWeeklyBestSwiper)가 ul.prdList li를 swiper-slide로 변환 후 Swiper 초기화.
+ * .lb-weekly-prd-wrap은 JS 실행 후 숨겨진다.
+ */
+.lb-weekly-best {
+  overflow: hidden;
+  padding-bottom: 8px;
+}
+.lb-weekly-prd-wrap {
+  /* JS 초기화 전 CSS fallback: 가로 스크롤 */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.lb-weekly-prd-wrap ul.prdList {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 0 16px 8px;
+  margin: 0;
+  list-style: none;
+}
+.lb-weekly-prd-wrap ul.prdList li {
+  flex: 0 0 44vw;
+  max-width: 210px;
+}
+/* JS 초기화 후 Swiper DOM */
 .lb-weekly-swiper {
   overflow: visible !important;
-  padding-left: 16px;
+  padding: 0 16px;
 }
 .lb-weekly-swiper .swiper-slide {
   width: 44vw !important;
   max-width: 210px;
 }
+/* 상품 카드 스타일 */
+.lb-weekly-swiper .lb-product-card,
+.lb-weekly-prd-wrap .lb-product-card {
+  display: block;
+}
+.lb-weekly-swiper .lb-product-card .prdImg img,
+.lb-weekly-prd-wrap .lb-product-card .prdImg img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+.lb-weekly-swiper .lb-product-card .description,
+.lb-weekly-prd-wrap .lb-product-card .description {
+  padding: 10px 2px 0;
+}
+.lb-weekly-swiper .lb-product-card .name,
+.lb-weekly-prd-wrap .lb-product-card .name {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.lb-weekly-swiper .lb-product-card .price,
+.lb-weekly-prd-wrap .lb-product-card .price {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+/* 페이지네이션 */
 .lb-weekly-best .swiper-button-prev,
 .lb-weekly-best .swiper-button-next { display: none; }
-.lb-weekly-best .swiper-pagination {
-  position: static;
-  margin-top: 12px;
-  padding-right: 16px;
+.lb-weekly-pagination-wrap {
+  text-align: center;
+  padding: 12px 0 4px;
+}
+.lb-weekly-pagination {
+  position: static !important;
+  display: inline-flex;
+  gap: 5px;
 }
 
 /* ── BAND BANNER ── */

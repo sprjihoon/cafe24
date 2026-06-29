@@ -148,6 +148,78 @@
     });
   }
 
+  /*
+   * WEEKLY BEST Swiper
+   * Cafe24의 product_listmain_1 모듈은 ul.prdList > li.xans-record- 구조로 렌더링됨.
+   * 이 함수가 렌더된 li 아이템을 Swiper 슬라이드로 변환하고 초기화한다.
+   */
+  function initWeeklyBestSwiper() {
+    if (typeof Swiper === 'undefined') return;
+
+    var section = document.getElementById('lb-section-best');
+    if (!section) return;
+
+    var prdWrap = section.querySelector('.lb-weekly-prd-wrap');
+    if (!prdWrap) return;
+
+    var prdList = prdWrap.querySelector('ul.prdList');
+    if (!prdList) return;
+
+    /* 이미 변환된 경우 중복 실행 방지 */
+    if (section.querySelector('.lb-weekly-swiper')) return;
+
+    var items = Array.prototype.slice.call(prdList.querySelectorAll('li.xans-record-'));
+    /* 상품이 없으면 CSS fallback(scroll-snap)으로 표시 */
+    if (items.length === 0) {
+      prdList.style.cssText = 'display:flex;flex-wrap:nowrap;overflow-x:auto;gap:12px;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;';
+      prdList.querySelectorAll('li').forEach(function(li) {
+        li.style.cssText = 'flex:0 0 44vw;max-width:200px;scroll-snap-align:start;';
+      });
+      return;
+    }
+
+    /* Swiper DOM 생성 */
+    var swiperEl = document.createElement('div');
+    swiperEl.className = 'swiper lb-weekly-swiper';
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'swiper-wrapper';
+
+    items.forEach(function(li) {
+      var slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      /* li 내부 자식을 slide로 이동 */
+      while (li.firstChild) {
+        slide.appendChild(li.firstChild);
+      }
+      wrapper.appendChild(slide);
+    });
+
+    swiperEl.appendChild(wrapper);
+
+    /* 페이지네이션 엘리먼트 */
+    var pagiEl = section.querySelector('.lb-weekly-pagination');
+    if (!pagiEl) {
+      pagiEl = document.createElement('div');
+      pagiEl.className = 'swiper-pagination lb-weekly-pagination';
+      swiperEl.appendChild(pagiEl);
+    }
+
+    /* prdWrap 자리에 swiperEl 삽입 후 원본 숨김 */
+    prdWrap.parentNode.insertBefore(swiperEl, prdWrap);
+    prdWrap.style.display = 'none';
+
+    new Swiper(swiperEl, {
+      slidesPerView: 2.2,
+      spaceBetween: 12,
+      grabCursor: true,
+      pagination: {
+        el: pagiEl,
+        clickable: true,
+      },
+    });
+  }
+
   function init() {
     ensureMarquee();
     fixMobileLogo();
@@ -156,8 +228,12 @@
     /* Swiper가 로드된 뒤 실행 (CDN async) */
     if (typeof Swiper !== 'undefined') {
       initFeatureSwiper();
+      initWeeklyBestSwiper();
     } else {
-      window.addEventListener('load', initFeatureSwiper);
+      window.addEventListener('load', function() {
+        initFeatureSwiper();
+        initWeeklyBestSwiper();
+      });
     }
   }
 
