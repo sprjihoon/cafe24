@@ -245,15 +245,17 @@ html, body { width: 100%; overflow-x: hidden; }
 }
 .lb-cat-inner {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;           /* 공간이 부족하면 자동으로 다음 행으로 */
   justify-content: flex-start;
   row-gap: 10px;
-  column-gap: 0;
-  padding: 0;                /* 좌우 패딩 제거 — 왼쪽 여백 없음 */
+  column-gap: 4px;
+  padding: 0;
+  margin: 0;
 }
 .lb-cat-item {
-  flex: 0 0 25%;             /* 4열 고정: 어떤 뷰포트에서도 25%×4=100% */
-  max-width: 25%;
+  flex: 0 0 80px;            /* 고정 픽셀 — flex-wrap이 줄 수를 자동 결정 */
+  max-width: 80px;           /* 375px: 4+3행 / 520px: 6+1행 / 664px: 1행 */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
