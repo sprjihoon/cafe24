@@ -123,7 +123,7 @@
 
 /* ============================================================
    SKIN OVERRIDE — 토큰 기반 리팩터링 (스킨별 커스텀 영역)
-   var(--xxx) 값은 leblanc.css :root 에서 정의된 디자인 토큰 참조.
+   var(--xxx) 값은 atelier.css :root 에서 정의된 디자인 토큰 참조.
    ============================================================ */
 
 /* 기존 카페24 헤더 구조 숨기기 */
@@ -513,7 +513,6 @@ body {
   gap:var(--space-3);
   width:100%;
   min-height:48px;
-  border-bottom:1px solid var(--color-border);
   background:var(--color-bg);
   position:relative;
   z-index:var(--z-nav, 10);
@@ -1637,6 +1636,60 @@ img[src*="btn_prd_zoom.gif"] {
   color:#666;
   line-height:1.55;
   margin:0;
+}
+
+/* 피처 배너 페이지네이션 — 데스크탑에서 숨김 */
+.lb-feature-pagination { display:none; }
+
+/* 1024px 이하: 2열 그리드 대신 Swiper 가로 스와이프 */
+@media (max-width:1024px) {
+  .lb-feature-banners {
+    padding:40px 0 28px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .lb-feature-pagination {
+    display:block;
+    position:absolute;
+    bottom:4px;
+    left:0;
+    right:0;
+    text-align:center;
+    z-index:10;
+  }
+
+  .lb-feature-pagination .swiper-pagination-bullet {
+    width:6px;
+    height:6px;
+    background:#ccc;
+    opacity:1;
+    margin:0 4px;
+  }
+
+  .lb-feature-pagination .swiper-pagination-bullet-active {
+    background:var(--color-charcoal, #1d1b1a);
+  }
+
+  .lb-feature-banners .lb-feature-inner {
+    display:flex !important;
+    grid-template-columns:unset !important;
+    gap:0;
+    max-width:none;
+    padding:0 0 0 var(--content-padding);
+  }
+
+  .lb-feature-banners .lb-feature-box {
+    flex:none;
+    width:76vw !important;
+    max-width:320px;
+    height:380px;
+    min-height:0;
+  }
+
+  .lb-feature-banners .lb-feature-box:hover {
+    transform:none;
+  }
 }
 
 /* ============================================================
@@ -3948,20 +4001,7 @@ img[src*="btn_prd_zoom.gif"] {
     border-radius:0 !important;
   }
 
-  /* 배너 박스 모바일 */
-  .lb-feature-banners {
-    padding:40px 0;
-  }
-
-  .lb-feature-banners .lb-feature-inner {
-    grid-template-columns:repeat(2, 1fr);
-    gap:16px;
-  }
-
-  .lb-feature-banners .lb-feature-box {
-    min-height:350px;
-  }
-
+  /* 배너 박스 — 1024px 이하 Swiper 스타일은 상단 @media (max-width:1024px) 에서 처리 */
   .lb-feature-banners .lb-feature-content {
     padding:16px 16px 18px;
     gap:6px;
@@ -4830,6 +4870,31 @@ body {
   pointer-events: auto;
 }
 
+/* hover 시 상품 링크박스 (활성/비활성 공통) */
+.atelier-shorts__card:hover .atelier-shorts__product-link,
+.atelier-shorts__card:hover .atelier-shorts__product-banner,
+.atelier-shorts__card.is-hovered .atelier-shorts__product-link,
+.atelier-shorts__card.is-hovered .atelier-shorts__product-banner {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 활성 카드: hover와 무관하게 밝기·화살표 힌트 유지 */
+.atelier-shorts__card--active::before,
+.atelier-shorts__card--playing::before,
+.atelier-shorts__card.is-active::before,
+.atelier-shorts__card.is-playing::before {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 비활성 카드: hover 재생 차단 (YouTube iframe) */
+.atelier-shorts__card:not(.atelier-shorts__card--active) .atelier-shorts__youtube-iframe-container {
+  display: none !important;
+}
+
 .atelier-shorts__product-thumb {
   width: 44px;
   height: 44px;
@@ -4915,15 +4980,6 @@ body {
 .atelier-shorts__card--error .atelier-shorts__play-btn {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* 모바일: 상품 링크 항상 표시 */
-@media (max-width: 1023px) {
-  .atelier-shorts__product-link {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
 }
 
 /* 반응형: 태블릿 */

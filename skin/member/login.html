@@ -1,221 +1,362 @@
 ﻿<!--@layout(/layout/basic/layout.html)-->
 <style>
-/* ── ATELIER N Skin: Login — body.xans-member 스코프 ── */
-body.xans-member .path,
-body.xans-member .titleArea { display: none !important; }
+/* ── ATELIER N — Login Page
+   스코프: .lb-login-page (body 클래스 의존 제거 — xans-member 불필요)
+   ──────────────────────────────────────────────────── */
 
-body.xans-member .lb-login-page {
+/* Cafe24 기본 경로/타이틀 숨김 */
+.path, .titleArea, .xans-member .path, .xans-member .titleArea {
+  display: none !important;
+}
+
+.lb-login-page {
   min-height: 70vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 60px 20px 80px;
+  padding: 64px 20px 100px;
   background: #fff;
 }
-body.xans-member .lb-login-box {
+.lb-login-box {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+}
+
+/* 브랜드 */
+.lb-login-brand {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.lb-login-brand-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  color: #9a8878;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 /* 제목 */
-body.xans-member .lb-login-heading {
+.lb-login-heading {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
-body.xans-member .lb-login-heading h1 {
+.lb-login-heading h1 {
   font-size: 26px;
   font-weight: 400;
   letter-spacing: .06em;
   margin: 0 0 10px;
-  color: #1d1d1f;
+  color: #2d2825;
 }
-body.xans-member .lb-login-heading p {
+.lb-login-heading p {
   font-size: 13px;
-  color: #888;
-  line-height: 1.7;
+  color: #9a8878;
+  line-height: 1.75;
   margin: 0;
 }
 
-/* SNS 간편 로그인 */
-body.xans-member .lb-sns-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-body.xans-member .lb-sns-btn {
+/* SNS 간편 로그인 (항상 표시 — 앱키 등록 후 기능 활성화) */
+.lb-sns-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.lb-sns-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   width: 100%;
   padding: 14px 0;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: none !important;
   letter-spacing: .02em;
   cursor: pointer;
   border: none;
   box-sizing: border-box;
+  transition: opacity .15s;
 }
-body.xans-member .lb-sns-kakao { background: #FEE500; color: #191600; }
-body.xans-member .lb-sns-naver { background: #03C75A; color: #fff; }
-body.xans-member .lb-sns-line  { background: #06C755; color: #fff; }
-body.xans-member .lb-naver-n { font-size: 14px; font-weight: 900; font-family: Arial, sans-serif; }
+.lb-sns-btn:hover { opacity: .88; }
+.lb-sns-kakao  { background: #FEE500; color: #191600; }
+.lb-sns-naver  { background: #03C75A; color: #fff; }
+.lb-naver-n    { font-size: 14px; font-weight: 900; font-family: Arial, sans-serif; }
 
 /* 카카오 적립 배너 */
-body.xans-member .lb-kakao-reward {
+.lb-kakao-reward {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f4f6fb;
-  border-radius: 8px;
+  background: #faf8f5;
+  border-radius: 4px;
   padding: 14px 18px;
   margin-bottom: 24px;
 }
-body.xans-member .lb-kakao-reward-text { font-size: 13px; color: #444; line-height: 1.6; }
-body.xans-member .lb-kakao-reward-text strong { display: block; font-size: 16px; font-weight: 700; color: #1d1d1f; }
-body.xans-member .lb-kakao-reward-icon { font-size: 36px; }
+.lb-kakao-reward-text { font-size: 13px; color: #4a4440; line-height: 1.6; }
+.lb-kakao-reward-text strong { display: block; font-size: 15px; font-weight: 700; color: #2d2825; }
+.lb-kakao-reward-icon { font-size: 32px; }
 
 /* 구분선 */
-body.xans-member .lb-divider {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 22px; color: #bbb; font-size: 12px; letter-spacing: .06em;
+.lb-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  color: #c4b8ae;
+  font-size: 12px;
+  letter-spacing: .06em;
 }
-body.xans-member .lb-divider::before,
-body.xans-member .lb-divider::after { content: ''; flex: 1; height: 1px; background: #e8e8e8; }
+.lb-divider::before,
+.lb-divider::after { content: ''; flex: 1; height: 1px; background: #f0ebe5; }
 
 /* 탭 */
-body.xans-member .lb-login-tabs {
+.lb-login-tabs {
   display: flex;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border: 1px solid #e8ddd3;
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: 28px;
 }
-body.xans-member .lb-login-tab {
-  flex: 1; padding: 12px 0; font-size: 13px; font-weight: 500;
-  letter-spacing: .03em; text-align: center; cursor: pointer;
-  border: none; background: #fff; color: #888;
+.lb-login-tab {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: #fff;
+  color: #9a8878;
+  transition: background .15s, color .15s;
 }
-body.xans-member .lb-login-tab.is-active { background: #1d1d1f; color: #fff; }
+.lb-login-tab.is-active { background: #2d2825; color: #fff; }
 
 /* 폼 패널 */
-body.xans-member .lb-login-form-wrap { display: none; }
-body.xans-member .lb-login-form-wrap.is-active { display: block; }
-body.xans-member .lb-login-form-wrap fieldset { border: none; padding: 0; margin: 0; }
-body.xans-member .lb-login-form-wrap legend { display: none; }
+.lb-login-form-wrap { display: none; }
+.lb-login-form-wrap.is-active { display: block; }
+.lb-login-form-wrap fieldset { border: none; padding: 0; margin: 0; }
+.lb-login-form-wrap legend { display: none; }
 
-/* .ePlaceholder / 입력 필드 (SKIN_MAP: ePlaceholder 클래스 중요) */
-body.xans-member .lb-login-form-wrap .id.ePlaceholder,
-body.xans-member .lb-login-form-wrap .password.ePlaceholder {
+/* 입력 필드 (ePlaceholder 클래스 — Cafe24 필수) */
+.lb-login-form-wrap .id.ePlaceholder,
+.lb-login-form-wrap .password.ePlaceholder {
   display: block;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #ddd;
-  padding: 12px 0;
+  border-bottom: 1px solid #e8ddd3;
+  padding: 13px 0;
   font-size: 14px;
   background: transparent;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  color: #2d2825;
 }
-body.xans-member .lb-login-form-wrap .id input,
-body.xans-member .lb-login-form-wrap .password input {
-  width: 100%; border: none; outline: none;
-  font-size: 14px; background: transparent;
+.lb-login-form-wrap .id input,
+.lb-login-form-wrap .password input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+  color: #2d2825;
 }
 
 /* 보안접속/아이디저장 */
-body.xans-member .lb-login-form-wrap .security {
-  display: flex; justify-content: space-between; align-items: center;
-  margin: 16px 0 20px; font-size: 12px; color: #666;
+.lb-login-form-wrap .security {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 0 20px;
+  font-size: 12px;
+  color: #6b5344;
 }
 
-/* 로그인 버튼 (SKIN_MAP: btnLogin 클래스 유지) */
-body.xans-member .lb-login-form-wrap .btnLogin.lb-login-submit {
-  display: block;
-  width: 100%;
-  padding: 15px 0;
-  background: #1d1d1f;
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: .08em;
-  text-decoration: none;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 20px;
+/* 로그인 버튼 (btnLogin 클래스 — Cafe24 JS 필수) */
+.lb-login-form-wrap .btnLogin.lb-login-submit {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 15px 0 !important;
+  line-height: 1.4 !important;
+  background: #2d2825 !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: .1em !important;
+  text-decoration: none !important;
+  border-radius: 4px !important;
+  border: none !important;
+  cursor: pointer !important;
+  margin-bottom: 20px !important;
+  transition: background .15s;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  vertical-align: top !important;
 }
+.lb-login-form-wrap .btnLogin.lb-login-submit:hover { background: #4a4440 !important; }
 
 /* 링크 (아이디찾기 등) */
-body.xans-member .lb-auth-links {
-  display: flex; justify-content: center; list-style: none;
-  padding: 0; margin: 0 0 28px;
+.lb-auth-links {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
 }
-body.xans-member .lb-auth-links li + li::before { content: '|'; color: #ddd; padding: 0 10px; }
-body.xans-member .lb-auth-links li a { font-size: 12px; color: #888; text-decoration: none; }
-body.xans-member .lb-auth-links li a:hover { color: #1d1d1f; }
+.lb-auth-links li + li::before { content: '|'; color: #e8ddd3; padding: 0 10px; }
+.lb-auth-links li a { font-size: 12px; color: #9a8878; text-decoration: none !important; }
+.lb-auth-links li a:hover { color: #2d2825; }
 
-/* 소셜 로그인 (페이스북, Apple, Google 등) */
-body.xans-member .lb-social-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-body.xans-member .lb-social-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 13px 0; border: 1px solid #ddd; border-radius: 6px;
-  font-size: 13px; color: #333; text-decoration: none; background: #fff;
-  letter-spacing: .02em;
+/* 소셜 로그인 (Facebook, Apple, Google) */
+.lb-social-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
 }
-body.xans-member .lb-social-btn.lb-social-apple { background: #000; color: #fff; border-color: #000; }
-body.xans-member .lb-social-btn.lb-social-yahoo { background: #720096; color: #fff; border-color: #720096; }
+.lb-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 0;
+  border: 1px solid #e8ddd3;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #4a4440;
+  text-decoration: none !important;
+  background: #fff;
+  letter-spacing: .02em;
+  transition: border-color .15s;
+}
+.lb-social-btn:hover { border-color: #2d2825; color: #2d2825; }
+.lb-social-btn.lb-social-apple  { background: #000; color: #fff; border-color: #000; }
+.lb-social-btn.lb-social-apple:hover { background: #2d2825; }
 
 /* 가입 유도 */
-body.xans-member .lb-join-prompt {
-  text-align: center; padding: 20px 0 0; border-top: 1px solid #f0f0f0;
+.lb-join-prompt {
+  text-align: center;
+  padding: 20px 0 0;
+  border-top: 1px solid #f0ebe5;
 }
-body.xans-member .lb-join-prompt p { font-size: 12px; color: #888; margin: 0 0 4px; }
-body.xans-member .lb-join-prompt strong { color: #1d1d1f; font-weight: 500; }
+.lb-join-prompt p { font-size: 12px; color: #9a8878; margin: 0 0 4px; }
+.lb-join-prompt strong { color: #2d2825; font-weight: 500; }
 
-/* 비회원 구매 안내 (SKIN_MAP: {$display_nomember|display}) */
-body.xans-member .lb-nomember-info {
+/* 비회원 구매 안내 */
+.lb-nomember-info {
   text-align: center;
   padding: 20px;
-  background: #f8f8f8;
-  border-radius: 6px;
+  background: #faf8f5;
+  border-radius: 4px;
   margin-top: 20px;
 }
-body.xans-member .lb-nomember-info p { font-size: 12px; color: #666; line-height: 1.7; margin: 0 0 12px; }
-body.xans-member .lb-nomember-info .btnEm.lb-nomember-btn {
+.lb-nomember-info p { font-size: 12px; color: #6b5344; line-height: 1.75; margin: 0 0 12px; }
+.lb-nomember-info .btnEm.lb-nomember-btn {
   display: inline-block;
   padding: 10px 28px;
-  border: 1px solid #1d1d1f;
+  border: 1px solid #2d2825;
   font-size: 13px;
-  color: #1d1d1f;
-  text-decoration: none;
-  border-radius: 4px;
+  color: #2d2825;
+  text-decoration: none !important;
+  border-radius: 2px;
 }
 
-/* 비회원 폼 */
-body.xans-member .lb-nonmember-wrap { display: none; }
-body.xans-member .lb-nonmember-wrap.is-active { display: block; }
-body.xans-member .lb-nonmember-desc { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.6; }
-body.xans-member .lb-nonmember-wrap dl { margin: 0 0 20px; }
-body.xans-member .lb-nonmember-wrap dt { font-size: 12px; color: #888; margin-bottom: 4px; }
-body.xans-member .lb-nonmember-wrap dd {
-  margin: 0 0 14px; border-bottom: 1px solid #ddd; padding-bottom: 10px;
+/* 비회원 주문조회 폼 */
+.lb-nonmember-wrap { display: none !important; }
+.lb-nonmember-wrap.is-active { display: block !important; }
+.lb-nonmember-desc {
+  font-size: 13px;
+  color: #6b5344;
+  margin-bottom: 20px;
+  line-height: 1.7;
 }
-body.xans-member .lb-nonmember-wrap dd input {
-  width: 100%; border: none; outline: none; font-size: 14px; padding: 4px 0; background: transparent;
+.lb-nonmember-wrap.is-active dl,
+.lb-nonmember-wrap.is-active dt,
+.lb-nonmember-wrap.is-active dd,
+.lb-nonmember-wrap.is-active table,
+.lb-nonmember-wrap.is-active tr,
+.lb-nonmember-wrap.is-active td,
+.lb-nonmember-wrap.is-active th,
+.lb-nonmember-wrap.is-active fieldset,
+.lb-nonmember-wrap.is-active legend { display: revert !important; }
+.lb-nonmember-wrap.is-active input[type="text"],
+.lb-nonmember-wrap.is-active input[type="password"] { display: block !important; }
+.lb-nonmember-wrap dl { margin: 0 0 20px; }
+.lb-nonmember-wrap dt {
+  font-size: 11px;
+  color: #9a8878;
+  margin-bottom: 4px;
+  letter-spacing: .04em;
 }
-body.xans-member .lb-nonmember-wrap .ec-base-button { text-align: center; margin-top: 10px; }
-body.xans-member .lb-nonmember-wrap button.btnNormal {
-  width: 100%; padding: 14px 0; background: #1d1d1f; color: #fff;
-  border: none; font-size: 14px; cursor: pointer; border-radius: 4px;
+.lb-nonmember-wrap dd {
+  margin: 0 0 14px;
+  border-bottom: 1px solid #e8ddd3;
+  padding-bottom: 10px;
+}
+.lb-nonmember-wrap dd input,
+.lb-nonmember-wrap td input,
+.lb-nonmember-wrap .inputType1 {
+  display: block !important;
+  width: 100% !important;
+  border: none !important;
+  outline: none !important;
+  font-size: 14px !important;
+  padding: 4px 0 !important;
+  background: transparent !important;
+  color: #2d2825 !important;
+}
+/* Cafe24 모듈 기본 table 레이아웃 재정의 */
+.lb-nonmember-wrap table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.lb-nonmember-wrap th {
+  text-align: left;
+  font-size: 11px;
+  color: #9a8878;
+  font-weight: 400;
+  padding: 4px 0;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  width: 90px;
+  vertical-align: middle;
+}
+.lb-nonmember-wrap td {
+  padding: 6px 0;
+  border-bottom: 1px solid #e8ddd3;
+}
+.lb-nonmember-wrap .ec-base-button { text-align: center; margin-top: 10px; }
+.lb-nonmember-wrap button.btnNormal,
+.lb-nonmember-wrap input[type="submit"] {
+  display: block !important;
+  width: 100%;
+  padding: 14px 0;
+  background: #2d2825;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: .06em;
 }
 
 /* Cafe24 기본 모듈 클래스 리셋 */
-body.xans-member .lb-login-page .ec-base-box { background: none; border: none; padding: 0; }
-body.xans-member .lb-login-page .boxTitle { display: none; }
+.lb-login-page .ec-base-box { background: none !important; border: none !important; padding: 0 !important; }
+.lb-login-page .boxTitle { display: none !important; }
+
+/* displaynone — Cafe24 시스템 클래스. SNS 버튼에는 미적용(판매용 스킨은 버튼 항상 표시).
+   다른 Cafe24 시스템 요소(비회원 구매 등)의 show/hide에는 유지. */
 .displaynone { display: none !important; }
 </style>
 
 <div class="lb-login-page">
   <div class="lb-login-box">
+
+    <div class="lb-login-brand">
+      <p class="lb-login-brand-name">ATELIER N</p>
+    </div>
 
     <div class="lb-login-heading">
       <h1>로그인</h1>
@@ -229,23 +370,28 @@ body.xans-member .lb-login-page .boxTitle { display: none; }
           $forbidIpUrl = member/adminFail.html
       -->
 
-      <!-- ── SNS 간편 로그인 (SKIN_MAP: kakao, naver, line 등) ── -->
+      <!-- ── SNS 간편 로그인
+           {$display_XXX|display} → 관리자 SNS 설정 시 활성화.
+           미설정이면 Cafe24가 'displaynone' 클래스를 주입해 버튼을 숨김.
+           ★ 항상 표시하려면 위 CSS 주석 블록을 해제하거나 display_XXX 클래스를 제거.
+      ── -->
       <div class="lb-sns-group">
-        <a href="#none" onclick="{$kakao_func_login}" class="lb-sns-btn lb-sns-kakao {$display_kakao|display}">
-          <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#191600" d="M12 3C6.477 3 2 6.477 2 10.882c0 2.738 1.667 5.151 4.191 6.636L5.1 21l4.65-2.448C10.22 18.835 11.096 19 12 19c5.523 0 10-3.477 10-7.882C22 6.477 17.523 3 12 3z"/></svg>
+        <a href="#none" onclick="{$kakao_func_login}"
+           class="lb-sns-btn lb-sns-kakao">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#191600" d="M12 3C6.477 3 2 6.477 2 10.882c0 2.738 1.667 5.151 4.191 6.636L5.1 21l4.65-2.448C10.22 18.835 11.096 19 12 19c5.523 0 10-3.477 10-7.882C22 6.477 17.523 3 12 3z"/>
+          </svg>
           카카오 1초 로그인·회원가입
         </a>
-        <a href="#none" onclick="{$naver_func_login}" class="lb-sns-btn lb-sns-naver {$display_naver|display}">
-          <span class="lb-naver-n">N</span>네이버 1초 로그인·회원가입
-        </a>
-        <a href="#none" onclick="{$line_func_login}" class="lb-sns-btn lb-sns-line {$display_line|display}">
-          <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M19.365 9.89c.165 0 .3.135.3.3v1.08a.3.3 0 0 1-.3.3h-3.045v.825h3.045a.3.3 0 0 1 .3.3v1.08a.3.3 0 0 1-.3.3h-3.045v.825h3.045a.3.3 0 0 1 .3.3v1.08a.3.3 0 0 1-.3.3h-4.425a.3.3 0 0 1-.3-.3V9.89a.3.3 0 0 1 .3-.3zm-6.855 0a.3.3 0 0 1 .3.3v5.01a.3.3 0 0 1-.3.3H11.43a.3.3 0 0 1-.3-.3V9.89a.3.3 0 0 1 .3-.3zm-2.295 0c.165 0 .3.135.3.3v5.01a.3.3 0 0 1-.3.3H9.135a.3.3 0 0 1-.3-.3V9.89a.3.3 0 0 1 .3-.3zM12 2C6.48 2 2 5.94 2 10.78c0 3.27 2.09 6.15 5.24 7.79L6.5 22l4.51-2.49A11.2 11.2 0 0 0 12 19.56c5.52 0 10-3.94 10-8.78C22 5.94 17.52 2 12 2z"/></svg>
-          LINE으로 로그인
+        <a href="#none" onclick="{$naver_func_login}"
+           class="lb-sns-btn lb-sns-naver">
+          <span class="lb-naver-n" aria-hidden="true">N</span>
+          네이버 1초 로그인·회원가입
         </a>
       </div>
 
       <!-- 카카오 적립 배너 -->
-      <div class="lb-kakao-reward {$display_kakao|display}">
+      <div class="lb-kakao-reward">
         <div class="lb-kakao-reward-text">
           <span>카카오 1초 가입하고 🎉</span>
           <strong>적립금 받으세요</strong>
@@ -256,109 +402,119 @@ body.xans-member .lb-login-page .boxTitle { display: none; }
       <!-- 구분선 -->
       <div class="lb-divider">또는</div>
 
-      <!-- ── 탭 ── -->
+      <!-- 탭 -->
       <div class="lb-login-tabs">
-        <button class="lb-login-tab is-active" data-tab="member">기존 회원</button>
-        <button class="lb-login-tab" data-tab="nonmember">비회원 주문조회</button>
+        <button class="lb-login-tab is-active" type="button" data-tab="member">기존 회원</button>
+        <button class="lb-login-tab" type="button" data-tab="nonmember">비회원 주문조회</button>
       </div>
 
-      <!-- ── 회원 로그인 폼 ── -->
+      <!-- 회원 로그인 폼 -->
       <div class="lb-login-form-wrap is-active" id="lb-tab-member">
         <fieldset>
           <legend>회원로그인</legend>
-          <!-- SKIN_MAP: ePlaceholder 클래스 + title 속성 유지 -->
           <label class="id ePlaceholder" title="{$login_id_type_text}">{$form.member_id}</label>
           <label class="password ePlaceholder" title="비밀번호">{$form.member_passwd}</label>
           <p class="security">
             {$form.member_check_secret_connect}
             {$form.member_check_save_id}
           </p>
-          <!-- SKIN_MAP: btnLogin 클래스 유지 (Cafe24 JS 참조) -->
           <a href="#none" class="btnLogin lb-login-submit" onclick="{$action_func_login}">로그인</a>
         </fieldset>
 
-        <!-- 아이디찾기 / 비밀번호찾기 / 회원가입 -->
         <ul class="lb-auth-links">
           <li><a href="/member/id/find_id.html">아이디찾기</a></li>
           <li><a href="/member/passwd/find_passwd_info.html">비밀번호찾기</a></li>
           <li><a href="/member/join.html">회원가입</a></li>
         </ul>
 
-        <!-- 소셜 로그인 (Facebook, Google, Apple, Yahoo) -->
+        <!-- 소셜 로그인 2차 (Facebook, Google, Apple) -->
         <div class="lb-social-group">
-          <a href="#none" onclick="{$facebook_func_login}" class="lb-social-btn {$display_facebook|display}">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-            페이스북으로 로그인
+          <a href="#none" onclick="{$facebook_func_login}"
+             class="lb-social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2" aria-hidden="true">
+              <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+            </svg>
+            Facebook으로 로그인
           </a>
-          <a href="#none" onclick="{$apple_func_login}" class="lb-social-btn lb-social-apple {$display_apple|display}">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <a href="#none" onclick="{$apple_func_login}"
+             class="lb-social-btn lb-social-apple">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
             Apple로 로그인
           </a>
-          <a href="#none" onclick="{$google_func_login}" class="lb-social-btn {$display_google|display}">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          <a href="#none" onclick="{$google_func_login}"
+             class="lb-social-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
             Google로 로그인
-          </a>
-          <a href="#none" onclick="{$yahoojp_func_login}" class="lb-social-btn lb-social-yahoo {$display_yahoojp|display}">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M22 4h-7.4l-2.6 5.8L9.4 4H2l7.4 16H4v4h7v-4H7l2.4-5.6L22 4z"/></svg>
-            Yahoo! JAPAN ID로 로그인
           </a>
         </div>
 
-        <!-- 비회원 구매 안내 (SKIN_MAP: {$display_nomember|display}) -->
-        <div class="lb-nomember-info {$display_nomember|display}">
+        <!-- 비회원 구매 안내 -->
+        <div class="lb-nomember-info" id="noMemberWrap">
           <p>비회원님도 상품구매가 가능하나 다양한<br>회원혜택에서 제외됩니다.</p>
           <a href="{$returnUrl}" class="btnEm lb-nomember-btn" onclick="{$action_nomember_order}">비회원구매</a>
         </div>
 
-        <!-- 가입 유도 -->
         <div class="lb-join-prompt">
           <p>아직도 회원이 아니세요?</p>
-          <p>지금 회원이 되어 다양한 쇼핑 혜택을 이용해 보세요.</p>
+          <p><a href="/member/join.html"><strong>지금 가입하고 다양한 쇼핑 혜택을 받아보세요 →</strong></a></p>
         </div>
       </div>
-    </div><!-- /member_login -->
 
-    <!-- ── 비회원 주문조회 (SKIN_MAP: MyShop_OrderHistoryNologin) ── -->
-    <div module="MyShop_OrderHistoryNologin" class="lb-nonmember-wrap" id="lb-tab-nonmember">
-      <!--@css(/css/module/myshop/orderHistoryNologin.css)-->
-      <!--
-          $orderDetailUrl = /myshop/order/list.html
-      -->
-      <p class="lb-nonmember-desc">비회원의 경우, 주문시의 주문번호로 주문조회가 가능합니다.</p>
-      <dl>
-        <dt>{$form_label.order_name}</dt><dd>{$form.order_name}</dd>
-        <dt>{$form_label.order_id}</dt><dd>{$form.order_id}</dd>
-        <dt>{$form_label.order_password}</dt><dd>{$form.order_password}</dd>
-      </dl>
-      <div class="ec-base-button"><button type="submit" class="btnNormal">조회</button></div>
+    </div><!-- /module="member_login" -->
+
+    <!-- 비회원 주문조회 탭 패널 -->
+    <div class="lb-nonmember-wrap" id="lb-tab-nonmember">
+      <div module="MyShop_OrderHistoryNologin">
+        <p class="lb-nonmember-desc">비회원의 경우, 주문번호로 주문조회가 가능합니다.</p>
+        <dl>
+          <dt>{$form_label.order_name}</dt>
+          <dd>{$form.order_name}</dd>
+          <dt>{$form_label.order_id}</dt>
+          <dd>{$form.order_id}</dd>
+          <dt>{$form_label.order_password}</dt>
+          <dd>{$form.order_password}</dd>
+        </dl>
+        <div class="ec-base-button">
+          <button type="submit" class="btnNormal">조회</button>
+        </div>
+      </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /.lb-login-box -->
+</div><!-- /.lb-login-page -->
 
 <script>
 (function () {
   var tabs   = document.querySelectorAll('.lb-login-tab');
-  var panels = {
-    member:    document.getElementById('lb-tab-member'),
-    nonmember: document.getElementById('lb-tab-nonmember')
-  };
+  var member    = document.getElementById('lb-tab-member');
+  var nonmember = document.getElementById('lb-tab-nonmember');
+
+  function showPanel(key) {
+    if (member)    { member.classList.remove('is-active');    member.style.display    = 'none'; }
+    if (nonmember) { nonmember.classList.remove('is-active'); nonmember.style.display = 'none'; }
+    var target = key === 'member' ? member : nonmember;
+    if (target) { target.classList.add('is-active'); target.style.display = 'block'; }
+  }
+
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
-      var key = tab.dataset.tab;
       tabs.forEach(function (t) { t.classList.remove('is-active'); });
       tab.classList.add('is-active');
-      Object.keys(panels).forEach(function (k) {
-        if (!panels[k]) return;
-        panels[k].classList.remove('is-active');
-        panels[k].style.display = 'none';
-      });
-      if (panels[key]) {
-        panels[key].classList.add('is-active');
-        panels[key].style.display = '';
-      }
+      showPanel(tab.dataset.tab);
     });
   });
+
+  /* 초기 상태: 비회원 패널 숨김 */
+  if (nonmember) nonmember.style.display = 'none';
 })();
 </script>
+
+
 

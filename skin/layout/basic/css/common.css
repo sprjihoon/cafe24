@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* **************************** //필수 CSS 수정 및 삭제 불가 **************************** */
 
@@ -17,7 +17,6 @@ th,td { border:0; vertical-align:top; }
 button { overflow:visible; padding:0; margin:0; border:0; cursor:pointer; }
 hr.layout { display:none; }
 a { text-decoration:none; color:#000; }
-a:hover { text-decoration:underline; }
 a:active { text-decoration:none; }
 .objHidden { visibility:hidden; position:absolute; left:-1000px; top:-1000px; height:0; width:0; }
 #content_CONTAINER table, #bi_inquire_content_CONTAINER table { border:0; margin:0 0 -1px; }

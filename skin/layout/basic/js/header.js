@@ -16,9 +16,28 @@
   function init() {
     removeNavDropdowns();
     initHamburgerMenu();
+    positionFullmenu();          // nav 바닥 기준으로 top 설정
     initLanguageDropdown();
     initScrollHeader();
     initCartCount();
+    window.addEventListener('resize', positionFullmenu);
+  }
+
+  /**
+   * #lb-fullmenu top을 nav 바닥에 정확히 맞춤
+   * (#lb-fullmenu는 div.inner 자식 / position:absolute)
+   */
+  function positionFullmenu() {
+    var nav      = document.getElementById('lb-nav');
+    var fullmenu = document.getElementById('lb-fullmenu');
+    var inner    = nav && nav.closest('.inner');
+    if (!nav || !fullmenu || !inner) return;
+
+    var navRect   = nav.getBoundingClientRect();
+    var innerRect = inner.getBoundingClientRect();
+    // inner 기준 top = (nav 바닥) - (inner 상단)
+    var topPx = navRect.bottom - innerRect.top;
+    fullmenu.style.top = topPx + 'px';
   }
 
   /**

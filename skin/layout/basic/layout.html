@@ -12,9 +12,12 @@
     <!-- // PG크로스브라우징필수내용 -->
 
     <title>기본 레이아웃</title>
+    <!-- Google Fonts — 폰트를 @import 대신 <link>로 로드 (Cafe24 CSS 번들링 시 @import 누락 방지) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Nanum+Gothic:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap">
     <!--@css(/layout/basic/css/common.css)--><!-- 해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요. -->
     <!--@css(/layout/basic/css/layout.css)-->
-    <!--@css(/layout/basic/css/_new-navigation.css)--><!-- ATELIER 새 네비게이션 스타일 (v2) -->
     <!--@css(/layout/basic/css/ec-base-ui.css)-->
     <!--@css(/layout/basic/css/ec-base-tooltip.css)-->
     <!--@css(/layout/basic/css/ec-base-help.css)-->
@@ -25,12 +28,36 @@
     <!--@css(/layout/basic/css/ec-base-box.css)-->
     <!--@css(/layout/basic/css/ec-base-table.css)-->
     <!--@css(/layout/basic/css/ec-base-desc.css)-->
-    <!--@css(/layout/basic/css/leblanc.css)-->
+    <!--@css(/layout/basic/css/atelier.css)-->
     <!--@css(/css/design-tokens.css)-->
     <!--@css(/css/components.css)-->
     
     <!-- Swiper.js CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <!-- 네비게이션 링크 hover 언더라인 제거 (border는 atelier.css에서 제어) -->
+    <style>
+      /* #lb-nav 자체 border 제거 — lb-nav-inner 에서 콘텐츠 폭으로 관리 */
+      #lb-nav,
+      nav#lb-nav,
+      #header #lb-nav,
+      #header .inner #lb-nav {
+        border-top: none !important;
+        border-bottom: none !important;
+      }
+      /* 링크 hover 텍스트 언더라인만 제거 */
+      #lb-nav a,
+      #lb-nav a:link,
+      #lb-nav a:visited,
+      #lb-nav a:hover,
+      #lb-nav a:focus,
+      #lb-nav a:active {
+        text-decoration: none !important;
+        border-bottom: none !important;
+        border-bottom-width: 0 !important;
+        border-bottom-color: transparent !important;
+      }
+    </style>
     
     <!-- ATELIER 네비게이션 초기화 -->
     <script>
@@ -267,7 +294,7 @@
     
     <!-- ATELIER SHORTS -->
     <!--@js(/layout/basic/js/atelier-shorts-data.js)-->
-    <script src="/ecudemo394315/layout/basic/js/atelier-shorts.js?v=20260626-sync2"></script>
+    <!--@js(/layout/basic/js/atelier-shorts.js)-->
     
     <!-- Countdown JS -->
     <!--@js(/layout/basic/js/countdown.js)-->
@@ -275,8 +302,6 @@
     <!-- Video JS -->
     <!--@js(/layout/basic/js/video.js)-->
     
-    <!-- Product Icons JS -->
-    <!--@js(/layout/basic/js/product-icons.js)-->
     
 </head>
 <body>
@@ -483,80 +508,118 @@
 
   </nav>
 
-  <!-- 전체메뉴 드롭다운 (nav 외부) -->
-  <div id="lb-fullmenu" class="atelier-fullmenu-dropdown">
+  <!-- 전체메뉴 드롭다운 — div.inner 자식, top:100%는 nav 바닥 기준 -->
+  <div id="lb-fullmenu" class="lb-fullmenu atelier-fullmenu-dropdown">
     <div class="lb-fullmenu-panel atelier-fullmenu-panel">
       <div class="atelier-fullmenu-inner">
-        <!-- 왼쪽: 카테고리 섹션 -->
-        <div class="atelier-fullmenu-left">
-          <nav class="atelier-fullmenu-section">
-            <h2 class="atelier-fullmenu-title">SHOP</h2>
-            <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-link">전체보기</a>
-            <a href="/product/list.html?cate_no=25" class="atelier-fullmenu-link">Tops</a>
-            <a href="/product/list.html?cate_no=26" class="atelier-fullmenu-link">Dresses</a>
-            <a href="/product/list.html?cate_no=24" class="atelier-fullmenu-link">Outerwear</a>
-          </nav>
-          
-          <div class="atelier-fullmenu-section">
-            <h2 class="atelier-fullmenu-title">ACCOUNT</h2>
-            <a href="/member/login.html" class="atelier-fullmenu-link" module="Layout_statelogoff">로그인</a>
-            <a href="/member/join.html" class="atelier-fullmenu-link" module="Layout_statelogoff">회원가입</a>
-            <a href="/myshop/index.html" class="atelier-fullmenu-link">마이쇼핑</a>
-            <a href="/order/basket.html" class="atelier-fullmenu-link">장바구니</a>
-          </div>
 
-          <div class="atelier-fullmenu-section">
-            <h2 class="atelier-fullmenu-title">COMMUNITY</h2>
-            <a href="/board/index.html" class="atelier-fullmenu-link">커뮤니티</a>
-            <a href="/board/product/list.html" class="atelier-fullmenu-link">상품 Q&A</a>
-            <a href="/board/notice/list.html" class="atelier-fullmenu-link">공지사항</a>
+        <!-- ── 1열: SHOP 카테고리 ── -->
+        <div class="atelier-fullmenu-col">
+          <h2 class="atelier-fullmenu-title">SHOP</h2>
+          <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-link atelier-fullmenu-link--all">전체보기 →</a>
+          <div class="atelier-fullmenu-subgroup">
+            <span class="atelier-fullmenu-sublabel">TOPS</span>
+            <a href="/product/list.html?cate_no=25" class="atelier-fullmenu-link">전체 Tops</a>
+            <a href="/product/list.html?cate_no=32" class="atelier-fullmenu-link">Knit</a>
+            <a href="/product/list.html?cate_no=33" class="atelier-fullmenu-link">Blouse</a>
+            <a href="/product/list.html?cate_no=34" class="atelier-fullmenu-link">T-Shirt</a>
+          </div>
+          <div class="atelier-fullmenu-subgroup">
+            <span class="atelier-fullmenu-sublabel">BOTTOMS</span>
+            <a href="/product/list.html?cate_no=27" class="atelier-fullmenu-link">전체 Bottoms</a>
+            <a href="/product/list.html?cate_no=40" class="atelier-fullmenu-link">Pants</a>
+            <a href="/product/list.html?cate_no=41" class="atelier-fullmenu-link">Skirt</a>
           </div>
         </div>
 
-        <!-- 중앙: 프로모션 이미지 -->
-        <div class="atelier-fullmenu-center">
-          <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-promo">
-            <img src="//img.echosting.cafe24.com/design/skin/admin/ko_KR/btn_square_white.gif" 
-                 alt="New Collection" 
-                 class="atelier-fullmenu-promo-img">
-            <div class="atelier-fullmenu-promo-text">
-              <h3>2026 FALL COLLECTION</h3>
-              <p>계절을 오래 입는 방식</p>
-            </div>
-          </a>
-        </div>
-
-        <!-- 오른쪽: 특별 버튼들 -->
-        <div class="atelier-fullmenu-right">
-          <a href="/product/list.html?cate_no=23&sort_method=5" class="atelier-fullmenu-cta-btn primary">
-            <span class="cta-icon">🎁</span>
-            <div class="cta-text">
-              <strong>SPECIAL SALE</strong>
-              <small>최대 50% 할인</small>
-            </div>
-          </a>
-          
-          <a href="/product/list.html?cate_no=23&sort_method=7" class="atelier-fullmenu-cta-btn secondary">
-            <span class="cta-icon">✨</span>
-            <div class="cta-text">
-              <strong>NEW ARRIVALS</strong>
-              <small>신상품 먼저 만나기</small>
-            </div>
-          </a>
-          
-          <a href="/product/list.html?cate_no=23&sort_method=3" class="atelier-fullmenu-cta-btn tertiary">
-            <span class="cta-icon">⭐</span>
-            <div class="cta-text">
-              <strong>BEST SELLERS</strong>
-              <small>인기 상품 보기</small>
-            </div>
-          </a>
-
-          <div class="atelier-fullmenu-info">
-            <p class="info-text">무료 배송</p>
-            <p class="info-detail">5만원 이상 구매 시</p>
+        <!-- ── 2열: 드레스 & 아우터 ── -->
+        <div class="atelier-fullmenu-col">
+          <h2 class="atelier-fullmenu-title">STYLE</h2>
+          <div class="atelier-fullmenu-subgroup">
+            <span class="atelier-fullmenu-sublabel">DRESSES</span>
+            <a href="/product/list.html?cate_no=26" class="atelier-fullmenu-link">전체 Dresses</a>
+            <a href="/product/list.html?cate_no=35" class="atelier-fullmenu-link">Midi Dress</a>
+            <a href="/product/list.html?cate_no=36" class="atelier-fullmenu-link">Long Dress</a>
+            <a href="/product/list.html?cate_no=39" class="atelier-fullmenu-link">Mini Dress</a>
+          </div>
+          <div class="atelier-fullmenu-subgroup">
+            <span class="atelier-fullmenu-sublabel">OUTERWEAR</span>
+            <a href="/product/list.html?cate_no=24" class="atelier-fullmenu-link">전체 Outerwear</a>
+            <a href="/product/list.html?cate_no=37" class="atelier-fullmenu-link">Coat</a>
+            <a href="/product/list.html?cate_no=38" class="atelier-fullmenu-link">Jacket</a>
+          </div>
+          <div class="atelier-fullmenu-subgroup">
+            <span class="atelier-fullmenu-sublabel">ACC</span>
+            <a href="/product/list.html?cate_no=28" class="atelier-fullmenu-link">Bag &amp; Shoes</a>
           </div>
         </div>
+
+        <!-- ── 3열: COLLECTION 이미지 카드 ── -->
+        <div class="atelier-fullmenu-col atelier-fullmenu-col--wide">
+          <h2 class="atelier-fullmenu-title">COLLECTION</h2>
+          <div class="atelier-fullmenu-cards">
+            <a href="/product/list.html?cate_no=23&sort_method=7" class="atelier-fullmenu-card">
+              <div class="atelier-fullmenu-card-img">
+                <img src="/web/upload/hero/hero-1.jpg" alt="2026 F/W New" loading="lazy">
+                <span class="atelier-fullmenu-card-badge">NEW</span>
+              </div>
+              <div class="atelier-fullmenu-card-info">
+                <strong>2026 F/W</strong>
+                <span>신상품 먼저 보기</span>
+              </div>
+            </a>
+            <a href="/product/list.html?cate_no=23&sort_method=3" class="atelier-fullmenu-card">
+              <div class="atelier-fullmenu-card-img">
+                <img src="/web/upload/lookbook/look-1.jpg" alt="Best Sellers" loading="lazy">
+                <span class="atelier-fullmenu-card-badge">BEST</span>
+              </div>
+              <div class="atelier-fullmenu-card-info">
+                <strong>BEST SELLERS</strong>
+                <span>이번 주 인기</span>
+              </div>
+            </a>
+            <a href="/product/list.html?cate_no=23&sort_method=5" class="atelier-fullmenu-card">
+              <div class="atelier-fullmenu-card-img">
+                <img src="/web/upload/promo/promo-1.jpg" alt="Special Sale" loading="lazy">
+                <span class="atelier-fullmenu-card-badge atelier-fullmenu-card-badge--sale">SALE</span>
+              </div>
+              <div class="atelier-fullmenu-card-info">
+                <strong>SPECIAL SALE</strong>
+                <span>최대 50% 할인</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── 4열: 프로모 배너 + 계정 ── -->
+        <div class="atelier-fullmenu-col atelier-fullmenu-col--promo">
+          <!-- 대형 프로모 배너 -->
+          <a href="/product/list.html?cate_no=23" class="atelier-fullmenu-banner">
+            <div class="atelier-fullmenu-banner-bg" style="background-image: url('/web/upload/banner/banner-1.jpg');"></div>
+            <div class="atelier-fullmenu-banner-text">
+              <em>2026 FALL</em>
+              <strong>THE QUIET EDIT</strong>
+              <span>조용한 날들에 더 잘 어울리는 옷</span>
+              <div class="atelier-fullmenu-banner-cta">SHOP NOW →</div>
+            </div>
+          </a>
+
+          <!-- 계정 + 고객센터 -->
+          <div class="atelier-fullmenu-util">
+            <div class="atelier-fullmenu-util-group">
+              <a href="/member/login.html" class="atelier-fullmenu-util-link" module="Layout_statelogoff">로그인</a>
+              <a href="/member/join.html" class="atelier-fullmenu-util-link" module="Layout_statelogoff">회원가입</a>
+              <a href="/myshop/index.html" class="atelier-fullmenu-util-link">마이쇼핑</a>
+              <a href="/order/basket.html" class="atelier-fullmenu-util-link">장바구니</a>
+            </div>
+            <div class="atelier-fullmenu-util-group">
+              <a href="/board/notice/list.html" class="atelier-fullmenu-util-link">공지사항</a>
+              <a href="/board/product/list.html" class="atelier-fullmenu-util-link">상품 Q&amp;A</a>
+              <span class="atelier-fullmenu-util-info">무료배송 5만원 이상</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -803,28 +866,6 @@
         </div>
     </div><hr class="layout" />
 
-    <div id="quick">
-        <div module="Layout_orderBasketcount">
-            <!--@css(/css/module/layout/orderBasketcount.css)-->
-            <strong>장바구니</strong> <span><a href="/order/basket.html">{$basket_count}</a>개</span>
-        </div>
-
-        <div module="Layout_productRecent">
-            <!--@css(/css/module/layout/productRecent.css)-->
-            <h2><a href="/product/recent_view_product.html">최근 본 상품</a></h2>
-            <ul>
-                <li class="{$disp_recent|display}">
-                    <a href="/product/detail.html{$param}"><img src="{$recent_img}" alt="" /><span>{$name}</span></a>
-                </li>
-                <li class="{$disp_recent|display}">
-                    <a href="/product/detail.html{$param}"><img src="{$recent_img}" alt="" /><span>{$name}</span></a>
-                </li>
-            </ul>
-            <p class="player"><img src="//img.echosting.cafe24.com/skin/base/layout/btn_recent_prev.gif" alt="이전 제품" class="prev" /><img src="//img.echosting.cafe24.com/skin/base/layout/btn_recent_next.gif" alt="다음 제품" class="next" /></p>
-        </div>
-
-        <p class="pageTop"><a href="#header" title="화면 최상단으로 이동하기"><img src="//img.echosting.cafe24.com/skin/base_ko_KR/layout/btn_top1.gif" alt="맨위로" /></a></p>
-    </div>
 </div><hr class="layout" />
 
 <div id="footer" class="lb-footer" module="Layout_footer">

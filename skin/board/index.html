@@ -1,328 +1,494 @@
-<!--@layout(/layout/basic/layout.html)-->
-<div class="path">
-    <span>현재 위치</span>
-    <ol>
-        <li><a href="/">홈</a></li>
-        <li title="현재 위치"><strong>게시판 메인</strong></li>
-    </ol>
-</div>
+﻿<!--@layout(/layout/basic/layout.html)-->
+<style>
+/* ── ATELIER N — Community (Board Index) ── */
+.path, .titleArea { display: none !important; }
 
-<div class="titleArea">
-    <h2>게시판 메인</h2>
-</div>
+/* 페이지 헤더 */
+.lb-community-header {
+  text-align: center;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid #e8ddd3;
+  margin-bottom: 48px;
+}
+.lb-community-eyebrow {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.36em;
+  color: #9a8878;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.lb-community-header h2 {
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: .08em;
+  color: #2d2825;
+  margin: 0 0 10px;
+}
+.lb-community-header p {
+  font-size: 13px;
+  color: #c4b8ae;
+  letter-spacing: .04em;
+  margin: 0;
+}
 
+/* 게시판 그리드 컨테이너 */
+.lb-board-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+  overflow: hidden;
+}
+
+/* 2열 레이아웃 — flexbox 사용 (grid보다 Cafe24 기본 스타일 간섭 없음) */
+.boardMain {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 48px !important;
+  margin-bottom: 0 !important;
+  float: none !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+.boardMain::after { display: none !important; }
+
+/* 단일 전체폭 섹션 */
+.boardMain.lb-full {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* leftArea·rightArea: 정확히 절반씩 */
+.leftArea, .rightArea {
+  flex: 1 1 0 !important;
+  width: 0 !important;          /* flex가 크기 결정하도록 */
+  min-width: 0 !important;
+  max-width: calc(50% - 24px) !important;
+  float: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* 각 게시판 카드 */
+.board {
+  border-top: 1px solid #2d2825;
+  padding: 20px 0 0;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: visible !important;
+}
+
+/* 게시판 제목 행 (제목 + 더보기) */
+.lb-board-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.board > h3,
+.board h3 {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  color: #2d2825 !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+}
+.board > h3 span { color: inherit; }
+
+/* 더보기 — 화살표 없음 */
+.board .btnLink,
+a.btnLink {
+  display: inline-block !important;
+  font-size: 11px !important;
+  color: #9a8878 !important;
+  text-decoration: none !important;
+  letter-spacing: 0.10em !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+}
+.board .btnLink::before,
+.board .btnLink::after,
+a.btnLink::before,
+a.btnLink::after { content: none !important; }
+.board .btnLink:hover,
+a.btnLink:hover { color: #2d2825 !important; }
+
+/* 게시판 테이블 */
+.board .ec-base-table.typeList,
+.board .ec-base-table.gLine {
+  width: 100% !important;
+  border-top: none !important;
+  margin-bottom: 12px !important;
+}
+.board .ec-base-table table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+}
+.board .ec-base-table caption { display: none !important; }
+.board .ec-base-table colgroup { display: none !important; }
+.board .ec-base-table thead { display: none !important; }
+.board .ec-base-table tbody tr {
+  display: flex !important;
+  align-items: center !important;
+  border-bottom: 1px solid #f0ebe5 !important;
+  padding: 10px 0 !important;
+  gap: 12px !important;
+}
+.board .ec-base-table tbody tr:last-child {
+  border-bottom: none !important;
+}
+.board .ec-base-table td {
+  display: block !important;
+  border: none !important;
+  padding: 0 !important;
+  background: none !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+.board .ec-base-table td.title {
+  flex: 1 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+}
+.board .ec-base-table td.title a {
+  color: #4a4440 !important;
+  text-decoration: none !important;
+  font-size: 13px !important;
+}
+.board .ec-base-table td.title a:hover { color: #2d2825 !important; }
+.board .ec-base-table td.right {
+  flex-shrink: 0 !important;
+  font-size: 11px !important;
+  color: #c4b8ae !important;
+  white-space: nowrap !important;
+  min-width: 70px !important;
+  text-align: right !important;
+}
+
+/* 갤러리 리스트 */
+.galleryList ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.galleryList li {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #f0ebe5 !important;
+  gap: 12px !important;
+}
+.galleryList li:last-child { border-bottom: none !important; }
+.galleryList li a.imgLink {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: #4a4440 !important;
+  font-size: 13px !important;
+  text-decoration: none !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+}
+.galleryList li a.imgLink:hover { color: #2d2825 !important; }
+.galleryList li a.imgLink img {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  border-radius: 2px !important;
+}
+.galleryList li > span {
+  font-size: 11px !important;
+  color: #c4b8ae !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* 베스트 섹션 숨김 */
+.boardMain:first-of-type { display: none !important; }
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .boardMain {
+    grid-template-columns: 1fr !important;
+  }
+  .rightArea { padding-left: 0 !important; }
+  .lb-community-header { padding: 40px 20px 28px; }
+  .lb-board-container { padding: 0 20px 60px; }
+}
+</style>
+
+<!-- 페이지 헤더 -->
+<div class="lb-board-container">
+  <div class="lb-community-header">
+    <p class="lb-community-eyebrow">Community</p>
+    <h2>커뮤니티</h2>
+    <p>공지사항 · Q&A · 이벤트 소식을 한곳에서 확인하세요</p>
+  </div>
+
+<!-- ── 베스트 (조회수/추천수) — 숨김 처리 (글 없을 때 빈 박스)
 <div class="boardMain">
-    <div class="leftArea">
-        <div class="board" module="board_MainHit">
+  <div class="leftArea">
+    <div class="board" module="board_MainHit"> ... </div>
+  </div>
+  <div class="rightArea">
+    <div class="board" module="board_MainRecommend"> ... </div>
+  </div>
+</div> -->
+
+<!-- ── 공지사항 / 뉴스&이벤트 ── -->
+<div class="boardMain">
+  <div class="leftArea">
+    <div class="board" module="board_listpackage_1">
+      <div class="lb-board-head">
+        <h3 module="board_title_1">{$home_title}</h3>
+        <a href="/board/free/list.html?board_no=1" class="btnLink">더보기</a>
+      </div>
+      <div class="ec-base-table typeList gLine">
+        <table border="1" summary="">
+          <caption>공지사항 목록</caption>
+          <colgroup><col style="width:auto;"/><col style="width:90px;"/></colgroup>
+          <thead module="board_listheader_1" class="blind">
+            <tr><th scope="col">제목</th><th scope="col">작성일</th></tr>
+          </thead>
+          <tbody module="board_list_1" class="top">
             <!--
                 $count = 5
-                $subject_cut = 25
+                $main_list = yes
+                $subject_cut = 30
+                $main_list_reply_view = no
              -->
-            <h3><span>조회수 베스트</span></h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>게시판 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody class="top">
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$board_read_url}" class="{$block_content_class}">{$subject}</a></td>
-                        <td class="right">{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$board_read_url}" class="{$block_content_class}">{$subject}</a></td>
-                        <td class="right">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-        </div>
+            <tr>
+              <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+            <tr>
+              <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <div class="rightArea">
-        <div class="board" module="board_MainRecommend">
+  <div class="rightArea">
+    <div class="board" module="board_listpackage_2">
+      <div class="lb-board-head">
+        <h3 module="board_title_2">{$home_title}</h3>
+        <a href="/board/free/list.html?board_no=2" class="btnLink">더보기</a>
+      </div>
+      <div class="ec-base-table typeList gLine">
+        <table border="1" summary="">
+          <caption>뉴스&amp;이벤트 목록</caption>
+          <colgroup><col style="width:auto;"/><col style="width:90px;"/></colgroup>
+          <thead module="board_listheader_2" class="blind">
+            <tr><th scope="col">제목</th><th scope="col">작성일</th></tr>
+          </thead>
+          <tbody module="board_list_2" class="top">
             <!--
                 $count = 5
-                $subject_cut = 25
+                $main_list = yes
+                $subject_cut = 30
+                $main_list_reply_view = no
              -->
-            <h3><span>추천수 베스트</span></h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>게시판 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody class="top">
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$board_read_url}" class="{$block_content_class}">{$subject}</a></td>
-                        <td class="right">{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$board_read_url}" class="{$block_content_class}">{$subject}</a></td>
-                        <td class="right">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-        </div>
+            <tr>
+              <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+            <tr>
+              <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- ── 자유게시판 (전체폭) ── -->
+<div class="boardMain lb-full">
+  <div class="board" module="board_listpackage_5">
+    <div class="lb-board-head">
+      <h3 module="board_title_5">{$home_title}</h3>
+      <a href="/board/free/list.html?board_no=5" class="btnLink">더보기</a>
+    </div>
+    <div class="ec-base-table typeList gLine">
+      <table border="1" summary="">
+        <caption>자유게시판 목록</caption>
+        <colgroup><col style="width:auto;"/><col style="width:90px;"/></colgroup>
+        <thead module="board_listheader_5" class="blind">
+          <tr><th scope="col">제목</th><th scope="col">작성일</th></tr>
+        </thead>
+        <tbody module="board_list_5" class="top">
+          <!--
+              $count = 5
+              $main_list = yes
+              $subject_cut = 45
+              $main_list_reply_view = no
+           -->
+          <tr class="{$block_target_class}" {$block_data_attr}>
+            <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject|cut:50,...}</a> {$icon_new}{$comment_count}</td>
+            <td class="right {$date_display|display}">{$write_date}</td>
+          </tr>
+          <tr class="{$block_target_class}" {$block_data_attr}>
+            <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject|cut:50,...}</a> {$icon_new}{$comment_count}</td>
+            <td class="right {$date_display|display}">{$write_date}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── 이용안내 FAQ / 자료실 ── -->
 <div class="boardMain">
-    <div class="leftArea">
-        <div class="board" module="board_listpackage_1">
-            <h3 module="board_title_1">{$home_title}</h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>공지사항 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead module="board_listheader_1" class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody module="board_list_1" class="top">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                     -->
-                    <tr>
-                        <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                    <tr>
-                        <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <a href="/board/free/list.html?board_no=1" class="btnLink">더보기</a>
-        </div>
+  <div class="leftArea">
+    <div class="board" module="board_listpackage_3">
+      <div class="lb-board-head">
+        <h3 module="board_title_3">{$home_title}</h3>
+        <a href="/board/free/list.html?board_no=3" class="btnLink">더보기</a>
+      </div>
+      <div class="ec-base-table typeList gLine">
+        <table border="1" summary="">
+          <caption>이용안내 목록</caption>
+          <colgroup><col style="width:auto;"/><col style="width:90px;"/></colgroup>
+          <thead module="board_listheader_3" class="blind">
+            <tr><th scope="col">제목</th><th scope="col">작성일</th></tr>
+          </thead>
+          <tbody module="board_list_3" class="top">
+            <!--
+                $count = 5
+                $main_list = yes
+                $subject_cut = 30
+                $main_list_reply_view = no
+             -->
+            <tr class="{$block_target_class}" {$block_data_attr}>
+              <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+            <tr class="{$block_target_class}" {$block_data_attr}>
+              <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <div class="rightArea">
-        <div class="board" module="board_listpackage_2">
-            <h3 module="board_title_2">{$home_title}</h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>뉴스&amp;이벤트 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead module="board_listheader_2" class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody module="board_list_2" class="top">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                     -->
-                    <tr>
-                        <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                    <tr>
-                        <td class="title"><a href="{$link_board_detail}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <a href="/board/free/list.html?board_no=2" class="btnLink">더보기</a>
-        </div>
+  <div class="rightArea">
+    <div class="board" module="board_listpackage_7">
+      <div class="lb-board-head">
+        <h3 module="board_title_7">{$home_title}</h3>
+        <a href="/board/free/list.html?board_no=7" class="btnLink">더보기</a>
+      </div>
+      <div class="ec-base-table typeList gLine">
+        <table border="1" summary="">
+          <caption>자료실 목록</caption>
+          <colgroup><col style="width:auto;"/><col style="width:90px;"/></colgroup>
+          <thead module="board_listheader_7" class="blind">
+            <tr><th scope="col">제목</th><th scope="col">작성일</th></tr>
+          </thead>
+          <tbody module="board_list_7" class="top">
+            <!--
+                $count = 5
+                $main_list = yes
+                $subject_cut = 30
+                $main_list_reply_view = no
+             -->
+            <tr class="{$block_target_class}" {$block_data_attr}>
+              <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+            <tr class="{$block_target_class}" {$block_data_attr}>
+              <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$comment_count}</td>
+              <td class="right {$date_display|display}">{$write_date}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>
 
+<!-- ── 상품 Q&A / 갤러리 ── -->
 <div class="boardMain">
-    <div class="board" module="board_listpackage_5">
-        <h3 module="board_title_5">{$home_title}</h3>
-        <div class="ec-base-table typeList gLine">
-            <table border="1" summary="">
-            <caption>자유게시판 목록</caption>
-            <colgroup>
-                <col style="width:auto;" />
-                <col style="width:100px;" />
-            </colgroup>
-            <thead module="board_listheader_5" class="blind">
-                <tr>
-                    <th scope="col">제목</th>
-                    <th scope="col">작성일</th>
-                </tr>
-            </thead>
-            <tbody module="board_list_5" class="top">
-                <!--
-                    $count = 5
-                    $main_list = yes
-                    $subject_cut = 25
-                    $main_list_reply_view = no
-                 -->
-                <tr class="{$block_target_class}" {$block_data_attr}>
-                    <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject|cut:45,...}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                    <td class="right {$date_display|display}">{$write_date}</td>
-                </tr>
-                <tr class="{$block_target_class}" {$block_data_attr}>
-                    <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject|cut:45,...}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                    <td class="right {$date_display|display}">{$write_date}</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        <a href="/board/free/list.html?board_no=5" class="btnLink">더보기</a>
+  <div class="leftArea">
+    <div class="board" module="board_listpackage_6">
+      <div class="lb-board-head">
+        <h3 module="board_title_6">{$home_title}</h3>
+        <a href="/board/product/list.html?board_no=6" class="btnLink">더보기</a>
+      </div>
+      <div class="galleryList" module="board_list_6">
+        <!--
+            $count = 5
+            $main_list = yes
+            $subject_cut = 25
+        -->
+        <ul>
+          <li class="{$block_target_class}" {$block_data_attr}>
+            <a href="{$link_board_detail}" class="imgLink {$block_content_class}">{$product_img}{$subject} {$comment_count}</a>
+            <span>{$write_date}</span>
+          </li>
+          <li class="{$block_target_class}" {$block_data_attr}>
+            <a href="{$link_board_detail}" class="imgLink {$block_content_class}">{$product_img}{$subject} {$comment_count}</a>
+            <span>{$write_date}</span>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
+
+  <div class="rightArea">
+    <div class="board" module="board_listpackage_8">
+      <div class="lb-board-head">
+        <h3 module="board_title_8">{$home_title}</h3>
+        <a href="/board/gallery/list.html?board_no=8" class="btnLink">더보기</a>
+      </div>
+      <div class="galleryList" module="board_list_8">
+        <!--
+            $count = 5
+            $main_list = yes
+            $subject_cut = 25
+        -->
+        <ul>
+          <li class="{$block_target_class}" {$block_data_attr}>
+            <a href="{$link_board_detail}" class="imgLink {$block_content_class}"><img src="{$img_src}" alt="" />{$subject} {$comment_count}</a>
+            <span>{$write_date}</span>
+          </li>
+          <li class="{$block_target_class}" {$block_data_attr}>
+            <a href="{$link_board_detail}" class="imgLink {$block_content_class}"><img src="{$img_src}" alt="" />{$subject} {$comment_count}</a>
+            <span>{$write_date}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="boardMain">
-    <div class="leftArea">
-        <div class="board" module="board_listpackage_3">
-            <h3 module="board_title_3">{$home_title}</h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>이용안내 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead module="board_listheader_3" class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody module="board_list_3" class="top">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                     -->
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <a href="/board/free/list.html?board_no=3" class="btnLink">더보기</a>
-        </div>
-    </div>
-
-    <div class="rightArea">
-        <div class="board" module="board_listpackage_7">
-            <h3 module="board_title_7">{$home_title}</h3>
-            <div class="ec-base-table typeList gLine">
-                <table border="1" summary="">
-                <caption>자료실 목록</caption>
-                <colgroup>
-                    <col style="width:auto;" />
-                    <col style="width:100px;" />
-                </colgroup>
-                <thead module="board_listheader_7" class="blind">
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성일</th>
-                    </tr>
-                </thead>
-                <tbody module="board_list_7" class="top">
-                    <!--
-                        $count = 5
-                        $main_list = yes
-                        $subject_cut = 25
-                        $main_list_reply_view = no
-                     -->
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                    <tr class="{$block_target_class}" {$block_data_attr}>
-                        <td class="title"><a href="{$link_board_detail}" class="{$block_content_class}">{$subject}</a> {$icon_new}{$icon_hit}{$icon_file}{$comment_count}</td>
-                        <td class="right {$date_display|display}">{$write_date}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <a href="/board/free/list.html?board_no=7" class="btnLink">더보기</a>
-        </div>
-    </div>
-</div>
-
-<div class="boardMain">
-    <div class="leftArea">
-        <div class="board" module="board_listpackage_6">
-            <h3 module="board_title_6">{$home_title}</h3>
-            <div class="galleryList" module="board_list_6">
-                <!--
-                    $count = 5
-                    $main_list = yes
-                    $subject_cut = 25
-                -->
-                <ul>
-                    <li class="{$block_target_class}" {$block_data_attr}>
-                        <a href="{$link_board_detail}" class="imgLink {$block_content_class}">{$product_img}{$subject} {$comment_count}</a>
-                        <span>{$write_date}</span>
-                    </li>
-                    <li class="{$block_target_class}" {$block_data_attr}>
-                        <a href="{$link_board_detail}" class="imgLink {$block_content_class}">{$product_img}{$subject} {$comment_count}</a>
-                        <span>{$write_date}</span>
-                    </li>
-                </ul>
-            </div>
-            <a href="/board/product/list.html?board_no=6" class="btnLink">더보기</a>
-        </div>
-    </div>
-
-    <div class="rightArea">
-        <div class="board" module="board_listpackage_8">
-            <h3 module="board_title_8">{$home_title}</h3>
-            <div class="galleryList" module="board_list_8">
-                <!--
-                    $count = 5
-                    $main_list = yes
-                    $subject_cut = 25
-                -->
-                <ul>
-                    <li class="{$block_target_class}" {$block_data_attr}>
-                        <a href="{$link_board_detail}" class="imgLink {$block_content_class}"><img src="{$img_src}" alt="" />{$subject} {$comment_count}</a>
-                        <span>{$write_date}</span>
-                    </li>
-                    <li class="{$block_target_class}" {$block_data_attr}>
-                        <a href="{$link_board_detail}" class="imgLink {$block_content_class}"><img src="{$img_src}" alt="" />{$subject} {$comment_count}</a>
-                        <span>{$write_date}</span>
-                    </li>
-                </ul>
-            </div>
-            <a href="/board/gallery/list.html?board_no=8" class="btnLink">더보기</a>
-        </div>
-    </div>
-</div>
+</div><!-- /.lb-board-container -->

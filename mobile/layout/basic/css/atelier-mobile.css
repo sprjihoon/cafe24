@@ -1,0 +1,1389 @@
+﻿@charset "utf-8";
+
+/* ============================================================
+   ATELIER N ATELIER N. — Mobile Overrides
+   PC layout.css + atelier.css를 기반으로 모바일 뷰 조정
+   ============================================================ */
+
+/* ── 기본 레이아웃 ── */
+/* overflow-x:hidden을 html/body에 쓰면 scroll container가 바뀌어
+   position:fixed 가 스크롤을 따라가는 버그 발생.
+   overflow-x:clip 은 스크롤 컨테이너를 바꾸지 않아 fixed가 정상 동작. */
+html { overflow-x: clip; }
+body { width: 100%; overflow-x: clip; }
+#wrap { overflow-x: clip; }
+
+/* body/container 패딩 완전 초기화 — JS 간섭 방지 */
+body { padding-top: 0 !important; }
+#container { padding-top: 0 !important; margin-top: 0 !important; }
+
+/* spacer: 인라인 style로 관리 (CSS 개입 없음) */
+.lb-fixed-spacer { display: block; }
+#contents { padding-bottom: 0; }
+
+/* ── 마르키: 일반 흐름, 스크롤 시 올라감 ── */
+#marquee-banner {
+  position: relative !important;
+  top: auto !important;
+  z-index: 50 !important;
+  width: 100%;
+  overflow: hidden;
+  background: #1d1d1f;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+.marquee-track span {
+  display: inline-block;
+  padding: 0 2em;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #fff;
+  white-space: nowrap;
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── ATELIER N 모바일 헤더 (fixed, JS로 top 동적 조정) ── */
+/* layout.css: #header { position:relative } → fixed로 완전 재정의 */
+#header {
+  position: fixed !important;
+  top: 36px;   /* JS(initMarqueeScroll)가 스크롤에 따라 0~36px 사이로 조정 */
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+.lb-m-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 12px;
+  background: #fff;
+}
+.lb-m-header__hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.lb-m-header__hamburger span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: #1d1d1f;
+}
+.lb-m-header__logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.lb-m-header__logo a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #1d1d1f;
+}
+/* 로고 이미지 */
+.lb-logo-image {
+  height: 28px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+/* 이미지 없을 때 텍스트 폴백 ({$mall_name}) */
+.lb-logo-text {
+  flex-direction: column;
+  align-items: center;
+}
+.lb-logo-brand {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #1d1d1f;
+}
+.lb-logo-tagline {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  color: #888;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.lb-m-header__utils {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+.lb-m-header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1d1d1f;
+  position: relative;
+}
+.lb-m-header__basket { margin: 0; }
+.lb-m-basket-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  background: #1d1d1f;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+/* ── 헤더 하단 카테고리 탭바 래퍼 (fixed, JS로 top 동적 조정) ── */
+.lb-m-catbar-wrap {
+  position: fixed !important;
+  top: 88px;   /* 마르키(36px)+헤더(52px), JS가 동적 조정 */
+  left: 0;
+  right: 0;
+  z-index: 190;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: stretch;
+}
+/* ── 카테고리 탭바 (스와이프 스크롤) ── */
+.lb-m-catbar {
+  position: relative;
+  flex: 1;
+  overflow-x: auto;                     /* ← hidden → auto: 가로 스와이프 허용 */
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;    /* iOS 모멘텀 스크롤 */
+  scroll-snap-type: none;
+  min-width: 0;
+  background: transparent;
+  border-bottom: none;
+  scrollbar-width: none;               /* Firefox 스크롤바 숨김 */
+  -ms-overflow-style: none;
+}
+.lb-m-catbar::-webkit-scrollbar { display: none; }
+
+.lb-m-catbar__list {
+  display: flex;
+  flex-wrap: nowrap;                    /* 한 줄로 유지 */
+  overflow-x: visible;                  /* 부모 .lb-m-catbar가 스크롤 담당 */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 0 0 4px;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  width: max-content;                   /* 내용 너비만큼 확장 */
+}
+.lb-m-catbar__list::-webkit-scrollbar { display: none; }
+.lb-m-catbar__list li { flex: none; }
+.lb-m-catbar a {
+  display: block;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #888;
+  white-space: nowrap;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.lb-m-catbar a:hover, .lb-m-catbar a.selected { color: #1d1d1f; border-bottom-color: #1d1d1f; }
+.lb-m-catbar .btnPrev, .lb-m-catbar .btnNext { display: none; }
+
+/* ── ▼ 전체메뉴 버튼 ── */
+.lb-m-catbar__more {
+  flex: none;
+  width: 44px;
+  border: none;
+  background: linear-gradient(to right, transparent, #fff 38%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px 0 0;
+  cursor: pointer;
+  color: #1d1d1f;
+  position: relative;
+  z-index: 1;
+}
+.lb-m-catbar__more svg {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.lb-m-catbar__more.is-open svg {
+  transform: rotate(180deg);
+}
+
+/* ── 전체메뉴 드롭다운 패널 ── */
+.lb-m-catdrop {
+  position: fixed;
+  top: 0;             /* JS(initCatDrop)가 catbar 하단 위치로 동적 설정 */
+  left: 0;
+  right: 0;
+  z-index: 89;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+}
+.lb-m-catdrop.is-open {
+  max-height: 60vh;
+  opacity: 1;
+  pointer-events: auto;
+}
+.lb-m-catdrop__inner {
+  background: #fff;
+  padding: 14px 12px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 60vh;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border-top: 1px solid #f0f0f0;
+}
+.lb-m-catdrop__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #1d1d1f;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  padding: 12px 6px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #fafafa;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.lb-m-catdrop__link:hover,
+.lb-m-catdrop__link:active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+/* 백드롭 오버레이 */
+.lb-m-catdrop__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.lb-m-catdrop.is-open .lb-m-catdrop__backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── 카테고리 페이지 인트로 (eyebrow + desc) ── */
+#lb-cat-page-intro {
+  padding-top: 20px;
+  padding-bottom: 16px;
+}
+
+/* 회원가입 + 배지 숨김 */
+.lb-badge { display: none !important; }
+
+/* ────────────────────────────────────────────────
+   ATELIER SHORTS — hover 동작 재정의 (모바일)
+   · 모든 카드 hover/is-hovered → 하단 상품 링크박스 표시
+   · 활성 카드 재생은 hover로 절대 멈추지 않음
+   ──────────────────────────────────────────────── */
+
+.atelier-shorts__card:hover .atelier-shorts__product-link,
+.atelier-shorts__card:hover .atelier-shorts__product-banner,
+.atelier-shorts__card.is-hovered .atelier-shorts__product-link,
+.atelier-shorts__card.is-hovered .atelier-shorts__product-banner {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.atelier-shorts__card:not(.atelier-shorts__card--active):hover .atelier-shorts__play-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.atelier-shorts__card--active .atelier-shorts__video,
+.atelier-shorts__card--playing .atelier-shorts__video,
+.atelier-shorts__card.is-active .atelier-shorts__video,
+.atelier-shorts__card.is-playing .atelier-shorts__video {
+  filter: brightness(1) !important;
+}
+
+.atelier-shorts__card--active::before,
+.atelier-shorts__card--playing::before,
+.atelier-shorts__card.is-active::before,
+.atelier-shorts__card.is-playing::before {
+  opacity: 0 !important;
+}
+
+/* ── Cafe24 기본 헤더 숨김 ── */
+#topArea { display: none !important; }
+.xans-layout-mobilenavigation { display: none !important; }
+#header nav[module="Layout_MobileNavigation"] { display: none !important; }
+
+/* ── 히어로 슬라이더 — 모바일 정사각형 ── */
+.lb-hero {
+  position: relative;
+  overflow: hidden;
+  /* 100vw × 100vw = 정사각형 */
+  aspect-ratio: 1 / 1;
+  min-height: 320px;
+  max-height: 520px;
+  width: 100%;
+}
+/* layout.css @media: aspect-ratio:640/800(세로형) → 정사각형으로 재정의 */
+.lb-hero-slider {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1 !important;
+  max-height: 520px !important;
+  min-height: 320px !important;
+}
+.lb-hero-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+.lb-hero-slide {
+  min-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #f0f0f0;
+  position: relative;
+  display: flex;
+}
+/*
+ * layout.css: .lb-hero-placeholder { height:100%; display:flex; justify-content:flex-end }
+ * → placeholder가 슬라이드 전체를 채우며 텍스트를 하단으로 밀어냄.
+ * 모바일에서는 히어로가 짧아 텍스트가 아래로 밀려 안 보이므로,
+ * justify-content를 flex-start로 재정의해 텍스트를 상단에 고정.
+ */
+.lb-hero-placeholder {
+  padding: 24px 20px 20px;
+  /* 상단 그라디언트: 텍스트가 위에 있으므로 위→아래 어둡게 */
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.20) 60%,
+    transparent 100%
+  );
+  width: 100%;
+  color: #fff;
+  box-sizing: border-box;
+  /* layout.css의 justify-content:flex-end 재정의 */
+  justify-content: flex-start;
+}
+.lb-hero-sub {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+.lb-hero-title {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.lb-hero-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+.lb-hero-btn {
+  display: inline-block;
+  padding: 9px 20px;
+  border: 1px solid rgba(255,255,255,0.7);
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+/* Hero dots — PC와 동일한 pill 스타일 */
+.lb-hero-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+.lb-hero-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.lb-hero-dot.is-active {
+  width: 32px;
+  background: rgba(255,255,255,1);
+}
+/* PC 전용 영상 컨테이너 숨김 */
+.lb-hero-video-container { display: none; }
+/* layout.css 장식선 숨김 */
+.lb-hero-placeholder::before { display: none; }
+.lb-hero-slider--has-fullscreen .lb-hero-slide--fullscreen { height: 100% !important; }
+
+/* ── 카테고리 아이콘 존 (항상 4열 2행, 비율 반응형) ── */
+.lb-cat-zone {
+  padding: 14px 0 10px;
+  /* layout.css @media: overflow-x:auto → 가로스크롤 차단 */
+  overflow-x: hidden !important;
+  overflow-y: visible;
+}
+.lb-cat-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 10px;
+  column-gap: 0;            /* layout.css gap 덮어쓰기 */
+  width: 100% !important;   /* layout.css @media: width:max-content 덮어쓰기 → % flex-basis 확정 */
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+/*
+ * ★ flex: 0 0 25% → 항상 정확히 4열
+ *   width:100% 이 lb-cat-inner에 있어야 25%가 확정 크기로 계산됨
+ *   box-sizing: border-box → padding 포함해 25% 유지
+ */
+.lb-cat-item {
+  flex: 0 0 25% !important;
+  width: 25% !important;
+  max-width: 25% !important;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #1d1d1f;
+  text-align: center;
+}
+/*
+ * 원 크기: width·height 모두 동일한 vw 값 → 항상 정원 보장
+ *   min(68px, 17vw): 320px → 54px / 375px → 64px / 400px+ → 68px
+ *   aspect-ratio 사용 X — 일부 모바일에서 height 미적용되어 타원 발생
+ */
+.lb-cat-circle {
+  width: min(75px, 18.7vw);
+  height: min(75px, 18.7vw);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f5f5f5;
+  border: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.lb-cat-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.lb-cat-item:hover .lb-cat-circle { background: #1d1d1f; border-color: #1d1d1f; }
+.lb-cat-item:hover .lb-cat-abbr { color: #fff; }
+.lb-cat-abbr {
+  font-size: min(14px, 3.5vw);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #1d1d1f;
+  transition: color 0.2s;
+}
+.lb-cat-label {
+  font-size: min(11px, 2.8vw);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1d1d1f;
+  text-transform: uppercase;
+  display: block;
+  word-break: break-word;
+  line-height: 1.3;
+  text-align: center;
+  min-height: 2.6em;
+}
+.lb-cat-desc { display: none; }
+
+/* ── 섹션 공통 헤더 ── */
+.lb-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 32px 16px 16px;
+}
+.lb-section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 4px;
+  display: block;
+}
+.lb-section-title {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: #1d1d1f;
+  margin: 0;
+}
+.lb-section-more {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #888;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-left: 12px;
+}
+
+/* ── 상품 리스트 2열 그리드 ── */
+.ec-base-product.typeThumb ul.prdList,
+.ec-base-product ul.prdList.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+  background: #e8e8e8;
+}
+.ec-base-product.typeThumb ul.prdList > li,
+.ec-base-product ul.prdList.grid3 > li {
+  background: #fff;
+  overflow: hidden;
+}
+.ec-base-product.typeThumb ul.prdList .thumbnail a,
+.ec-base-product ul.prdList.grid3 .thumbnail a {
+  display: block;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+.ec-base-product.typeThumb ul.prdList .thumbnail img,
+.ec-base-product ul.prdList.grid3 .thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ec-base-product.typeThumb ul.prdList .description,
+.ec-base-product ul.prdList.grid3 .description {
+  padding: 10px 10px 12px;
+}
+.ec-base-product.typeThumb ul.prdList .name a,
+.ec-base-product ul.prdList.grid3 .name a {
+  font-size: 13px;
+  font-weight: 400;
+  color: #1d1d1f;
+  text-decoration: none;
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 4px;
+}
+.ec-base-product.typeThumb ul.prdList .price,
+.ec-base-product ul.prdList.grid3 .price {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d1d1f;
+}
+.ec-base-product.typeThumb ul.prdList .wish,
+.ec-base-product ul.prdList.grid3 .wish {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.ec-base-product.typeThumb ul.prdList .thumbnail,
+.ec-base-product ul.prdList.grid3 .thumbnail {
+  position: relative;
+}
+
+/* ── ATELIER SHORTS 모바일 ── */
+.atelier-shorts {
+  padding: 32px 0 24px;
+  overflow: hidden;
+}
+.atelier-shorts__header {
+  padding: 0 16px 16px;
+}
+.atelier-shorts__nav { display: none; }
+/* PC의 margin:-8px 보정을 모바일에서 해제 */
+.atelier-shorts__slider {
+  overflow: visible;
+  margin: 0 !important;
+}
+/* 슬라이드 패딩 → spaceBetween이 처리하도록 제거 */
+.atelier-shorts__slider .swiper-slide {
+  padding: 0 !important;
+}
+/* 슬라이더 시작 여백 */
+.atelier-shorts__slider-wrap {
+  padding-left: 16px;
+  overflow: hidden;
+}
+/* 카드: Swiper slide 100% 채우기 */
+.atelier-shorts__card {
+  width: 100% !important;
+  aspect-ratio: 9/16;
+}
+.atelier-shorts__pagination-bar { padding: 12px 16px; }
+
+/* ── PHOTO REVIEW 슬라이더 ── */
+.lb-photo-review-section {
+  padding: 32px 0;
+  background: #fafafa;
+}
+.lb-photo-review-section .lb-section-header {
+  padding: 0 16px 16px;
+}
+.lb-board-review-wrapper { padding-left: 16px; overflow: hidden; }
+.lb-review-swiper { overflow: visible; }
+.lb-review-item {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+}
+.lb-review-link { display: block; text-decoration: none; color: inherit; }
+.lb-review-image-wrapper { aspect-ratio: 1; overflow: hidden; background: #f5f5f5; }
+.lb-review-image { width: 100%; height: 100%; object-fit: cover; }
+.lb-review-content { padding: 10px 12px 12px; }
+.lb-review-stars { font-size: 12px; color: #f5a623; margin-bottom: 4px; }
+.lb-review-title { font-size: 13px; font-weight: 500; color: #1d1d1f; margin: 0 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-review-text { font-size: 12px; color: #888; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 6px; }
+.lb-review-meta { display: flex; justify-content: space-between; font-size: 11px; color: #bbb; }
+.lb-review-empty-state { padding: 48px 16px; text-align: center; color: #aaa; }
+.lb-review-pagination.swiper-pagination { position: static; margin-top: 16px; padding-right: 16px; }
+
+/* ── 브랜드 스토리 ── */
+.lb-brand-story {
+  padding: 48px 24px;
+  text-align: center;
+  background: #1d1d1f;
+  color: #fff;
+}
+.lb-brand-story-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 20px;
+}
+.lb-brand-story-body p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #d8d8d8;
+  margin: 0 0 16px;
+}
+
+/* ── 더보기 버튼 ── */
+.ec-base-paginate.typeMoreview { padding: 16px; text-align: center; }
+.ec-base-paginate.typeMoreview .btnMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  border: 1px solid #1d1d1f;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #1d1d1f;
+  text-decoration: none;
+  background: #fff;
+}
+
+/* ── 숨김 처리 ── */
+.lb-hidden-section { display: none !important; }
+.lb-band-banner { display: none; } /* 모바일에서 띠배너 숨김 */
+
+/* ── 하단 탭 네비게이션 (비활성) ── */
+.lb-m-tabnav { display: none !important; }
+.lb-m-tabnav--hidden {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.lb-m-tabnav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  color: #aaa;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+.lb-m-tabnav__item.is-active { color: #1d1d1f; }
+.lb-m-tabnav__item:hover { color: #1d1d1f; }
+.lb-m-tabnav__badge-wrap { position: relative; display: flex; }
+.lb-m-tabnav__badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  background: #1d1d1f;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+/* ── 사이드바 (드로어) ── */
+#aside {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100%;
+  background: #fff;
+  z-index: 300;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#aside.open { left: 0; }
+
+/* ── PC 전용 요소 모바일 숨김 ── */
+.lb-floating-right { display: none !important; }
+.lb-fullmenu-panel { display: none !important; }
+#lb-nav { display: none !important; }
+
+/* ── Cafe24 어드민 버튼 (카트/줌 PNG) 숨김 ── */
+img.ec-admin-icon,
+.ec-admin-icon.cart,
+.ec-admin-icon.zoom,
+.icon .button .likeButton,
+.icon .button .option,
+.icon .button { display: none !important; }
+
+/* 상품 이미지 위 wish 아이콘은 유지 */
+.thumbnail .wish { display: block !important; }
+
+/* ── lb-full-bleed 모바일 해제 ── */
+.lb-full-bleed { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
+
+/* ── FEATURE BANNERS — Swiper 슬라이드 ── */
+.lb-feature-banners {
+  overflow: hidden;
+  padding: 12px 0 12px 16px; /* 좌측 패딩: 첫 카드 시작 위치 */
+}
+/* Swiper wrapper */
+.lb-feature-inner {
+  display: flex;
+  align-items: stretch;
+}
+/* Swiper slide — slidesPerView:'auto' 사용 시 반드시 width 명시 */
+.lb-feature-box {
+  flex: none;
+  width: 76vw !important;   /* 한 화면에 1장 + 다음 카드 살짝 노출 */
+  max-width: 290px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.lb-feature-image {
+  aspect-ratio: 3/2;    /* 가로형으로 높이 축소 */
+  overflow: hidden;
+}
+.lb-feature-image img { width: 100%; height: 100%; object-fit: cover; }
+.lb-feature-content {
+  padding: 12px 14px;
+  background: #f5f5f5;
+}
+.lb-feature-badge {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.lb-feature-title { font-size: 14px; font-weight: 400; margin: 0 0 4px; }
+.lb-feature-desc { font-size: 11px; color: #888; line-height: 1.4; margin: 0; }
+
+/* ── FEATURE BANNERS — Swiper 페이지네이션 (하단 점 버튼) ── */
+.lb-feature-banners { position: relative; padding-bottom: 28px !important; }
+.lb-feature-pagination {
+  position: absolute;
+  bottom: 4px !important;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+}
+.lb-feature-pagination .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  background: #ccc;
+  opacity: 1;
+  margin: 0 3px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+.lb-feature-pagination .swiper-pagination-bullet-active {
+  background: #1d1d1f;
+  width: 18px;
+  border-radius: 3px;
+}
+
+/* ── SPLIT BANNER — 왼쪽 슬라이더만 (모바일 전체 너비) ── */
+.lb-split-banner { padding: 0; overflow: hidden; }
+.lb-split-inner { display: block; }
+.lb-split-grid { display: none; }
+.lb-split-slider { width: 100%; }
+/* Swiper 슬라이드: 이미지가 메인 */
+.lb-promo-slide {
+  display: block;
+  position: relative;
+  text-decoration: none;
+}
+.lb-promo-visual { position: relative; }
+.lb-promo-visual img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+.lb-video-container { aspect-ratio: 1; overflow: hidden; }
+.lb-video-container iframe { width: 100%; height: 100%; }
+.lb-promo-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+  color: #fff;
+}
+.lb-promo-eyebrow { font-size: 10px; letter-spacing: 0.14em; opacity: 0.8; margin-bottom: 4px; }
+.lb-promo-title { font-size: 20px; font-weight: 300; margin: 0; letter-spacing: -0.01em; }
+
+/* ── PROMO SECTION (2배너) — 나란히, 텍스트 항상 표시 ── */
+.lb-promo-section { padding: 0; }
+.lb-promo-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+/* 2열 그리드 — PC와 동일한 레이아웃 */
+.lb-promo-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 4px !important;
+}
+/* 5:6 세로 비율 (padding-top trick) */
+.lb-promo-item {
+  position: relative !important;
+  overflow: hidden;
+  padding-top: 130% !important; /* 세로 비율 */
+  width: 100% !important;
+}
+.lb-promo-item > a {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.lb-promo-item img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+  transition: transform 0.4s ease;
+}
+/* 오버레이 텍스트 — 항상 표시 */
+.lb-promo-overlay {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 14px 10px !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%) !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+/* 오버레이 내부 텍스트 — 작은 카드 최적화 */
+.lb-promo-item .lb-promo-eyebrow {
+  font-size: 9px !important;
+  letter-spacing: 0.12em;
+  margin-bottom: 3px;
+  opacity: 0.85;
+}
+.lb-promo-item .lb-promo-title {
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+.lb-promo-item .lb-promo-desc {
+  font-size: 10px !important;
+  opacity: 0.8;
+  margin: 0 0 6px;
+}
+.lb-promo-item .lb-promo-cta {
+  font-size: 10px !important;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+/* PC .lb-promo-banner (feature banners와 다른 컴포넌트) */
+.lb-promo-banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.lb-promo-banner img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+.lb-promo-banner-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  color: #fff;
+}
+
+/* ── WEEKLY BEST (가로 스냅 스크롤)
+ *
+ * [Cafe24 렌더링 규칙 — 확인된 사실]
+ *   xans-record- 방식(li 1개 반복): 이미지·텍스트 분리 렌더링 버그 발생.
+ *   anchorBoxId 방식(li N개 미리 정의, xans-record- 없음):
+ *     → ESSENTIALS·NEW IN 등 모든 다른 섹션이 사용하는 표준 방식.
+ *     → 4개 li × ($count/4) 반복 = $count개 상품 정상 렌더링.
+ *
+ * [구조]
+ *   .lb-weekly-prd-wrap  (overflow-x: auto — 가로 스크롤 컨테이너)
+ *     ul.prdList          (display: flex, nowrap — 수평 나열)
+ *       li × 4 (반복)     (flex-shrink: 0, 42vw — 카드 1장)
+ *         div.thumbnail > div.prdImg > a > img
+ *         div.description > strong.name + ul.spec
+ */
+.lb-weekly-best {
+  padding-bottom: 8px;
+}
+
+/* 모듈 div → 가로 스크롤 컨테이너 */
+.lb-weekly-prd-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.lb-weekly-prd-wrap::-webkit-scrollbar { display: none; }
+
+/* ul.prdList → 가로 flex */
+.lb-weekly-prd-wrap ul.prdList {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 8px 16px 16px;
+  margin: 0;
+  list-style: none;
+  width: max-content;
+}
+
+/* 각 상품 li = 카드 1장 */
+.lb-weekly-prd-wrap ul.prdList > li {
+  flex-shrink: 0;
+  width: 42vw;
+  max-width: 190px;
+  scroll-snap-align: start;
+  list-style: none;
+}
+
+/* 이미지 래퍼 — PC처럼 상대 위치(wish 버튼 오버레이용) */
+.lb-weekly-prd-wrap .thumbnail {
+  position: relative;
+}
+.lb-weekly-prd-wrap .prdImg {
+  overflow: hidden;
+  border-radius: 2px;
+  position: relative;
+}
+.lb-weekly-prd-wrap .prdImg img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+/* wish(찜) 버튼 — 이미지 우상단 */
+.lb-weekly-prd-wrap .prdImg .wish {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: block !important;
+  z-index: 2;
+}
+
+/* 텍스트 영역 */
+.lb-weekly-prd-wrap .description {
+  padding: 8px 2px 0;
+}
+.lb-weekly-prd-wrap .description .name a {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #1d1d1f;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+/* 가격 spec — 타이틀("판매가 :") 숨기고 금액만 표시 */
+.lb-weekly-prd-wrap .description .spec {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.lb-weekly-prd-wrap .description .spec li {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+.lb-weekly-prd-wrap .description .spec li .title {
+  display: none;
+}
+
+/* ── 이전/다음 버튼 ── */
+.lb-weekly-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.lb-weekly-nav {
+  display: flex;
+  gap: 6px;
+}
+.lb-weekly-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+  padding: 0;
+}
+.lb-weekly-btn:active {
+  background: #f5f5f5;
+  border-color: #1d1d1f;
+}
+
+/* JS Swiper 잔재 완전 숨김 */
+.lb-weekly-swiper,
+.lb-weekly-pagination-wrap { display: none !important; }
+
+/* ── BAND BANNER ── */
+.lb-band-banner {
+  padding: 32px 20px;
+  text-align: center;
+}
+.lb-band-inner { display: block; }
+.lb-band-visual { width: 100%; margin-top: 20px; }
+.lb-band-visual img { width: 100%; max-height: 200px; object-fit: cover; }
+
+/* ── TIMESALE BANNER ── */
+.lb-timesale-banner {
+  padding: 28px 20px;
+  overflow: hidden;
+}
+.lb-timesale-content {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.lb-timesale-left {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.lb-timesale-text { margin-bottom: 12px; }
+.lb-timesale-eyebrow { font-size: 10px; letter-spacing: 0.16em; }
+.lb-timesale-title { font-size: 20px; line-height: 1.3; }
+.lb-timesale-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.lb-countdown-value { font-size: 28px; font-weight: 600; }
+.lb-countdown-label, .lb-countdown-suffix { font-size: 11px; }
+.lb-timesale-btn { font-size: 12px; }
+/* 시계 이미지 — 모바일에서 숨김, 텍스트만 표시 */
+.lb-timesale-visual { display: none !important; }
+.lb-timesale-left { width: 100%; }
+
+/* ── VIDEO BANNER ── */
+.lb-video-banner { padding: 32px 20px; }
+.lb-video-content { display: block; }
+.lb-video-text { margin-bottom: 20px; }
+.lb-video-player { aspect-ratio: 16/9; }
+
+/* ── BRAND STORY SECTION ── */
+/* ── BRAND STORY — 이미지 + 텍스트 가로 배치 유지 ── */
+.lb-brand-story-section { padding: 0; overflow: hidden; }
+.lb-brand-story-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  min-height: 180px;
+}
+.lb-brand-story-image {
+  flex: 0 0 25% !important;
+  width: 25% !important;
+  overflow: hidden;
+}
+.lb-brand-story-image img {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: unset !important;
+  object-fit: cover !important;
+  display: block;
+}
+.lb-brand-story-content {
+  flex: 1 !important;
+  padding: 20px 16px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* 텍스트 크기 모바일 최적화 */
+.lb-brand-story-content .lb-brand-eyebrow {
+  font-size: 9px !important;
+  letter-spacing: 0.1em;
+}
+.lb-brand-story-content .lb-brand-title {
+  font-size: 14px !important;
+  line-height: 1.4;
+  margin: 6px 0 8px;
+}
+.lb-brand-story-content .lb-brand-desc,
+.lb-brand-story-content p {
+  font-size: 11px !important;
+  line-height: 1.6;
+  color: #666;
+}
+.lb-brand-story-content .lb-brand-link,
+.lb-brand-story-content a {
+  font-size: 11px !important;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+/* ── CATEGORY BANNERS (2개) ── */
+.lb-category-banners { padding: 0; }
+.lb-category-grid { display: flex; flex-direction: column; gap: 1px; }
+.lb-category-banner { position: relative; overflow: hidden; }
+.lb-category-banner img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.lb-category-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+  color: #fff;
+}
+
+/* ── THE DAILY UNIFORM (product_listmain_1 × 3) ── */
+.lb-daily-uniform ul.prdList { background: #e8e8e8; }
+.lb-essentials-grid ul.prdList { background: #e8e8e8; }
+
+
+/* ============================================================
+   MOBILE FOOTER - 간결 스타일
+   ============================================================ */
+.lb-m-footer {
+  background: #f8f8f8;
+  border-top: 1px solid #e8e8e8;
+  padding: 32px 20px 28px;
+  text-align: center;
+}
+
+/* 정책 링크 */
+.lb-m-footer-policy {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.lb-m-footer-policy li {
+  display: flex;
+  align-items: center;
+}
+
+.lb-m-footer-policy li + li::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  background: #ddd;
+  margin: 0 10px;
+}
+
+.lb-m-footer-policy a {
+  font-size: 12px;
+  color: #666;
+  text-decoration: none;
+}
+
+.lb-m-footer-policy a strong {
+  font-weight: 600;
+  color: #444;
+}
+
+/* 사업자 정보 */
+.lb-m-footer-biz {
+  margin-bottom: 20px;
+}
+
+.lb-m-footer-biz-toggle {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 0;
+}
+
+.lb-m-footer-biz-arrow {
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.lb-m-footer-biz-toggle.open .lb-m-footer-biz-arrow {
+  transform: rotate(180deg);
+}
+
+.lb-m-footer-biz-detail {
+  display: none;
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.9;
+  margin-top: 10px;
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.lb-m-footer-biz-detail p {
+  margin: 0;
+}
+
+.lb-m-footer-biz-detail a {
+  color: #aaa;
+  text-decoration: underline;
+}
+
+/* SNS */
+.lb-m-footer-sns {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.lb-m-footer-sns a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #bbb;
+}
+
+/* 카피라이트 */
+.lb-m-footer-copyright {
+  font-size: 11px;
+  color: #ccc;
+  margin: 0;
+}
