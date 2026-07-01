@@ -539,6 +539,9 @@ img { vertical-align: top; }
 #lb-fullmenu.atelier-fullmenu-dropdown {
   position: absolute !important;
   left: 0 !important;
+  right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   width: 100% !important;
   background: #fff !important;
   border-top: 1px solid var(--color-border-light, #f0ebe5) !important;
